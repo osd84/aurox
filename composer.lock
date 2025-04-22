@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0fc1b78ee7f77d1afeb44fcc3f4897ef",
+    "content-hash": "a39a6b17061fea85a64501b451fe7448",
     "packages": [
         {
             "name": "mobiledetect/mobiledetectlib",
@@ -70,6 +70,43 @@
                 }
             ],
             "time": "2024-12-10T15:32:06+00:00"
+        },
+        {
+            "name": "osd/aurox_core",
+            "version": "v0.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PetitCitron/aurox_core.git",
+                "reference": "ba9bdeaf74a2fed8d47b1702175f0a95d869c157"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PetitCitron/aurox_core/zipball/ba9bdeaf74a2fed8d47b1702175f0a95d869c157",
+                "reference": "ba9bdeaf74a2fed8d47b1702175f0a95d869c157",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "OsdAurox\\": "src/OsdAurox/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "osd",
+                    "email": "info@osd84.fr"
+                }
+            ],
+            "description": "Aurox core",
+            "support": {
+                "issues": "https://github.com/PetitCitron/aurox_core/issues",
+                "source": "https://github.com/PetitCitron/aurox_core/tree/v0.2.1"
+            },
+            "time": "2025-04-22T18:37:39+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
