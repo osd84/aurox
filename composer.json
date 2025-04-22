@@ -1,0 +1,27 @@
+{
+    "name": "osd/aurox",
+    "description": "Lib for build web app",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "OsdAurox\\": "src/OsdAurox/",
+            "App\\": "app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "osd84.fr",
+            "email": "info@osd84.fr"
+        }
+    ],
+    "require": {
+        "mobiledetect/mobiledetectlib": "^4.8",
+        "phpmailer/phpmailer": "^6.9",
+        "ext-pdo": "*",
+        "respect/validation": "^2.4"
+    },
+    "require-dev": {
+        "petitcitron/brutaltestrunner": "^2.0"
+    }
+}
