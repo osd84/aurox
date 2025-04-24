@@ -19,9 +19,16 @@ Le moteur : https://github.com/PetitCitron/aurox_core
 
 ## Install
 
+Téléchargez la dernière release du projet : https://github.com/PetitCitron/aurox/releases/latest
+
+Copier [conf_example.php](conf_example.php) et renommer en `conf.php` en modifiant et adaptant son contenu à votre projet.
+
+Décompressez le .zip à la racine de votre dossier web en exposant uniquement le dossier **public/** dans votre conf Apache2.
+
 ```
-composer require petitcitron/aurox
+DocumentRoot /var/www/<my_project>/public/
 ```
+
 
 ## Usage & Attention
 
