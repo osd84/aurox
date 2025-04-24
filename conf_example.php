@@ -14,8 +14,8 @@ return [
     'devIp' => '127.0.0.1',
 
     'devUrl' => 'http://127.0.0.1:8000',
-    'prodUrl' => 'http://127.0.0.1:8000',
-    'appUrl' => 'http://127.0.0.1:8000',
+    'prodUrl' => 'https://127.0.0.1:8000',
+    'appUrl' => 'https://127.0.0.1:8000',
 
     'debug' => true, // change me to false in production
     'host' => '127.0.0.1',
