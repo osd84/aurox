@@ -56,8 +56,8 @@ if (!AppConfig::get('debug')) {
     header('X-XSS-Protection: 1; mode=block');
     header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
     if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
-        $appUrl = AppConfig::get('appUrl');
-        if (! str_contains($appUrl, 'https://')) {
+        $appUrl = AppConfig::get('appUrl', '');
+        if (!str_contains($appUrl, 'https://')) {
             die('HTTPS is required in PROD');
         }
         header('Location: ' . AppConfig::get('appUrl'));
