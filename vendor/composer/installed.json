@@ -69,46 +69,6 @@
             "install-path": "../mobiledetect/mobiledetectlib"
         },
         {
-            "name": "osd/aurox_core",
-            "version": "v0.2.1",
-            "version_normalized": "0.2.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/PetitCitron/aurox_core.git",
-                "reference": "ba9bdeaf74a2fed8d47b1702175f0a95d869c157"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/PetitCitron/aurox_core/zipball/ba9bdeaf74a2fed8d47b1702175f0a95d869c157",
-                "reference": "ba9bdeaf74a2fed8d47b1702175f0a95d869c157",
-                "shasum": ""
-            },
-            "time": "2025-04-22T18:37:39+00:00",
-            "type": "library",
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "OsdAurox\\": "src/OsdAurox/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "osd",
-                    "email": "info@osd84.fr"
-                }
-            ],
-            "description": "Aurox core",
-            "support": {
-                "issues": "https://github.com/PetitCitron/aurox_core/issues",
-                "source": "https://github.com/PetitCitron/aurox_core/tree/v0.2.1"
-            },
-            "install-path": "../osd/aurox_core"
-        },
-        {
             "name": "petitcitron/brutaltestrunner",
             "version": "v2.0.5",
             "version_normalized": "2.0.5.0",

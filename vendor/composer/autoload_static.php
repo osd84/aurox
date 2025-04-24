@@ -73,7 +73,7 @@ class ComposerStaticInit0b6ad33749024c76d70f25daaeaea139
         ),
         'OsdAurox\\' => 
         array (
-            0 => __DIR__ . '/..' . '/osd/aurox_core/src/OsdAurox',
+            0 => __DIR__ . '/../..' . '/src/OsdAurox',
         ),
         'Detection\\' => 
         array (

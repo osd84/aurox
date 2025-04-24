@@ -13,8 +13,6 @@ LICENCE MIT - Projet en cours - Ne pas utiliser en production
 Ceci est une application web d'exemple, un kit de démarrage, utilisant le moteur Aurox.
 C'est aussi dans ce dépot que sont écrits les tests unitaires du moteur Aurox.
 
-Le moteur : https://github.com/PetitCitron/aurox_core
-
 # Aurox
 
 ## Install

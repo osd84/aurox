@@ -13,7 +13,7 @@ return array(
     'Psr\\Cache\\' => array($vendorDir . '/psr/cache/src'),
     'PetitCitron\\BrutalTestRunner\\' => array($vendorDir . '/petitcitron/brutaltestrunner/src'),
     'PHPMailer\\PHPMailer\\' => array($vendorDir . '/phpmailer/phpmailer/src'),
-    'OsdAurox\\' => array($vendorDir . '/osd/aurox_core/src/OsdAurox'),
+    'OsdAurox\\' => array($baseDir . '/src/OsdAurox'),
     'Detection\\' => array($vendorDir . '/mobiledetect/mobiledetectlib/src'),
     'App\\' => array($baseDir . '/app'),
 );

@@ -5,6 +5,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
+            "OsdAurox\\": "src/OsdAurox/",
             "App\\": "app/"
         }
     },
@@ -18,8 +19,7 @@
         "mobiledetect/mobiledetectlib": "^4.8",
         "phpmailer/phpmailer": "^6.9",
         "ext-pdo": "*",
-        "respect/validation": "^2.4",
-        "osd/aurox_core": "^0.2.1"
+        "respect/validation": "^2.4"
     },
     "require-dev": {
         "petitcitron/brutaltestrunner": "^2.0"
