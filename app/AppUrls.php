@@ -13,7 +13,13 @@ class AppUrls
 
     # login
     public const LOGIN = '/auth/login.php';
+    public const LOGOUT = '/auth/login.php?action=logout';
 
+    public const ADMIN_DIR = '/admin';
+    public const ADMIN_HOME = '/admin/index.php';
+    public const ADMIN_USERS = '/admin/users.php';
+    public const ADMIN_USER_EDIT = '/admin/user_edit.php';
+    public const ADMIN_USER_ADD = '/admin/user_edit.php';
 
     public static function getList() {
         $reflect = new \ReflectionClass(__CLASS__);

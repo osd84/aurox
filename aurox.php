@@ -12,6 +12,7 @@ require_once '../vendor/autoload.php';
 
 use App\AppUrls;
 use OsdAurox\AppConfig;
+use OsdAurox\Ban;
 use OsdAurox\Dbo;
 use OsdAurox\ErrorMonitoring;
 use OsdAurox\I18n;
@@ -85,6 +86,10 @@ Dbo::getInstance(
 
 // Flash
 $GLOBALS['messages'] = [];
+
+// ban system
+Ban::blockBlackListed();
+Ban::checkRequest();
 
 // i18n
 $GLOBALS['i18n'] = new I18n();
