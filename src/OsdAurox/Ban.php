@@ -159,10 +159,7 @@ class Ban
             header('HTTP/1.0 403 Forbidden');
             die($instance->banMessage);
         }
-        if($output) {
-            return false;
-        }
-
+        return false;
     }
 
     public static function checkRequest($output=false): bool
@@ -191,9 +188,7 @@ class Ban
             Discord::send('[BAN] Hack crawling detected by ' . Sec::hNoHtml($instance->realIp));
             die($instance->banMessage);
         }
-        if($output) {
-            return false;
-        }
+        return false;
     }
 
     public static function ban($ip)
