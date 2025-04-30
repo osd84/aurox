@@ -191,7 +191,7 @@ class Ban
         return false;
     }
 
-    public static function ban($ip)
+    public static function ban($ip): bool
     {
         $instance = self::getInstance();
         $instance->blackList = $instance->loadBanList();
