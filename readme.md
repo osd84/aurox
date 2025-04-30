@@ -299,28 +299,32 @@ todo
 ## Sec
 
 ```php
+
+use OsdAurox\Sec
+
 Sec::isPost() // true si POST
 Sec:getAction()  // lit $_GET['action'] et standardise sa lecture sécurisée
 Sec::jsonDatas()   // Retourne une request JSON en tableau
 
 Sec::getRealIpAddr()  // retourne vrai adresse ip du src request
 
-Sec::h($string) // alias htmlespcialchar
-Sec::hNoHtml($string) // alias htmlespcialchar
+Sec::h($string) // alias htmlspecialchars
+Sec::hNoHtml($string) // alias htmlspecialchars
 
 Sec::safeForLikeStrong($string)   // sécurise fortement un string pour son utilisation en LIKE SQL
 Sec::safeForLike($string)   // sécurise légerement un string pour son utilisation en LIKE SQL
 
 Sec::isAdminOrDie($flash = true, $redirect = true)    // regarde le $_SESSION['user']['role']
-Sec::isAdminBool()    // regarde le $_SESSION['user']['role']
+Sec::isAdminBool()    // regarde le $_SESSION['user']['role'] == 'admin'
 Sec::isRoleOrDie($role, $flash = true, $redirect = true)
-Sec::isRoleBool($role)
+Sec::isRoleBool($role)  // $role == 'user' , regarde si $_SESSION['user']['role'] == $role et retourne true / false
 Sec::isLogged($flash = true, $redirect = true)
+Sec::isLoggedBool()  // retoune true ou false si utilisateur connecté
 
 Sec::noneCsp() // retourne le NONCE Csp courant (typo)
 
-Sec::getPage() // méthode securisé pour lire le $_GET['page']
-Sec::getPerPage() // méthode securisé pour lire le $_GET['per_page']
+Sec::getPage() // méthode securisée pour lire le $_GET['page']
+Sec::getPerPage() // méthode securisée pour lire le $_GET['per_page']
 
 ```
 
