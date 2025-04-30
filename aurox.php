@@ -8,7 +8,8 @@ if(!defined('APP_ROOT')) {
 define('REQUEST_ID', bin2hex(random_bytes(16)));
 define('NONCE', base64_encode(random_bytes(16)));
 
-require_once '../vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
+
 
 use App\AppUrls;
 use OsdAurox\AppConfig;
