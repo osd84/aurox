@@ -174,7 +174,7 @@ class Sec
         return false;
     }
 
-    public static function isLogged($flash = true, $redirect = true)
+    public static function isLogged($flash = true, $redirect = true): void
     {
         if (!isset($_SESSION['user'])) {
             if ($flash) {
@@ -186,6 +186,19 @@ class Sec
             }
             die('Accès refusé');
         }
+    }
+
+    public static function isLoggedBool(): bool
+    {
+        if (!isset($_SESSION['user'])) {
+            return false;
+        }
+
+        if (empty($_SESSION['user']['role'])) {
+            return false;
+        }
+
+        return true;
     }
 
 
