@@ -2,7 +2,7 @@
 
 namespace OsdAurox;
 
-use App\AppConfig;
+use OsdAurox\AppConfig;
 use PHPMailer\PHPMailer\PHPMailer;
 
 class Mailer

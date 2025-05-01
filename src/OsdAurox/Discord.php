@@ -2,7 +2,7 @@
 
 namespace OsdAurox;
 
-use App\AppConfig;
+use OsdAurox\AppConfig;
 
 class Discord
 {
