@@ -38,7 +38,7 @@ Il suffit de télécharger la dernière version en .zip, le dossier /public cont
 
 Téléchargez la dernière release du projet : https://github.com/PetitCitron/aurox/releases/latest
 
-Dans la racine lancez
+Dans la racine lancer
 
 ```
 composer require osd/aurox
