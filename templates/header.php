@@ -16,7 +16,7 @@ use OsdAurox\Sec;
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title><?=  Sec::hNoHtml($title ?? "Aurox - BDD") ?></title>
     <!-- Ajoutez vos feuilles de style -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 <header>
