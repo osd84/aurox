@@ -6,7 +6,7 @@ use PDO;
 
 class Dbo
 {
-    public static ?Dbo $dbo_instance;
+    public static ?Dbo $dbo_instance = null;
 
     public ?PDO $pdo;
     public string $host;
