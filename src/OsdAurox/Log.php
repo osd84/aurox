@@ -4,9 +4,9 @@ namespace OsdAurox;
 
 class Log
 {
-    public static $logger_instance = null;
-    public $path = '';
-    public $level = '';
+    public static ?Log $logger_instance = null;
+    public string $path = '';
+    public string $level = '';
     private function __construct()
     {
         // sigleton

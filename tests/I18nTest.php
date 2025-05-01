@@ -42,7 +42,7 @@ $tester->assertEqual($htmlTranslation, 'Bonjour <b>Jean</b>', "translate() retou
 
 // Test de la méthode translate() avec l'option safe désactivé (default)
 $htmlKey = 'hello_user';
-$htmlTranslationSafe = $GLOBALS['i18n']->translate($htmlKey,  ['name' => '<b>Jean</b>'], safe: false);
+$htmlTranslationSafe = $GLOBALS['i18n']->translate($htmlKey,  ['name' => '<b>Jean</b>']);
 $expectedSafeOutput = 'Bonjour &lt;b&gt;Jean&lt;/b&gt;';
 $tester->assertEqual($htmlTranslationSafe, $expectedSafeOutput, "translate() échappe correctement le HTML quand l'option safe est activée");
 

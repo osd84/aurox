@@ -9,7 +9,7 @@ class FormValidator
     // Propriété pour stocker les messages d'erreur
     private array $errors = [];
     public ?bool $is_valid = null;
-    public $o_api_response = null;
+    public ?Api $o_api_response = null;
 
     public function isValid()
     {
@@ -82,7 +82,7 @@ class FormValidator
         }
         foreach ($this->errors as $field => $messages) {
             foreach ($messages as $message) {
-                $o_api_response->addValidatorField($field, $message, 'danger');
+                $o_api_response->addValidatorField($field, $message);
             }
         }
         $this->o_api_response = $o_api_response;

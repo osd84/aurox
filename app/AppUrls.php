@@ -21,12 +21,14 @@ class AppUrls
     public const ADMIN_USER_EDIT = '/admin/user_edit.php';
     public const ADMIN_USER_ADD = '/admin/user_edit.php';
 
-    public static function getList() {
+    public static function getList(): array
+    {
         $reflect = new \ReflectionClass(__CLASS__);
         return $reflect->getConstants();
     }
 
-    public static function existOr404() {
+    public static function existOr404()
+    {
         $url = $_SERVER['REQUEST_URI'] ?? '/';
         $url = trim($url, '/');
         $url = explode('?', $url);

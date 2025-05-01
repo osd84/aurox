@@ -13,8 +13,7 @@ class Csrf
             throw new Exception('La longueur doit être supérieure à 0');
         }
         // Utilise bin2hex et random_bytes pour une génération sécurisée
-        $key = bin2hex(random_bytes($length));
-        return $key;
+        return bin2hex(random_bytes($length));
     }
 
     public static function verify($key)

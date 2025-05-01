@@ -52,25 +52,21 @@ class FormsFilter
     {
         $btn_name = I18n::t('Actions');
 
-        $html =  <<<HTML
+        return <<<HTML
            <div class="card">
                <div class="card-header">
                     <h3 class="card-title">$btn_name</h3>
                 </div>
                 <div class="card-body">
         HTML;
-
-        return $html;
     }
 
     public function footerBtn()
     {
-        $html = <<<HTML
+        return <<<HTML
                 </div>
             </div>
         HTML;
-
-        return $html;
     }
 
     public function headerFilter()
@@ -84,7 +80,7 @@ class FormsFilter
             $html_remove_filter_btn = '<p>'.I18n::t('No filter applied').'</p>';
         }
 
-        $html = <<<HTML
+        return <<<HTML
            <div class="card">
                <div class="card-header">
                     <h3 class="card-title">$filter</h3>
@@ -92,18 +88,14 @@ class FormsFilter
                 <div class="card-body">
                     $html_remove_filter_btn
         HTML;
-
-        return $html;
     }
 
     public function footerFilter()
     {
-        $html = <<<HTML
+        return <<<HTML
                 </div>
             </div>
         HTML;
-
-        return $html;
     }
 
     public function listFilter($field, $list)
@@ -211,13 +203,10 @@ class FormsFilter
         $html = '';
         $html .= "<a href='$url' class='btn btn-primary'";
         $html .= ">";
-        switch ($type) {
-            case 'add':
-                $html .= "<span class='fa fa-plus'></span> ";
-                break;
-            default:
-                $html .= "";
-        }
+        $html .= match ($type) {
+            'add' => "<span class='fa fa-plus'></span> ",
+            default => "",
+        };
         $html .= "$text</a>";
 
         $this->btns[] = $html;

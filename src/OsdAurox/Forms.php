@@ -8,7 +8,7 @@ class Forms
 {
     public string $unique_id;
     public ?FormValidator $validator;
-    public $entity;
+    public mixed $entity;
     public array $errors = [];
     public bool $ajax = false;
     public string $action = '';
@@ -272,7 +272,7 @@ class Forms
      * @param string $type The type attribute of the input field (e.g., text, password). Defaults to 'text'.
      * @param string $placeholder The placeholder attribute for the input field. Defaults to an empty string.
      * @param string $class The CSS class applied to the input field. Defaults to 'form-control'.
-     * @param mixed $value The value attribute for the input field. Defaults to an empty string unless entity values are available.
+     * @param mixed|string $value The value attribute for the input field. Defaults to an empty string unless entity values are available.
      * @param bool $required Determines if the input field is required. Adds a 'required' attribute if true. Defaults to false.
      * @param bool $autocomplete Toggles the autocomplete attribute. Adds `autocomplete="off"` or password-specific behavior when false. Defaults to false.
      * @param bool $div Whether or not the input field should be wrapped in a div. Defaults to true.
@@ -283,30 +283,30 @@ class Forms
      * @param string $div_class Additional CSS classes to be applied to the wrapping div. Defaults to 'mb-3'.
      * @param string $fa_icon Font Awesome icon class to prepend inside the input group. Defaults to an empty string.
      * @param bool $checked Determines whether the input is checked. For use with specific input types only. Defaults to false.
-     * @param mixed $layout The layout type, with support for inline or break styles. Defaults to 'inline'.
+     * @param mixed|string $layout The layout type, with support for inline or break styles. Defaults to 'inline'.
      *
      * @return string The generated HTML for the input field.
      * @throws \Exception If the input type is 'checkbox', as a specific method should handle it.
      */
     public function input(
-        string $name,
-        string $label = '',
-        string $id = null,
-        string $type = 'text',
-        string $placeholder = '',
-        string $class = 'form-control',
-        $value = '',
-        bool $required = false,
-        bool $autocomplete = false,
-        bool $div = true,
-        bool $show_label = true,
-        bool $row = true,
-        int $label_width = 2,
-        int $input_width = 10,
-        string $div_class = 'mb-3',
-        string $fa_icon = '',
-        bool $checked = false,
-        $layout = 'inline'
+        string       $name,
+        string       $label = '',
+        string       $id = null,
+        string       $type = 'text',
+        string       $placeholder = '',
+        string       $class = 'form-control',
+        mixed        $value = '',
+        bool         $required = false,
+        bool         $autocomplete = false,
+        bool         $div = true,
+        bool         $show_label = true,
+        bool         $row = true,
+        int          $label_width = 2,
+        int          $input_width = 10,
+        string       $div_class = 'mb-3',
+        string       $fa_icon = '',
+        bool         $checked = false,
+        string $layout = 'inline'
     ): string {
         $id = Sec::h($id);
         if (!$label) {

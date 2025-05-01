@@ -26,9 +26,9 @@ AppConfig::init(require APP_ROOT . '/conf.php');
 
 // ERRORS
 if (AppConfig::get('debug', false)) {
+    error_reporting(E_ALL);
     ini_set('display_errors', '1');
     ini_set('display_startup_errors', '1');
-    error_reporting(E_ALL);
     Log::getInstance(path : '/logs/dev.log');
     DEFINE('DEBUG', true);
 } else {
@@ -58,7 +58,7 @@ if (!AppConfig::get('debug')) {
     header('X-XSS-Protection: 1; mode=block');
     header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
     if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
-        $appUrl = AppConfig::get('appUrl', '');
+        $appUrl = AppConfig::get('appUrl');
         if (!str_contains($appUrl, 'https://')) {
             die('HTTPS is required in PROD');
         }

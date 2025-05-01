@@ -110,7 +110,8 @@ class Paginator
         $perPage = Sec::getPerPage() ?? 10;
 
         // Construire les parties de l'URL et les paramètres existants
-        $url = (strpos($this->url, '?') === false) ? '?per_page=' : '&per_page=';
+        $url = str_contains($this->url, '?') ? '&per_page=' : '?per_page=';
+
         $url .= $perPage . '&page=';
 
         $baseUrl = $this->url . $url;

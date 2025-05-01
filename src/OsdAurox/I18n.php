@@ -4,8 +4,8 @@ namespace  OsdAurox;
 
 class I18n
 {
-    private $translations = [];
-    private $locale;
+    private array $translations = [];
+    private string $locale;
 
     public function __construct($locale = 'en')
     {
@@ -57,4 +57,3 @@ class I18n
         return $translator->translate(key : $key, placeholders: $placeholders, safe : $safe);
     }
 }
-?>

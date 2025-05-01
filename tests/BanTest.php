@@ -68,13 +68,13 @@ $tester->assertEqual(true, $r, 'unban ok');
 // ban par detection d'injection dans $_POST ou $_GET
 $_POST['test'] = 'test';
 $_GET['name'] = 'username';
-$r = Ban::banIfHackAttempt(APP_ROOT);
-$tester->assertEqual(false, $r, 'pas de tentative');;
+$r = Ban::banIfHackAttempt();
+$tester->assertEqual(false, $r, 'pas de tentative');
 
 // ban par XSS sur POST
 $_POST['test'] = "<script>alert('123')</script>";
 unset($_GET['name']);
-$r = Ban::banIfHackAttempt(APP_ROOT);
+$r = Ban::banIfHackAttempt();
 $tester->assertEqual(true, $r, 'block XSS');
 
 // check if ban & unban
@@ -86,7 +86,7 @@ $tester->assertEqual(true, $r, 'unban ok');
 // ban par SQLI en GET
 unset($_POST['test']);
 $_GET['name'] = "'; DROP TABLE users; --";
-$r = Ban::banIfHackAttempt(APP_ROOT);
+$r = Ban::banIfHackAttempt();
 $tester->assertEqual(true, $r, 'block sqli');
 
 // check if ban & unban

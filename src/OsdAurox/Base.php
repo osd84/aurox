@@ -33,7 +33,7 @@ class Base
      * @param string $message Optional message to display or include in the exception.
      * @return void
      */
-    public static function dieOrThrow($message = '')
+    public static function dieOrThrow(string $message = ''): void
     {
         if(defined('UNIT_TESTING')) {
             throw new \RuntimeException('[STOPPED by dieOrThrow() ]' . $message);
@@ -52,7 +52,7 @@ class Base
      *
      * @return array The formatted array representing a select list structure, with each item having 'id' and 'name' keys.
      */
-    public static function asSelectList($array, $value_field = 'name', $key_field = 'id'): array
+    public static function asSelectList(array $array, string $value_field = 'name', string $key_field = 'id'): array
     {
         $list = [];
         foreach ($array as $item) {
@@ -65,7 +65,7 @@ class Base
         return $list;
     }
 
-    public static function redirect($url)
+    public static function redirect($url): void
     {
         header("Cache-Control: no-cache, must-revalidate");
         header("Expires: 0");

@@ -6,15 +6,15 @@ use PDO;
 
 class Dbo
 {
-    public static $dbo_instance;
+    public static ?Dbo $dbo_instance;
 
     public ?PDO $pdo;
-    public $host;
-    public $user;
-    public $dbname;
-    public $pass;
-    public $charset;
-    public $dsn;
+    public string $host;
+    public string $user;
+    public string $dbname;
+    public string $pass;
+    public string $charset;
+    public string $dsn;
 
     private function __construct()
     {

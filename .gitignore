@@ -24,8 +24,6 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-##### Linux
-*~
 
 # temporary files which can be created if a process still has a handle open of a deleted file
 .fuse_hidden*
@@ -68,7 +66,6 @@ Temporary Items
 .apdisk
 
 ##### Backup
-*.bak
 *.gho
 *.ori
 *.orig
@@ -165,7 +162,6 @@ Sessionx.vim
 
 # Temporary
 .netrwhist
-*~
 # Auto-generated tag files
 tags
 # Persistent undo
@@ -255,7 +251,6 @@ GitHub.sublime-settings
 
 ##### Notepad++
 # Notepad++ backups #
-*.bak
 
 ##### TextMate
 *.tmproj
@@ -359,7 +354,6 @@ fabric.properties
 .metadata
 bin/
 tmp/
-*.tmp
 *.bak
 *.swp
 *~.nib

@@ -19,7 +19,8 @@
         "mobiledetect/mobiledetectlib": "^4.8",
         "phpmailer/phpmailer": "^6.9",
         "ext-pdo": "*",
-        "respect/validation": "^2.4"
+        "respect/validation": "^2.4",
+        "ext-curl": "*"
     },
     "require-dev": {
         "petitcitron/brutaltestrunner": "^2.0"

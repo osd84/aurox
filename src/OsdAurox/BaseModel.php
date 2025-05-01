@@ -9,11 +9,11 @@ use RuntimeException;
 class BaseModel {
 
 
-    public static $table = "unknown";
+    public static string $table = "unknown";
 
     public int $id;
 
-    public function getTable()
+    public function getTable(): string
     {
         return static::$table;
     }
@@ -51,7 +51,7 @@ class BaseModel {
      * @return array|false The fetched record as an associative array, or false if no record is found.
      * @throws RuntimeException If there is a database connection error.
      */
-    public static function getBy($pdo, $field, $value)
+    public static function getBy($pdo, string $field, mixed $value): array|false
     {
         try {
             $table = static::$table;
@@ -75,7 +75,7 @@ class BaseModel {
      * @return array An array of fetched records as associative arrays.
      * @throws RuntimeException If a database connection error occurs.
      */
-    public static function getAllBy($pdo, $field, $value)
+    public static function getAllBy($pdo, string $field, mixed $value): array
     {
         try {
             $table = static::$table;
@@ -97,7 +97,7 @@ class BaseModel {
         return $stmt->fetchColumn();
     }
 
-    public static function delete($pdo, $id)
+    public static function delete($pdo, $id): bool
     {
         $id = (int) $id;
         $stmt = $pdo->prepare("DELETE FROM " . static::$table . " WHERE id = :id");
@@ -111,7 +111,7 @@ class BaseModel {
     /**
     * Not secure sql injection possible via $field
     */
-    public static function check_uniq($pdo, $field, $value)
+    public static function check_uniq($pdo, $field, $value): bool
     {
         $table = static::$table;
         $stmt = $pdo->prepare("SELECT $field FROM $table WHERE $field = :value");

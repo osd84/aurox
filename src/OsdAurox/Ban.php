@@ -5,10 +5,11 @@ namespace OsdAurox;
 
 class Ban
 {
-    public static $banInstance = null;
+    public static Ban|null $banInstance = null;
 
 
-    public static $blackListWords = [
+    public static array $blackListWords = [
+        '/.git/config',
         '.git/config',
         '/wp-admin/admin-ajax.php',
         '/xmlrpc.php',
@@ -122,7 +123,7 @@ class Ban
         // sigleton
     }
 
-    public function init($banMessage='Oops !')
+    public function init($banMessage='Oops !'): void
     {
         if(!file_exists(APP_ROOT . '/blacklist__.php')) {
             file_put_contents(APP_ROOT . '/blacklist__.php', "<?php \r\n");
@@ -134,7 +135,7 @@ class Ban
         $this->banMessage = $banMessage;
     }
 
-    public static function getInstance($banMessage='Oops !')
+    public static function getInstance($banMessage='Oops !'): ?Ban
     {
         if(!self::$banInstance) {
             $o_ban = new self();
@@ -199,6 +200,9 @@ class Ban
             return false;
         }
         $date = date('Y-m-d H:i:s');
+        if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+            return false;
+        }
         $log = "$ip\n";
         file_put_contents(APP_ROOT . '/blacklist__.php', $log, FILE_APPEND);
         $logtimed = "$date - $ip\n";
@@ -227,8 +231,7 @@ class Ban
 
     private function loadBanList(): array
     {
-        $black_list = file(APP_ROOT . '/blacklist__.php', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        return $black_list;
+        return file(APP_ROOT . '/blacklist__.php', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     }
 
     public static function detectXssAttempt(string $input): bool
@@ -293,6 +296,9 @@ class Ban
 
     public static function unBan( $ip): bool
     {
+        if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+            return false;
+        }
         $instance = self::getInstance();
         $instance->blackList = $instance->loadBanList();
         $newContent = '';
@@ -306,7 +312,7 @@ class Ban
         }
         file_put_contents(APP_ROOT . '/blacklist__.php', $newContent);
         $date = date('Y-m-d H:i:s');
-        $logtimed = "$date - $instance->realIp - unban\n";
+        $logtimed = "$date - $ip - unban\n";
         file_put_contents(APP_ROOT . '/banlog__.php', $logtimed, FILE_APPEND);
         return $hint;
     }

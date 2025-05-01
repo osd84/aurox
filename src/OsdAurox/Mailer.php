@@ -7,7 +7,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 
 class Mailer
 {
-    public $mail = null;
+    public ?PHPMailer $mail = null;
 
     public function __construct() {
         $mail = new PHPMailer(DEBUG);
@@ -19,7 +19,7 @@ class Mailer
         $mail->SMTPSecure = AppConfig::get('mail_ssl') ? 'ssl' : 'tls';
         $mail->Port = AppConfig::get('mail_port');
         $mail->setFrom(AppConfig::get('mail_from'), AppConfig::get('appName'));
-        $mail->isHTML(true);
+        $mail->isHTML();
         $mail->CharSet = 'UTF-8';
 
         $this->mail = $mail;
