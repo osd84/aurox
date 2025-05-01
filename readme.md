@@ -38,6 +38,13 @@ Il suffit de télécharger la dernière version en .zip, le dossier /public cont
 
 Téléchargez la dernière release du projet : https://github.com/PetitCitron/aurox/releases/latest
 
+Dans la racine lancez
+
+```
+composer require osd/aurox
+composer dump-autoload         
+```
+
 Copier [conf_example.php](conf_example.php) et renommer en `conf.php` en modifiant et adaptant son contenu à votre projet.
 
 Décompressez le .zip à la racine de votre dossier web en exposant uniquement le dossier **public/** dans votre conf Apache2.
