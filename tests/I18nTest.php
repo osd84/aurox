@@ -59,4 +59,32 @@ try {
     $tester->assertEqual(str_contains($e->getMessage(), 'I18n not initialized'), true, "I18n::t() lance correctement une exception si I18n est non initialisé");
 }
 
+
+$GLOBALS['i18n'] = new I18n('en');
+// Test de la méthode entity
+$entity = [
+    'name' => 'default',
+    'name_en' => 'en',
+    'name_fr' => 'fr',
+    'name_it' => 'it',
+];
+// en
+$r = I18n::entity($entity);
+$tester->assertEqual($r, 'en', "I18n::entity() retourne la traduction correcte 'en'");
+$GLOBALS['i18n'] = new I18n('fr');
+// fr
+$r = I18n::entity($entity);
+$tester->assertEqual($r, 'fr', "I18n::entity() retourne la traduction correcte 'fr'");
+// default cascade sur la clef 'name'
+unset($entity['name_fr']);
+$r = I18n::entity($entity);
+$tester->assertEqual($r, 'default', "I18n::entity() retourne la traduction correcte 'default' car pas de name_fr");
+// default cascade sur 'default' var
+$r = I18n::entity($entity, 'custom');
+$tester->assertEqual($r, 'custom', "I18n::entity() retourne la traduction correcte 'custom' car pas de name_fr et default");
+// default cascade sur '' car pas de name, et pas de default val
+unset($entity['name']);
+$r = I18n::entity($entity);
+$tester->assertEqual($r, '', "I18n::entity() retourne la traduction correcte '' car pas de name_fr et pas de default");
+
 $tester->footer(exit: false);

@@ -56,4 +56,35 @@ class I18n
         }
         return $translator->translate(key : $key, placeholders: $placeholders, safe : $safe);
     }
+
+    public static function entity(array $entity, ?string $default = null, string $fieldName = 'name', bool $safe = false): string
+    {
+        if (!$entity) {
+            return '';
+        }
+
+        $translator = $GLOBALS['i18n'];
+        if (!$translator) {
+            throw new \LogicException('Out context; I18n not initialized');
+        }
+
+        $localizedKey = $fieldName . '_' . $translator->getLocale();
+
+        // si la clef existe
+        if (array_key_exists($localizedKey, $entity)) {
+            $out = $entity[$localizedKey];
+        } elseif ($default !== null) {
+            $out = $default;
+        } elseif (array_key_exists($fieldName, $entity)) {
+            $out = $entity[$fieldName];
+        } else {
+            $out = '';
+        }
+
+        if (!$safe) {
+            return htmlspecialchars($out, ENT_QUOTES, 'UTF-8');
+        }
+
+        return $out;
+    }
 }
