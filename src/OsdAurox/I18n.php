@@ -10,6 +10,9 @@ class I18n
     public function __construct($locale = 'en')
     {
         $this->locale = $locale;
+        if (!in_array($this->locale, AppConfig::get('lang', safe: true) ?? ['en'])) {
+            $this->locale = 'en';
+        }
         $this->loadTranslations();
     }
 
@@ -94,6 +97,12 @@ class I18n
         if (!$translator) {
             throw new \LogicException('Out context; I18n not initialized');
         }
-        return $translator->getLocale();
+
+        $out = $translator->getLocale();
+        if (!in_array($out, AppConfig::get('lang', safe: true) ?? ['en'])) {
+            return 'en';
+        }
+        return $out;
     }
+
 }
