@@ -102,5 +102,12 @@ $entity = [
 ];
 $r = I18n::entity($entity, fieldName: 'custom');
 $tester->assertEqual($r, 'fr', "fieldName field ok");
+// test cascade sur name si traduction null
+$entity = [
+    'name' => 'default',
+    'name_fr' => null,
+];
+$r = I18n::entity($entity);
+$tester->assertEqual($r, 'default', "fieldName field cascade sur custom ok si traduction null");
 
 $tester->footer(exit: false);

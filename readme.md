@@ -306,8 +306,22 @@ Traduire avec des fichiers JSON
 FIchier dans : [fr.php](translations/fr.php)
 
 ```php
+// intialisation du traducteur dans le scope 
+$GLOBALS['i18n'] = new I18n('en');
+
+// support des traductions classique via /translations
 I18n::t('English')
 >>> Anglais
+
+// support des traductions bdd via des array
+$entity = [
+    'name' => 'default',
+    'name_en' => 'trad_en',
+    'name_fr' => 'trad_fr',
+    'name_it' => 'trad_it',
+];
+$r = I18n::entity($entity);
+>>> 'trad_en'
 ```
 
 ## Mailer
