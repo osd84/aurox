@@ -71,7 +71,7 @@ class I18n
         $localizedKey = $fieldName . '_' . $translator->getLocale();
 
         // si la clef existe
-        if (array_key_exists($localizedKey, $entity)) {
+        if (array_key_exists($localizedKey, $entity) && !empty($entity[$localizedKey])) {
             $out = $entity[$localizedKey];
         } elseif ($default !== null) {
             $out = $default;
