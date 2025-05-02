@@ -29,6 +29,9 @@ class AppUrls
 
     public static function existOr404()
     {
+        if(!isset($_SERVER['REQUEST_URI'])) {
+            return true;
+        }
         $url = $_SERVER['REQUEST_URI'] ?? '/';
         $url = trim($url, '/');
         $url = explode('?', $url);
