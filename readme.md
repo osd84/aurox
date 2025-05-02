@@ -322,6 +322,11 @@ $entity = [
 ];
 $r = I18n::entity($entity);
 >>> 'trad_en'
+
+
+// locale actuelle
+$locale = I18n::currentLocale();
+>>> 'fr'
 ```
 
 ## Mailer
