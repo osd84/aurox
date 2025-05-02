@@ -16,6 +16,21 @@ C'est aussi dans ce dépot que sont écrits les tests unitaires du moteur Aurox.
 # Aurox
 
 
+## Utilisez comme lib
+
+Vous pouvez utiliser se repo, comme collection de lib.
+C'est sont objectif initial.
+
+```
+composer require osd/aurox
+```
+
+Puis 
+
+```
+require_once __DIR__ . '/vendor/autoload.php';
+```
+
 ## Utiliser comme start app
 
 Vous pouvez aussi utiliser se repo, comme squelette d'application de démarrage.
@@ -26,7 +41,7 @@ Téléchargez la dernière release du projet : https://github.com/PetitCitron/au
 
 Copier [conf_example.php](conf_example.php) et renommer en `conf.php` en modifiant et adaptant son contenu à votre projet.
 
-Décompressez le .zip à la racine de votre dossier web en exposant uniquement le dossier **public/** dans votre conf Apache2.
+Décompressez-le .zip à la racine de votre dossier web en exposant uniquement le dossier **public/** dans votre conf Apache2.
 
 ```
 DocumentRoot /var/www/<my_project>/public/
