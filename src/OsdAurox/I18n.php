@@ -37,13 +37,13 @@ class I18n
         return $translation;
     }
 
-    public function setLocale($locale)
+    public function setLocale($locale): void
     {
         $this->locale = $locale;
         $this->loadTranslations();
     }
 
-    public function getLocale()
+    public function getLocale(): ?string
     {
         return $this->locale;
     }
@@ -86,5 +86,14 @@ class I18n
         }
 
         return $out;
+    }
+
+    public static function currentLocale(): ?string
+    {
+        $translator = $GLOBALS['i18n'];
+        if (!$translator) {
+            throw new \LogicException('Out context; I18n not initialized');
+        }
+        return $translator->getLocale();
     }
 }

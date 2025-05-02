@@ -110,4 +110,13 @@ $entity = [
 $r = I18n::entity($entity);
 $tester->assertEqual($r, 'default', "fieldName field cascade sur custom ok si traduction null");
 
+
+// test currentLocale
+$GLOBALS['i18n'] = new I18n('en');
+$currentLocale = I18n::currentLocale();
+$tester->assertEqual($currentLocale, 'en', "currentLocale() retourne bien 'en'");
+$GLOBALS['i18n'] = new I18n('fr');
+$currentLocale = I18n::currentLocale();
+$tester->assertEqual($currentLocale, 'fr', "currentLocale() retourne bien 'fr'");
+
 $tester->footer(exit: false);
