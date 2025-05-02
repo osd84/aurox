@@ -476,4 +476,3 @@ composer.lock
 /cache_system_h€re/*.php
 /logs/*.log
 /conf.php
-/vendor/

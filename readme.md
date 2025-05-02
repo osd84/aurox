@@ -16,21 +16,6 @@ C'est aussi dans ce dépot que sont écrits les tests unitaires du moteur Aurox.
 # Aurox
 
 
-## Utilisez comme lib
-
-Vous pouvez utiliser se repo, comme collection de lib.
-C'est sont objectif initial.
-
-```
-composer require osd/aurox
-```
-
-Puis 
-
-```
-require_once __DIR__ . '/vendor/autoload.php';
-```
-
 ## Utiliser comme start app
 
 Vous pouvez aussi utiliser se repo, comme squelette d'application de démarrage.
@@ -38,12 +23,6 @@ Il suffit de télécharger la dernière version en .zip, le dossier /public cont
 
 Téléchargez la dernière release du projet : https://github.com/PetitCitron/aurox/releases/latest
 
-Dans la racine lancer
-
-```
-composer require osd/aurox
-composer dump-autoload         
-```
 
 Copier [conf_example.php](conf_example.php) et renommer en `conf.php` en modifiant et adaptant son contenu à votre projet.
 
