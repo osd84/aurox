@@ -86,5 +86,21 @@ $tester->assertEqual($r, 'custom', "I18n::entity() retourne la traduction correc
 unset($entity['name']);
 $r = I18n::entity($entity);
 $tester->assertEqual($r, '', "I18n::entity() retourne la traduction correcte '' car pas de name_fr et pas de default");
+// sec test
+$entity = [
+    'name' => 'default',
+    'name_fr' => "<script>alert('123')</script>",
+];
+$r = I18n::entity($entity);
+$tester->assertEqual($r, '&lt;script&gt;alert(&#039;123&#039;)&lt;/script&gt;', "échappement ok");
+$r = I18n::entity($entity, safe: true);
+$tester->assertEqual($r, "<script>alert('123')</script>", "safe mode ok");
+// test fieldName
+$entity = [
+    'custom' => 'default',
+    'custom_fr' => "fr",
+];
+$r = I18n::entity($entity, fieldName: 'custom');
+$tester->assertEqual($r, 'fr', "fieldName field ok");
 
 $tester->footer(exit: false);
