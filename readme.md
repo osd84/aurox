@@ -16,21 +16,6 @@ C'est aussi dans ce dépot que sont écrits les tests unitaires du moteur Aurox.
 # Aurox
 
 
-## Utilisez comme lib
-
-Vous pouvez utiliser se repo, comme collection de lib.
-C'est sont objectif initial.
-
-```
-composer require osd/aurox
-```
-
-Puis 
-
-```
-require_once __DIR__ . '/vendor/autoload.php';
-```
-
 ## Utiliser comme start app
 
 Vous pouvez aussi utiliser se repo, comme squelette d'application de démarrage.
