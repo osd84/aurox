@@ -21,6 +21,10 @@ class AppUrls
     public const ADMIN_USER_EDIT = '/admin/user_edit.php';
     public const ADMIN_USER_ADD = '/admin/user_edit.php';
 
+    public const PAGE_CONTACT = '/contact.php';
+    public const RSS = '/rss.php';
+
+
     public static function getList(): array
     {
         $reflect = new \ReflectionClass(__CLASS__);
