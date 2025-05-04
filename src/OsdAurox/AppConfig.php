@@ -7,42 +7,44 @@ use OsdAurox\Sec;
 Class AppConfig {
 
     private static ?self $instance = null;
-
-    public string $appName;
-    public string $appTitle;
+    public ?bool $debug;
+    public ?string $appUrl;
+    public array $lang;
+    public bool $featureRegister;
+    public bool $featureUserAllowAdminCreate;
+    public bool $nonce;
+    public int $passwordMaxLength;
+    public int $passwordMinLength;
+    public string $adminFolder;
     public string $appAuthor;
     public string $appDescription;
-    public string $ceoDesc;
-    public string $ceoKeywords;
     public string $appFavicon;
-    public string $appLogo;
+    public string $appKeywords;
     public string $appLang;
+    public string $appLogo;
+    public string $appName;
+    public string $appTitle;
     public string $appVersion;
-
-    public ?string $appUrl;
-    public string $devUrl;
-    public string $prodUrl;
-    public string $loginUrlForm;
-
-    public ?bool $debug;
-    public string $host;
-    public string $db;
-    public string $user;
-    public string $pass;
     public string $charset;
-    public bool $feature_register;
-    public int $password_min_length;
-    public int $password_max_length;
-    public string $password_complexity;
-    public string $admin_folder;
-    public bool $nonce;
+    public string $db;
     public string $devIp;
-
-    public array $lang;
-    public bool $feature_user_allow_admin_create;
-
+    public string $devUrl;
     public string $discordWebhook;
+    public string $host;
+    public string $loginUrlForm;
+    public string $mailContactDest;
+    public string $mailFrom;
+    public string $mailHost;
+    public string $mailPass;
+    public string $mailPort;
+    public string $mailSsl;
+    public string $mailTls;
+    public string $mailUser;
+    public string $pass;
+    public string $passwordComplexity;
+    public string $prodUrl;
     public string $salt;
+    public string $user;
 
     public static function init(array $config): self
     {
@@ -56,44 +58,44 @@ Class AppConfig {
 
     private function __construct(array $conf)
     {
-
-        // Affectation des propriétés depuis le tableau $conf
-        $this->appName = $conf['appName'] ?? 'DefaultAppName';
-        $this->appTitle = $conf['appTitle'] ?? 'DefaultTitle';
+        $this->adminFolder = $conf['adminFolder'] ?? 'admin';
         $this->appAuthor = $conf['appAuthor'] ?? '-';
         $this->appDescription = $conf['appDescription'] ?? '-';
-        $this->ceoDesc = $conf['ceoDesc'] ?? '-';
-        $this->ceoKeywords = $conf['ceoKeywords'] ?? '-';
         $this->appFavicon = $conf['appFavicon'] ?? 'favicon.ico';
-        $this->appLogo = $conf['appLogo'] ?? 'logo.png';
+        $this->appKeywords = $conf['appKeywords'] ?? '-';
         $this->appLang = $conf['appLang'] ?? 'fr';
-        $this->appVersion = $conf['appVersion'] ?? '1.0.0';
-        $this->devIp = $conf['devIp'] ?? '127.0.0.1';
-
-        $this->devUrl = $conf['devUrl'] ?? 'http://localhost';
-        $this->prodUrl = $conf['prodUrl'] ?? 'http://localhost';
+        $this->appLogo = $conf['appLogo'] ?? 'logo.png';
+        $this->appName = $conf['appName'] ?? 'DefaultAppName';
+        $this->appTitle = $conf['appTitle'] ?? 'DefaultTitle';
         $this->appUrl = $conf['appUrl'];
-        $this->loginUrlForm = $conf['loginUrlForm'] ?? '/';
-
-        $this->debug = $conf['debug'] ?? false;
-        $this->host = $conf['host'] ?? '127.0.0.1';
-        $this->db = $conf['db'] ?? 'default_db';
-        $this->user = $conf['user'] ?? 'root';
-        $this->pass = $conf['pass'] ?? '';
+        $this->appVersion = $conf['appVersion'] ?? '1.0.0';
         $this->charset = $conf['charset'] ?? 'utf8mb4';
-        $this->password_min_length = $conf['password_min_length'] ?? 8;
-        $this->password_max_length = $conf['password_max_length'] ?? 255;
-        $this->password_complexity = $conf['password_complexity'] ?? '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/';
-        $this->admin_folder = $conf['admin_folder'] ?? 'admin';
-        $this->nonce = $conf['nonce'] ?? false;
-
-        $this->feature_register = $conf['feature_register'] ?? true;
-        $this->feature_user_allow_admin_create = $conf['feature_user_allow_admin_create'] ?? false;
-
-        $this->lang = $conf['lang'] ?? ['fr'];
+        $this->db = $conf['db'] ?? 'default_db';
+        $this->debug = $conf['debug'] ?? false;
+        $this->devIp = $conf['devIp'] ?? '127.0.0.1';
+        $this->devUrl = $conf['devUrl'] ?? 'http://localhost';
         $this->discordWebhook = $conf['discordWebhook'] ?? '';
+        $this->featureRegister = $conf['featureRegister'] ?? false;
+        $this->featureUserAllowAdminCreate = $conf['featureUserAllowAdminCreate'] ?? false;
+        $this->host = $conf['host'] ?? '127.0.0.1';
+        $this->lang = $conf['lang'] ?? ['fr'];
+        $this->loginUrlForm = $conf['loginUrlForm'] ?? '/';
+        $this->mailContactDest = $conf['mailContactDest'] ?? false;
+        $this->mailFrom = $conf['mailFrom'] ?? false;
+        $this->mailHost = $conf['mailHost'] ?? false;
+        $this->mailPass = $conf['mailPass'] ?? false;
+        $this->mailPort = $conf['mailPort'] ?? false;
+        $this->mailSsl = $conf['mailSsl'] ?? false;
+        $this->mailTls = $conf['mailTls'] ?? false;
+        $this->mailUser = $conf['mailUser'] ?? false;
+        $this->nonce = $conf['nonce'] ?? false;
+        $this->pass = $conf['pass'] ?? '';
+        $this->passwordComplexity = $conf['passwordComplexity'] ?? '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/';
+        $this->passwordMaxLength = $conf['passwordMaxLength'] ?? 255;
+        $this->passwordMinLength = $conf['passwordMinLength'] ?? 8;
+        $this->prodUrl = $conf['prodUrl'] ?? 'http://localhost';
         $this->salt = $conf['salt'] ?? '';
-
+        $this->user = $conf['user'] ?? 'root';
     }
 
     public static function getInstance(): self
