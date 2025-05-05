@@ -6,12 +6,19 @@ Aurox suit l'idée du Brutalisme et du Brutalism Dev Design.
 
 C'est une **ALPHA** beaucoup de choses vont changer, ne pas utiliser en prod. 😉️
 
-Nécessite des fichiers .htaccess et apache2.
+Nécessite un serveur web Apache2 et PHP >= 8.1
 
 LICENCE MIT - Projet en cours - Ne pas utiliser en production
 
-Ceci est une application web d'exemple, un kit de démarrage, utilisant le moteur Aurox.
-C'est aussi dans ce dépot que sont écrits les tests unitaires du moteur Aurox.
+## A propos
+
+Aurox peut être utilisée comme lib utilitaire via composer ou comme moteur d'application web. <br>
+Ce depôt contient un kit de démarrage et un exemple d'utilisation dans /public[public](public). <br>
+<br>
+Ce dépôt est en phase de R&D, beaucoup de chose sont seulement prototypées en attente de tests et benchmarks.<br>
+Il manque de la documentation à tous les niveaux, mais le projet avance bien et va rapidement gagner en maturité.<br>
+<br>
+L'objectif est de rester très simple, ce n'est pas un framework.
 
 
 ![screen.png](public/img/screen.png)
