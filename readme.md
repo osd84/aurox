@@ -69,7 +69,8 @@ DocumentRoot /var/www/<my_project>/public/
 Mettez vos routes dans [app/AppUrls.php](app/AppUrls.php) <br>
 Mettez vos modèles dans [app/Models](app/Models) (si besoin) <br>
 
-⚠️ important Faites pointer le root de votre configuration Apache2 sur /public/ <br>
+⚠️ IMPORTANT configurer le DocumentRoot d'Apache2 pour pointer sur le dossier /public/ <br>
+Exemple `DocumentRoot /var/www/my_website/public/`
 Ne **jamais** exposer la racine directement sur le web. <br>
 Incluez [aurox.php](aurox.php) dans tous vos fichiers .php.
 
