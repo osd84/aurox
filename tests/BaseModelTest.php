@@ -4,6 +4,7 @@
 require_once '../aurox.php';
 
 use App\PostsModel;
+use OsdAurox\BaseModel;
 use OsdAurox\Dbo;
 use PetitCitron\BrutalTestRunner\BrutalTestRunner;
 
@@ -31,5 +32,19 @@ $uniq = PostsModel::check_uniq($pdo, 'title', 'title1');
 $tester->assertEqual($uniq, false, 'check_uniq() ok');
 $uniq = PostsModel::check_uniq($pdo, 'title', 'titleFake');
 $tester->assertEqual($uniq, true, 'check_uniq() ok');
+
+$jsonAgg = '[{"id": 3, "name": "Elem1", "name_translated": "Elem1Fr"}, {"id": 4, "name": "Elem2", "name_translated": "Elem2Fr"}]';
+$entity = ['keyJson' => $jsonAgg, 'keyNone' => null, 'keyNoJson' => 'noJson'];
+$r = BaseModel::jsonArrayAggDecode($entity, 'keyJson');
+$tester->assertEqual(array_column($r, 'name'), ['Elem1', 'Elem2'], 'jsonArrayAggDecode() keyJson ok');
+
+$r = BaseModel::jsonArrayAggDecode($entity, 'keyNone');
+$tester->assertEqual($r, [], 'jsonArrayAggDecode() keyNone ok');
+
+$r = BaseModel::jsonArrayAggDecode($entity, 'keyNoJson');
+$tester->assertEqual($r, [], 'jsonArrayAggDecode() keyNoJson ok');
+
+$r = BaseModel::jsonArrayAggDecode($entity, 'keyNoJson', default: ['my', 'default']);
+$tester->assertEqual($r, ['my', 'default'], 'jsonArrayAggDecode() keyNoJson + default ok');
 
 $tester->footer(exit: false);

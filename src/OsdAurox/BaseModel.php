@@ -134,4 +134,25 @@ class BaseModel {
     {
         throw new Exception('Not implemented');
     }
+
+    public static function jsonArrayAggDecode(array $array, string $key, array $default = null): array
+    {
+        if(!is_array($default)) {
+            $default = [];
+        }
+
+        if (!array_key_exists($key, $array)) {
+            return $default;
+        }
+
+        $json = $array[$key];
+        if (!$json) {
+            return $default;
+        }
+        $decoded = json_decode($json, true);
+        if ($decoded === null) {
+            return $default;
+        }
+        return $decoded;
+    }
 }
