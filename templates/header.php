@@ -18,13 +18,14 @@ use OsdAurox\Sec;
     <!-- Ajoutez vos feuilles de style -->
     <link rel="stylesheet" href="/style.css">
 </head>
-<body>
+<body class="container">
 <header>
     <h1><?= Sec::hNoHtml($headerTitle ?? "Bienvenue sur mon site"); ?></h1>
-    <nav>
+    <nav class="navbar">
         <ul>
             <li><a href="<?= Sec::hNoHtml(AppUrls::HOME) ?>">Accueil</a></li>
             <li><a href="<?= Sec::hNoHtml(AppUrls::NOT_FOUND) ?>">404</a></li>
         </ul>
     </nav>
 </header>
+<hr>
