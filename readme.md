@@ -151,6 +151,16 @@ Base:asSelectList($array, $value_field = 'name', $key_field = 'id') // retourne 
 Base:redirect($url) // redirect comme il faut
 ```
 
+
+## BaseModel
+
+```php
+// SELECT JSON_ARRAYAGG( JSON_OBJECT( 'id', wg.id, 'name', wg.name, 'name_translated', COALESCE(NULLIF(wg.name_$locale, ''), wg.name, '') )
+// as myKey
+$array = BaseModel::jsonArrayAggDecode($wine, 'myKey');  // Raccourcis pour extraire un JSON_ARRAYAGG ou [ ] si erreur; d'un résultat Array PDO
+>>> [ [ 'id' => 1, 'name' => 'foo', 'name_translated' => 'bar'], ... ]
+```
+
 ## LOG
 
 Écris les logs dans /logs/
