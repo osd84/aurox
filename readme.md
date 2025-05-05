@@ -19,7 +19,7 @@ C'est aussi dans ce dépot que sont écrits les tests unitaires du moteur Aurox.
 ## Utilisez comme lib
 
 Vous pouvez utiliser se repo, comme collection de lib.
-C'est sont objectif initial.
+C'est son objectif initial.
 
 ```
 composer require osd/aurox
