@@ -13,7 +13,7 @@ LICENCE MIT - Projet en cours - Ne pas utiliser en production
 ## A propos
 
 Aurox peut être utilisée comme lib utilitaire via composer ou comme moteur d'application web. <br>
-Ce depôt contient un kit de démarrage et un exemple d'utilisation dans /public[public](public). <br>
+Ce depôt contient un kit de démarrage et un exemple d'utilisation dans [/public](public). <br>
 <br>
 Ce dépôt est en phase de R&D, beaucoup de chose sont seulement prototypées en attente de tests et benchmarks.<br>
 Il manque de la documentation à tous les niveaux, mais le projet avance bien et va rapidement gagner en maturité.<br>
