@@ -471,3 +471,8 @@ Restore the dump `aurox_test.sql`
 ```sh
 cd tests && php run.php
 ```
+
+Quiet mode 
+```sh
+php run.php | grep  'fails' | grep -v '0 fails'
+```
