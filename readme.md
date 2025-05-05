@@ -42,7 +42,7 @@ Téléchargez la dernière release du projet : https://github.com/PetitCitron/au
 Dans la racine lancer
 
 ```
-composer require osd/aurox
+composer install
 composer dump-autoload         
 ```
 
