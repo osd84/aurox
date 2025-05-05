@@ -26,7 +26,7 @@ L'objectif est de rester très simple, ce n'est pas un framework.
 
 ## Utilisez comme lib
 
-Vous pouvez utiliser se repo, comme collection de lib.
+Vous pouvez utiliser ce repo, comme collection de lib.
 C'est son objectif initial.
 
 ```
@@ -39,11 +39,12 @@ Puis
 require_once __DIR__ . '/vendor/autoload.php';
 ```
 
+Vous avez accès à toutes les classes et fonctions décrites dans ce readme.
 
 ## Utiliser comme start app
 
 Vous pouvez aussi utiliser se repo, comme squelette d'application de démarrage.
-Il suffit de télécharger la dernière version en .zip, le dossier /public contient une start app.
+Il suffit de télécharger la dernière version en .zip, le dossier [/public](public) contient une start app.
 
 Téléchargez la dernière release du projet : https://github.com/PetitCitron/aurox/releases/latest
 
@@ -63,11 +64,10 @@ DocumentRoot /var/www/<my_project>/public/
 ```
 
 
-## Usage & Attention
+### Usage & Attention
 
-Copiez et modifiez le fichier   `conf.php`[conf_example.php](conf_example.php) en `conf.php` à la racine pour configurer votre application. <br>
 Mettez vos routes dans [app/AppUrls.php](app/AppUrls.php) <br>
-Mettez vos modèles dans [app/Models](app/Models) <br>
+Mettez vos modèles dans [app/Models](app/Models) (si besoin) <br>
 
 ⚠️ important Faites pointer le root de votre configuration Apache2 sur /public/ <br>
 Ne **jamais** exposer la racine directement sur le web. <br>
@@ -75,17 +75,18 @@ Incluez [aurox.php](aurox.php) dans tous vos fichiers .php.
 
 Exemple dans [index.php](public/index.php)
 
-Créer des fichiers templates, controllers où tout ce que vous voulez, comme vous le souhaitez. <br>
+Créer des fichiers templates, controllers et tout ce que vous voulez, comme vous le souhaitez. <br>
 Aurox n'est pas un framework, c'est juste un moteur avec de petits utilitaires. <br>
 <br>
 Il n'y a aucun système de routing ou de sécurité inclus. <br>
-C'est à vous de gérer, [BaseModel.php](src/OsdAurox/BaseModel.php) n'est pas un ORM.<br>
+C'est à vous de gérer <br>
+[BaseModel.php](src/OsdAurox/BaseModel.php) n'est pas un ORM.<br>
 Les arguments `$field` des méthodes de `BaseModel` sont **vulnérables aux injections SQL**. <br>
 N'y passez jamais de variables, le reste est normalement sécurisé via PDO.<br>
 <br>
 L'utilisation de cette lib est à vos risques et périls, elle est distribuée sous licence MIT. <br>
-Sans aucune garantie.
-
+Sans aucune garantie.<br>
+<br>
 
 La Doc est encore en ébauche, on fera mieux plus tard.
 
