@@ -30,7 +30,7 @@ Vous pouvez utiliser ce repo, comme collection de lib.
 C'est son objectif initial.
 
 ```
-composer require osd/aurox
+composer require osd84/aurox
 ```
 
 Puis
