@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0fc1b78ee7f77d1afeb44fcc3f4897ef",
+    "content-hash": "a244d16076da256be323c5b2a54dbe0c",
     "packages": [
         {
             "name": "mobiledetect/mobiledetectlib",
@@ -73,16 +73,16 @@
         },
         {
             "name": "phpmailer/phpmailer",
-            "version": "v6.9.3",
+            "version": "v6.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "2f5c94fe7493efc213f643c23b1b1c249d40f47e"
+                "reference": "bf74d75a1fde6beaa34a0ddae2ec5fce0f72a144"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/2f5c94fe7493efc213f643c23b1b1c249d40f47e",
-                "reference": "2f5c94fe7493efc213f643c23b1b1c249d40f47e",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/bf74d75a1fde6beaa34a0ddae2ec5fce0f72a144",
+                "reference": "bf74d75a1fde6beaa34a0ddae2ec5fce0f72a144",
                 "shasum": ""
             },
             "require": {
@@ -142,7 +142,7 @@
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
             "support": {
                 "issues": "https://github.com/PHPMailer/PHPMailer/issues",
-                "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.9.3"
+                "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.10.0"
             },
             "funding": [
                 {
@@ -150,7 +150,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-11-24T18:04:13+00:00"
+            "time": "2025-04-24T15:19:31+00:00"
         },
         {
             "name": "psr/cache",
@@ -376,19 +376,20 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.31.0",
+            "version": "v1.32.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "85181ba99b2345b0ef10ce42ecac37612d9fd341"
+                "reference": "6d857f4d76bd4b343eac26d6b539585d2bc56493"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/85181ba99b2345b0ef10ce42ecac37612d9fd341",
-                "reference": "85181ba99b2345b0ef10ce42ecac37612d9fd341",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/6d857f4d76bd4b343eac26d6b539585d2bc56493",
+                "reference": "6d857f4d76bd4b343eac26d6b539585d2bc56493",
                 "shasum": ""
             },
             "require": {
+                "ext-iconv": "*",
                 "php": ">=7.2"
             },
             "provide": {
@@ -436,7 +437,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.31.0"
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.32.0"
             },
             "funding": [
                 {
@@ -452,22 +453,22 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-09-09T11:45:10+00:00"
+            "time": "2024-12-23T08:48:59+00:00"
         }
     ],
     "packages-dev": [
         {
-            "name": "petitcitron/brutaltestrunner",
-            "version": "v2.0.5",
+            "name": "osd84/brutaltestrunner",
+            "version": "v2.0.6",
             "source": {
                 "type": "git",
-                "url": "https://github.com/PetitCitron/BrutalTestRunner.git",
-                "reference": "17ea06ef4da0d162cf63763fed7b765d4800b98c"
+                "url": "https://github.com/osd84/BrutalTestRunner.git",
+                "reference": "7d9612a30457c9394a51de84baf45194e61f41af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PetitCitron/BrutalTestRunner/zipball/17ea06ef4da0d162cf63763fed7b765d4800b98c",
-                "reference": "17ea06ef4da0d162cf63763fed7b765d4800b98c",
+                "url": "https://api.github.com/repos/osd84/BrutalTestRunner/zipball/7d9612a30457c9394a51de84baf45194e61f41af",
+                "reference": "7d9612a30457c9394a51de84baf45194e61f41af",
                 "shasum": ""
             },
             "type": "library",
@@ -487,10 +488,10 @@
             ],
             "description": "Minimalist PHP test runner Brutal dev design",
             "support": {
-                "issues": "https://github.com/PetitCitron/BrutalTestRunner/issues",
-                "source": "https://github.com/PetitCitron/BrutalTestRunner/tree/v2.0.5"
+                "issues": "https://github.com/osd84/BrutalTestRunner/issues",
+                "source": "https://github.com/osd84/BrutalTestRunner/tree/v2.0.6"
             },
-            "time": "2025-04-18T19:02:00+00:00"
+            "time": "2025-04-20T16:55:35+00:00"
         }
     ],
     "aliases": [],
@@ -499,7 +500,8 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "ext-pdo": "*"
+        "ext-pdo": "*",
+        "ext-curl": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.6.0"
