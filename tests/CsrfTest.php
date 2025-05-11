@@ -3,7 +3,7 @@
 require_once '../aurox.php';
 
 use OsdAurox\Csrf;
-use PetitCitron\BrutalTestRunner\BrutalTestRunner;
+use osd84\BrutalTestRunner\BrutalTestRunner;
 
 $tester = new BrutalTestRunner();
 $tester->header(__FILE__);

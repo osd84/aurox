@@ -23,6 +23,6 @@
         "ext-curl": "*"
     },
     "require-dev": {
-        "osd84/brutaltestrunner": "^2.0"
+        "osd84/brutaltestrunner": "^3.0"
     }
 }

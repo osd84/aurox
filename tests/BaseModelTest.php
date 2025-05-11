@@ -6,7 +6,7 @@ require_once '../aurox.php';
 use App\PostsModel;
 use OsdAurox\BaseModel;
 use OsdAurox\Dbo;
-use PetitCitron\BrutalTestRunner\BrutalTestRunner;
+use osd84\BrutalTestRunner\BrutalTestRunner;
 
 $tester = new BrutalTestRunner();
 $tester->header(__FILE__);

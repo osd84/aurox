@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a244d16076da256be323c5b2a54dbe0c",
+    "content-hash": "0fc7498d3676d6a5d4f179f62596a017",
     "packages": [
         {
             "name": "mobiledetect/mobiledetectlib",
@@ -459,22 +459,22 @@
     "packages-dev": [
         {
             "name": "osd84/brutaltestrunner",
-            "version": "v2.0.6",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/osd84/BrutalTestRunner.git",
-                "reference": "7d9612a30457c9394a51de84baf45194e61f41af"
+                "reference": "f04d52431140f4be6b58528f743ec18ff477da0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/osd84/BrutalTestRunner/zipball/7d9612a30457c9394a51de84baf45194e61f41af",
-                "reference": "7d9612a30457c9394a51de84baf45194e61f41af",
+                "url": "https://api.github.com/repos/osd84/BrutalTestRunner/zipball/f04d52431140f4be6b58528f743ec18ff477da0a",
+                "reference": "f04d52431140f4be6b58528f743ec18ff477da0a",
                 "shasum": ""
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "PetitCitron\\BrutalTestRunner\\": "src/"
+                    "osd84\\BrutalTestRunner\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -483,15 +483,15 @@
             ],
             "authors": [
                 {
-                    "name": "PetitCitron"
+                    "name": "osd84"
                 }
             ],
             "description": "Minimalist PHP test runner Brutal dev design",
             "support": {
                 "issues": "https://github.com/osd84/BrutalTestRunner/issues",
-                "source": "https://github.com/osd84/BrutalTestRunner/tree/v2.0.6"
+                "source": "https://github.com/osd84/BrutalTestRunner/tree/3.0.1"
             },
-            "time": "2025-04-20T16:55:35+00:00"
+            "time": "2025-05-06T19:59:14+00:00"
         }
     ],
     "aliases": [],

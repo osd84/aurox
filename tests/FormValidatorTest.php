@@ -3,7 +3,7 @@
 require_once '../aurox.php';
 
 use OsdAurox\FormValidator;
-use PetitCitron\BrutalTestRunner\BrutalTestRunner;
+use osd84\BrutalTestRunner\BrutalTestRunner;
 use Respect\Validation\Validator as v;
 
 
