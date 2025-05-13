@@ -45,6 +45,7 @@ Class AppConfig {
     public string $prodUrl;
     public string $salt;
     public string $user;
+    public string $ban_file_path;
 
     public static function init(array $config): self
     {
@@ -96,6 +97,7 @@ Class AppConfig {
         $this->prodUrl = $conf['prodUrl'] ?? 'http://localhost';
         $this->salt = $conf['salt'] ?? '';
         $this->user = $conf['user'] ?? 'root';
+        $this->ban_file_path  = $conf['ban_file_path'] ?? '';
     }
 
     public static function getInstance(): self
