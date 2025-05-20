@@ -147,7 +147,7 @@ Dict::isInArrayAndRevelant($tab, 'clef_existe_pas')
 
 ### Discord configuration
 
-Ajouter le webhook dans [conf.php](../../AppConfig.php)
+Ajouter le webhook dans [conf.php](conf.php)
 
 ```php
 'discordWebhook' => 'https://discord.com/api/webhooks/{key}';
