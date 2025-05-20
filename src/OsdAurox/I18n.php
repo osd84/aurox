@@ -22,6 +22,13 @@ class I18n
         $filePath = APP_ROOT . '/translations/' . $this->locale . '.php';
         if (file_exists($filePath)) {
             $this->translations = include $filePath;
+
+            // on injecte les traductions de Aurox Core si existent
+            $locale = $this->locale;
+            if (isset(Translations::$$locale)) {
+                $this->translations = array_merge(Translations::$fr, $this->translations);
+            }
+
             return true;
         }
         return false;

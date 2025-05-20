@@ -3,8 +3,9 @@
 require_once '../aurox.php';
 
 use OsdAurox\FormValidator;
+use OsdAurox\I18n;
+use OsdAurox\Validator;
 use osd84\BrutalTestRunner\BrutalTestRunner;
-use Respect\Validation\Validator as v;
 
 
 $tester = new BrutalTestRunner();
@@ -27,10 +28,11 @@ $tester->assertEqual(is_array($errorsEmail), true, "La méthode popError retourn
 $tester->assertEqual(str_contains(json_encode($errorsEmail), 'Email invalide'), true, "popError retourne correctement les erreurs du champ 'email'");
 $tester->assertEqual($validator->hasError('email'), false, "Le champ 'email' n'a plus d'erreur après l'appel à popError");
 
+$GLOBALS['i18n'] = new I18n('en');
 // Test de la méthode validate avec respect/validation
 $rules = [
-    'email' => v::email(),
-    'username' => v::notEmpty(),
+    Validator::create('email')->email(),
+    Validator::create('username')->notEmpty(),
 ];
 $data = [
     'email' => 'invalid-email',
@@ -40,8 +42,17 @@ $result = $validator->validate($data, $rules);
 $tester->assertEqual($result, false, "La validation échoue lorsque les données ne respectent pas les règles");
 
 $errors = $validator->getErrors();
-$tester->assertEqual(str_contains($errors['email'][0], 'Email must be valid email'), true, "La validation retourne une erreur pour un email non valide");
-$tester->assertEqual(str_contains($errors['username'][1], 'Username must not be empty'), true, "La validation retourne une erreur pour un champ vide");
+$tester->assertEqual(str_contains($errors['email'][0], 'must be valid email'), true, "La validation retourne une erreur pour un email non valide en");
+$tester->assertEqual(str_contains($errors['username'][1], 'must not be empty'), true, "La validation retourne une erreur pour un champ vide en");
+
+// on met en français pour tester les traductions du Core
+$GLOBALS['i18n'] = new I18n('fr');
+$validator->clearErrors(); // on efface les erreurs précédentes
+$result = $validator->validate($data, $rules);
+$errors = $validator->getErrors();
+$tester->assertEqual(str_contains($errors['email'][0], 'doit être une email valide'), true, "La validation retourne une erreur pour un email non valide fr");
+$tester->assertEqual(str_contains($errors['username'][0], 'doit être rempli'), true, "La validation retourne une erreur pour un champ vide fr");
+
 
 // Test de la méthode isValid avant validation
 $validator2 = new FormValidator();
@@ -52,11 +63,14 @@ try {
 }
 
 // Test de genApiResult
+$GLOBALS['i18n'] = new I18n('en');
+$validator->clearErrors(); // on efface les erreurs précédentes
+$result = $validator->validate($data, $rules);
 $apiResult = $validator->genApiResult();
 $tester->assertEqual(get_class($apiResult), OsdAurox\Api::class, "La méthode genApiResult retourne bien une instance d'Api");
 $tester->assertEqual(str_contains(json_encode($apiResult), 'Please correct the following errors'), true, "La méthode genApiResult inclut un message global d'erreur");
 $apiResultArr = json_decode(json_encode($apiResult), true);
-$tester->assertEqual(str_contains($apiResultArr['validators'][2]['msg'], 'must be valid email'), true, "genApiResult inclut correctement les erreurs de validation pour 'email'");
+$tester->assertEqual(str_contains($apiResultArr['validators'][0]['msg'], 'must be valid email'), true, "genApiResult inclut correctement les erreurs de validation pour 'email'");
 $tester->assertEqual(str_contains($apiResultArr['validators'][1]['msg'], 'must not be empty'), true, "genApiResult inclut correctement les erreurs de validation pour 'username'");
 
 $tester->footer(exit: false);

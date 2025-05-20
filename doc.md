@@ -219,17 +219,50 @@ Génération auto de formulaire BS
 
 todo
 
+## Validator & FormValidator
+
+Permet de créer des règles pour valider un tableau associatif
+
+```php
+use OsdAurox\Validator
+
+// règles
+$rules = [
+Validator::create('email')->email(),
+Validator::create('username')->notEmpty(),
+];
+
+// données à validées
+$data = [
+'email' => 'invalid-email',
+'username' => '',
+];
+
+
+// vérification d'une seule règle via Validator::validate()
+$rule[0]->validate($data['email'])
+>>> [ 0 => [ 'field' => 'email', 'valid' => false, 'msg' => 'must be valid email', ] ]
+
+
+// FormValidator permet de valider directement un tableau provenant d'un Formulaire
+// vérification via un FormValidator::validate($data, $rules)
+$validator = new FormValidator();
+$result = $validator->validate($data, $rules);
+>>> $result == False // validation échouée
+$errors = $validator->getErrors(); // on regarde les erreurs
+>>> [ 'username' => [ 0 => 'must not be empty', ], 'email' => [ 0 => 'must be valid email' ] ]
+
+```
+
+Les traductions des Validateurs sont stockées dans : [Translations.php](src/OsdAurox/Translations.php)
+C'est chargé par le module [I18n.php](src/OsdAurox/I18n.php)
+
 ## FormsFilter
 
 Query builder pour côté Admin
 
 todo
 
-## FormValidator
-
-Système mixte pour valider des formulaires et afficher des erreurs
-
-todo
 
 ## I18n
 

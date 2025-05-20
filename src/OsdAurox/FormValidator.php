@@ -73,6 +73,11 @@ class FormValidator
         return $this->errors;
     }
 
+    public function clearErrors(): void
+    {
+        $this->errors = [];
+    }
+
     public function genApiResult(): ?Api
     {
         $o_api_response = new Api();
@@ -98,17 +103,12 @@ class FormValidator
         if(count($this->errors) > 0) {
             $this->is_valid = false;
         }
-        foreach ($rules as $field => $rule) {
-            try {
-                $field_val = $data[$field] ?? null;
-                $rule->setName(ucfirst($field))->assert($field_val);
-            } catch (NestedValidationException $e) {
-                $this->is_valid = false;
-                $messages = $e->getMessages();
-                foreach ($messages as $message) {
-                    $this->addError($field, $message);
+        foreach ($rules as $rule) {
+                $field_val = $data[$rule->field] ?? null;
+                $errors = $rule->validate($field_val);
+                foreach ($errors as $error) {
+                    $this->addError($rule->field, $error['msg']);
                 }
-            }
         }
         return $this->isValid();
     }
