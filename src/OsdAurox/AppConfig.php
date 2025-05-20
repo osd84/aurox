@@ -117,4 +117,9 @@ Class AppConfig {
         return $instance->$key ?? $default;
     }
 
+    public static function isDebug(): bool
+    {
+        return self::get('debug');
+    }
+
 }

@@ -338,6 +338,13 @@ if($r) {
 
 ```
 
+# AppConfig
+
+```php
+use OsdAurox\AppConfig
+AppConfig::get('key', 'default') // recherche une clef dans /conf.php et retourne la valeur
+AppConfig::isDebug() // retourne vrai si l'application est en mode debug conf['debug'] = true
+```
 
 # urls
 ```php
