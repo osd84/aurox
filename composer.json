@@ -16,7 +16,6 @@
         }
     ],
     "require": {
-        "mobiledetect/mobiledetectlib": "^4.8",
         "phpmailer/phpmailer": "^6.9",
         "ext-pdo": "*",
         "ext-curl": "*",

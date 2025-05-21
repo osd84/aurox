@@ -3,7 +3,7 @@
 namespace OsdAurox;
 
 
-use Detection\MobileDetect;
+use OsdAurox\MobileDetect;
 
 class Base
 {
