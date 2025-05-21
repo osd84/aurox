@@ -456,6 +456,21 @@ $form = new Forms($action_url,
 
 ```
 
+## MobileDetect
+
+Une re-implémentation de  en version plus "light" intégré au Core de Aurox
+
+À noter, une Table retournera  "Vrai" aussi sur `isMobile()`;
+
+Il y a un Alias dans Base::isMobile() qui retourne Vrai si Mobile ou Tablet
+Il est recommandé d'utiliser directement Base::isMobile() au lieu de MobileDetect
+
+```
+$detect = new MobileDetect();
+$detect->isMobile()
+$detect->isTablet()
+```
+
 ## TESTS
 
 Create a mysql database `aurox_test`
