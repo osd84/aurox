@@ -5,5 +5,5 @@ use OsdAurox\BaseModel;
 
 class PostsModel extends BaseModel
 {
-    public static string $table = "posts";
+    public const TABLE = "posts";
 }

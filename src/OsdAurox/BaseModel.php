@@ -9,13 +9,13 @@ use RuntimeException;
 class BaseModel {
 
 
-    public static string $table = "unknown";
+    public const TABLE = "unknown";
 
     public int $id;
 
     public function getTable(): string
     {
-        return static::$table;
+        return static::TABLE;
     }
 
     public function __get($name)
@@ -30,7 +30,7 @@ class BaseModel {
     public static function get($pdo, $id)
     {
         try {
-            $table = static::$table;
+            $table = static::TABLE;
             $stmt = $pdo->prepare("SELECT * FROM $table WHERE id = :id");
             $id = (int) $id;
             $stmt->execute(['id' => $id]);
@@ -54,7 +54,7 @@ class BaseModel {
     public static function getBy($pdo, string $field, mixed $value): array|false
     {
         try {
-            $table = static::$table;
+            $table = static::TABLE;
             $f_token = ':' . $field;
             $stmt = $pdo->prepare("SELECT * FROM $table WHERE $field = $f_token");
             $stmt->execute([$field => $value]);
@@ -78,7 +78,7 @@ class BaseModel {
     public static function getAllBy($pdo, string $field, mixed $value): array
     {
         try {
-            $table = static::$table;
+            $table = static::TABLE;
             $f_token = ':' . $field;
             $stmt = $pdo->prepare("SELECT * FROM $table WHERE $field = $f_token");
             $stmt->execute([$field => $value]);
@@ -91,7 +91,7 @@ class BaseModel {
 
     public static function count($pdo)
     {
-        $table = static::$table;
+        $table = static::TABLE;
         $stmt = $pdo->prepare("SELECT COUNT(*) FROM $table");
         $stmt->execute();
         return $stmt->fetchColumn();
@@ -100,7 +100,7 @@ class BaseModel {
     public static function delete($pdo, $id): bool
     {
         $id = (int) $id;
-        $stmt = $pdo->prepare("DELETE FROM " . static::$table . " WHERE id = :id");
+        $stmt = $pdo->prepare("DELETE FROM " . static::TABLE . " WHERE id = :id");
         $stmt->execute(['id' => $id]);
         if($stmt->rowCount() == 0) {
             return false;
@@ -113,7 +113,7 @@ class BaseModel {
     */
     public static function check_uniq($pdo, $field, $value): bool
     {
-        $table = static::$table;
+        $table = static::TABLE;
         $stmt = $pdo->prepare("SELECT $field FROM $table WHERE $field = :value");
         $stmt->execute(['value' => $value]);
         $entity = $stmt->fetch();
