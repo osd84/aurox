@@ -4,6 +4,8 @@
 namespace OsdAurox;
 
 
+use DateTime;
+
 class Validator
 {
 
@@ -349,6 +351,110 @@ class Validator
 
         return $this;
     }
+
+    public function positive(): Validator
+    {
+        $this->rules[] = function ($input) {
+            $msg = '';
+
+            // Convertir les chaînes numériques en nombres
+            if (is_string($input) && is_numeric($input)) {
+                if (str_contains($input, '.')) {
+                    $input = (float)$input;
+                } else {
+                    $input = (int)$input;
+                }
+            }
+
+            // Vérifier si c'est un nombre
+            if (!is_numeric($input)) {
+                return [
+                    'valid' => false,
+                    'msg' => I18n::t('must be a positive number')
+                ];
+            }
+
+            return [
+                'valid' => $input > 0,
+                'msg' => I18n::t('must be a positive number')
+            ];
+        };
+
+        return $this;
+    }
+
+    public function date(string $format = 'Y-m-d'): Validator
+    {
+        $this->rules[] = function ($input) use ($format) {
+            $msg = '';
+
+            if (!is_string($input)) {
+                return [
+                    'valid' => false,
+                    'msg' => I18n::t('must be a string date')
+                ];
+            }
+
+            // Essayer de créer un objet DateTime
+            $dateTime = DateTime::createFromFormat($format, $input);
+
+            // Vérifier si la date est valide et si les erreurs de parsing sont présentes
+            if(!$dateTime) {
+                $valid = false;
+            } else {
+                $valid = true;
+            }
+            // Vérifier si la date correspond exactement au format attendu
+            if ($valid) {
+                $valid = $dateTime->format($format) === $input;
+            }
+
+            return [
+                'valid' => $valid,
+                'msg' => I18n::t('must be a valid date in format: %s', [$format])
+            ];
+        };
+
+        return $this;
+    }
+
+    public function dateTime(string $format = 'Y-m-d H:i:s'): Validator
+    {
+        $this->rules[] = function ($input) use ($format) {
+            $msg = '';
+
+            if (!is_string($input)) {
+                return [
+                    'valid' => false,
+                    'msg' => $msg
+                ];
+            }
+
+            // Essayer de créer un objet DateTime
+            $dateTime = DateTime::createFromFormat($format, $input);
+
+            // Vérifier si la date est valide et si les erreurs de parsing sont présentes
+            if(!$dateTime) {
+                $valid = false;
+            } else {
+                $valid = true;
+            }
+
+            // Vérifier si la date correspond exactement au format attendu
+            if ($valid) {
+                $valid = $dateTime->format($format) === $input;
+            }
+
+            return [
+                'valid' => $valid,
+                'msg' => I18n::t('must be a valid datetime in format: %s', [$format])
+            ];
+        };
+
+        return $this;
+    }
+
+
 
 
 

@@ -267,6 +267,10 @@ Validator::intType()
 Validator::floatType()
 
 Validator::email()
+Validator::positive() // int ou float, str > 0
+
+Validator::date() // string date au format 'Y-m-d'
+Validator::dateTime() // string date au format 'dateTime'
 
 Validator::length([min: int|null = null], [max: int|null = null])
 Validator::max(maximum: float|int)

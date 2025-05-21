@@ -207,4 +207,68 @@ $result = Validator::create('field')
 $tester->assertEqual(count($result), 0, 'combinaison : chaîne valide doit passer');
 
 
+// Tests pour positive()
+$tester->header("Test de la méthode positive()");
+
+$result = Validator::create('field')->positive()->validate(15);
+$tester->assertEqual(count($result), 0, 'positive : nombre positif doit passer');
+
+$result = Validator::create('field')->positive()->validate(0);
+$tester->assertEqual($result[0]['valid'], false, 'positive : zéro doit échouer');
+
+$result = Validator::create('field')->positive()->validate(-5);
+$tester->assertEqual($result[0]['valid'], false, 'positive : nombre négatif doit échouer');
+
+$result = Validator::create('field')->positive()->validate(10.5);
+$tester->assertEqual(count($result), 0, 'positive : float positif doit passer');
+
+$result = Validator::create('field')->positive()->validate("15");
+$tester->assertEqual(count($result), 0, 'positive : chaîne numérique positive doit passer');
+
+$result = Validator::create('field')->positive()->validate("abc");
+$tester->assertEqual($result[0]['valid'], false, 'positive : chaîne non numérique doit échouer');
+
+// Tests pour date()
+$tester->header("Test de la méthode date()");
+
+$result = Validator::create('field')->date()->validate("2024-03-13");
+$tester->assertEqual(count($result), 0, 'date : format Y-m-d valide doit passer');
+
+$result = Validator::create('field')->date()->validate("2024-13-13");
+$tester->assertEqual($result[0]['valid'], false, 'date : mois invalide doit échouer');
+
+$result = Validator::create('field')->date('d/m/Y')->validate("13/03/2024");
+$tester->assertEqual(count($result), 0, 'date : format d/m/Y valide doit passer');
+
+$result = Validator::create('field')->date()->validate("2024-03-13 14:30:00");
+$tester->assertEqual($result[0]['valid'], false, 'date : datetime dans date doit échouer');
+
+$result = Validator::create('field')->date()->validate("invalid-date");
+$tester->assertEqual($result[0]['valid'], false, 'date : format invalide doit échouer');
+
+$result = Validator::create('field')->date()->validate(12345);
+$tester->assertEqual($result[0]['valid'], false, 'date : nombre doit échouer');
+
+// Tests pour dateTime()
+$tester->header("Test de la méthode dateTime()");
+
+$result = Validator::create('field')->dateTime()->validate("2024-03-13 14:30:00");
+$tester->assertEqual(count($result), 0, 'dateTime : format Y-m-d H:i:s valide doit passer');
+
+$result = Validator::create('field')->dateTime()->validate("2024-03-13");
+$tester->assertEqual($result[0]['valid'], false, 'dateTime : date sans heure doit échouer');
+
+$result = Validator::create('field')->dateTime('d/m/Y H:i')->validate("13/03/2024 14:30");
+$tester->assertEqual(count($result), 0, 'dateTime : format personnalisé valide doit passer');
+
+$result = Validator::create('field')->dateTime()->validate("2024-03-13 25:00:00");
+$tester->assertEqual($result[0]['valid'], false, 'dateTime : heure invalide doit échouer');
+
+$result = Validator::create('field')->dateTime()->validate("invalid-datetime");
+$tester->assertEqual($result[0]['valid'], false, 'dateTime : format invalide doit échouer');
+
+$result = Validator::create('field')->dateTime()->validate(12345);
+$tester->assertEqual($result[0]['valid'], false, 'dateTime : nombre doit échouer');
+
+
 $tester->footer(exit: false);
