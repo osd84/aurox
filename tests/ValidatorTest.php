@@ -34,6 +34,10 @@ $tester->header("Test de la méthode notEmpty()");
 $result = Validator::create('username')->notEmpty()->validate($data['username']);
 $tester->assertEqual($result[0]['msg'], 'doit être rempli', 'notEmpty : doit être rempli');
 
+$result = Validator::create('username')->notEmpty()->validate(null);
+$tester->assertEqual($result[0]['msg'], 'doit être rempli', 'notEmpty : doit être rempli');
+
+
 $tester->header("Test de la méthode length()");
 // test length
 $result = Validator::create('email')->length(min : 0, max: 10)->validate($data['email']);

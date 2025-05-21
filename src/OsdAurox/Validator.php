@@ -78,9 +78,8 @@ class Validator
         $this->rules[] = function ($input) {
             $msg = I18n::t('must not be empty');
 
-            if (!is_string($input)) {
+            if (is_string($input)) {
                 $input = trim($input);
-
             }
 
             $valid = !empty($input);
