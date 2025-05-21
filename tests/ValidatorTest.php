@@ -271,4 +271,54 @@ $result = Validator::create('field')->dateTime()->validate(12345);
 $tester->assertEqual($result[0]['valid'], false, 'dateTime : nombre doit échouer');
 
 
+// Tests pour inArray()
+$tester->header("Test de la méthode inArray()");
+
+// Test avec des valeurs simples
+$values = [1, 2, 3, 4, 5];
+$result = Validator::create('field')->inArray($values)->validate(3);
+$tester->assertEqual(count($result), 0, 'inArray : valeur présente doit passer');
+
+$result = Validator::create('field')->inArray($values)->validate(6);
+$tester->assertEqual($result[0]['valid'], false, 'inArray : valeur absente doit échouer');
+$tester->assertEqual($result[0]['msg'], 'must be one of the following values : 1, 2, 3, 4, 5', 'inArray : message d\'erreur correct');
+
+// Test avec des chaînes
+$fruits = ['pomme', 'poire', 'banane'];
+$result = Validator::create('field')->inArray($fruits)->validate('poire');
+$tester->assertEqual(count($result), 0, 'inArray : chaîne présente doit passer');
+
+$result = Validator::create('field')->inArray($fruits)->validate('orange');
+$tester->assertEqual($result[0]['valid'], false, 'inArray : chaîne absente doit échouer');
+
+// Test avec comparaison stricte
+$mixedValues = ['1', '2'];
+$result = Validator::create('field')->inArray($mixedValues, true)->validate('1');
+$tester->assertEqual(count($result), 0, 'inArray : comparaison stricte doit passer pour type identique');
+
+$result = Validator::create('field')->inArray($mixedValues, true)->validate(1);
+$tester->assertEqual($result[0]['valid'], false, 'inArray : comparaison stricte doit échouer pour type différent');
+
+// Test avec tableau vide
+$result = Validator::create('field')->inArray([])->validate('test');
+$tester->assertEqual($result[0]['valid'], false, 'inArray : tableau vide doit échouer');
+
+// Test avec valeur null
+$nullableValues = ['test', null, 1];
+$result = Validator::create('field')->inArray($nullableValues)->validate(null);
+$tester->assertEqual(count($result), 0, 'inArray : valeur null présente doit passer');
+
+// Tests combinés
+$result = Validator::create('field')
+    ->required()
+    ->inArray(['pomme', 'poire', 'banane'])
+    ->validate('pomme');
+$tester->assertEqual(count($result), 0, 'combinaison : valeur valide doit passer');
+
+$result = Validator::create('field')
+    ->required()
+    ->inArray(['pomme', 'poire', 'banane'])
+    ->validate('');
+$tester->assertEqual($result[0]['valid'], false, 'combinaison : valeur vide doit échouer');
+
 $tester->footer(exit: false);

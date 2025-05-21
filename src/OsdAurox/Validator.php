@@ -455,6 +455,33 @@ class Validator
     }
 
 
+    /**
+     * Vérifie si la valeur est présente dans un tableau donné
+     *
+     * @param array $allowedValues Tableau des valeurs autorisées
+     * @param bool $strict Utiliser une comparaison stricte (===)
+     * @return Validator
+     */
+    public function inArray(array $allowedValues, bool $strict = false): Validator
+    {
+        $this->rules[] = function ($input) use ($allowedValues, $strict) {
+            $valid = in_array($input, $allowedValues, $strict);
+
+            // Crée un message lisible avec les valeurs autorisées
+            $valuesString = implode(', ', array_map(function ($value) {
+                if (is_null($value)) return 'null';
+                if (is_bool($value)) return $value ? 'true' : 'false';
+                return (string)$value;
+            }, $allowedValues));
+
+            return [
+                'valid' => $valid,
+                'msg' => I18n::t("must be one of the following values : $valuesString")
+            ];
+        };
+
+        return $this;
+    }
 
 
 

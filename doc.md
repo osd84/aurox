@@ -275,6 +275,7 @@ Validator::dateTime() // string date au format 'dateTime'
 Validator::length([min: int|null = null], [max: int|null = null])
 Validator::max(maximum: float|int)
 Validator::min(minimum: float|int)
+Validator::inArray(allowedValues: array, [strict: bool = false])
 
 Validator::startWith(prefix: string, [caseSensitive: bool = true])
 ```
