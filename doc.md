@@ -458,7 +458,7 @@ $form = new Forms($action_url,
 
 ## MobileDetect
 
-Une re-implémentation de  en version plus "light" intégré au Core de Aurox
+Une re-implémentation de `Detection\MobileDetect` en version plus "light" intégré au Core de Aurox
 
 À noter, une Table retournera  "Vrai" aussi sur `isMobile()`;
 
