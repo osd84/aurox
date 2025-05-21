@@ -229,7 +229,7 @@ class Validator
     public function intType(): Validator
     {
         $this->rules[] = function ($input) {
-            $msg = I18n::t('must be a string');
+            $msg = I18n::t('must be a int');
 
             // Vérifie si la valeur est de type string
             $valid = is_int($input);
@@ -246,7 +246,7 @@ class Validator
     public function floatType(): Validator
     {
         $this->rules[] = function ($input) {
-            $msg = I18n::t('must be a string');
+            $msg = I18n::t('must be a float');
 
             // Vérifie si la valeur est de type string
             $valid = is_float($input);
