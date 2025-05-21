@@ -207,4 +207,149 @@ class Validator
 
         return $this;
     }
+
+    public function stringType(): Validator
+    {
+        $this->rules[] = function ($input) {
+            $msg = I18n::t('must be a string');
+
+            // Vérifie si la valeur est de type string
+            $valid = is_string($input);
+
+            return [
+                'valid' => $valid,
+                'msg' => $msg
+            ];
+        };
+
+        return $this;
+    }
+
+    public function intType(): Validator
+    {
+        $this->rules[] = function ($input) {
+            $msg = I18n::t('must be a string');
+
+            // Vérifie si la valeur est de type string
+            $valid = is_int($input);
+
+            return [
+                'valid' => $valid,
+                'msg' => $msg
+            ];
+        };
+
+        return $this;
+    }
+
+    public function floatType(): Validator
+    {
+        $this->rules[] = function ($input) {
+            $msg = I18n::t('must be a string');
+
+            // Vérifie si la valeur est de type string
+            $valid = is_float($input);
+
+            return [
+                'valid' => $valid,
+                'msg' => $msg
+            ];
+        };
+
+        return $this;
+    }
+
+    public function min(int|float $minimum): Validator
+    {
+        $this->rules[] = function ($input) use ($minimum) {
+            $msg = I18n::t('must be greater than or equal to %s', [$minimum]);
+
+            // Convertir les chaînes numériques en nombres
+            if (is_string($input) && is_numeric($input)) {
+                if (str_contains($input, '.')) {
+                    $input = (float)$input;
+                } else {
+                    $input = (int)$input;
+                }
+            }
+
+            // Vérifier si c'est un nombre
+            if (!is_numeric($input)) {
+                return [
+                    'valid' => false,
+                    'msg' => I18n::t('must be a number')
+                ];
+            }
+
+            return [
+                'valid' => $input >= $minimum,
+                'msg' => $msg
+            ];
+        };
+
+        return $this;
+    }
+
+
+    public function max(int|float $maximum): Validator
+    {
+        $this->rules[] = function ($input) use ($maximum) {
+            $msg = I18n::t('must be less than or equal to %s', [$maximum]);
+
+            // Convertir les chaînes numériques en nombres
+            if (is_string($input) && is_numeric($input)) {
+                if (str_contains($input, '.')) {
+                    $input = (float)$input;
+                } else {
+                    $input = (int)$input;
+                }
+            }
+
+            // Vérifier si c'est un nombre
+            if (!is_numeric($input)) {
+                return [
+                    'valid' => false,
+                    'msg' => I18n::t('must be a number')
+                ];
+            }
+
+            return [
+                'valid' => $input <= $maximum,
+                'msg' => $msg
+            ];
+        };
+
+        return $this;
+    }
+
+
+    public function startWith(string $prefix, bool $caseSensitive = true): Validator
+    {
+        $this->rules[] = function ($input) use ($prefix, $caseSensitive) {
+            $msg = I18n::t('must start with "%s"', [$prefix]);
+
+            if (!is_string($input)) {
+                return [
+                    'valid' => false,
+                    'msg' => I18n::t('must be a string')
+                ];
+            }
+
+            if ($caseSensitive) {
+                $valid = str_starts_with($input, $prefix);
+            } else {
+                $valid = str_starts_with(strtolower($input), strtolower($prefix));
+            }
+
+            return [
+                'valid' => $valid,
+                'msg' => $msg
+            ];
+        };
+
+        return $this;
+    }
+
+
+
 }

@@ -13,21 +13,25 @@ $tester->header(__FILE__);
 
 // Test de la méthode addError et getErrors
 $validator = new FormValidator();
+$tester->header("Test addError");
 $validator->addError('email', 'Email invalide');
 $validator->addError('username', 'Nom d\'utilisateur requis');
 $tester->assertEqual(str_contains(json_encode($validator->getErrors()), 'Email invalide'), true, "Ajout et récupération des erreurs fonctionne correctement pour 'email'");
 $tester->assertEqual(str_contains(json_encode($validator->getErrors()), 'Nom d\'utilisateur requis'), true, "Ajout et récupération des erreurs fonctionne correctement pour 'username'");
 
 // Test de la méthode hasError
+$tester->header("Test hasError");
 $tester->assertEqual($validator->hasError('email'), true, "La méthode hasError retourne true pour 'email' avec des erreurs");
 $tester->assertEqual($validator->hasError('password'), false, "La méthode hasError retourne false pour un champ sans erreur");
 
 // Test de la méthode popError
+$tester->header("Test popError");
 $errorsEmail = $validator->popError('email');
 $tester->assertEqual(is_array($errorsEmail), true, "La méthode popError retourne un tableau d'erreurs");
 $tester->assertEqual(str_contains(json_encode($errorsEmail), 'Email invalide'), true, "popError retourne correctement les erreurs du champ 'email'");
 $tester->assertEqual($validator->hasError('email'), false, "Le champ 'email' n'a plus d'erreur après l'appel à popError");
 
+$tester->header("Test avec une instance de Validator");
 $GLOBALS['i18n'] = new I18n('en');
 // Test de la méthode validate avec respect/validation
 $rules = [
@@ -41,11 +45,13 @@ $data = [
 $result = $validator->validate($data, $rules);
 $tester->assertEqual($result, false, "La validation échoue lorsque les données ne respectent pas les règles");
 
+$tester->header("Test traduction en");
 $errors = $validator->getErrors();
 $tester->assertEqual(str_contains($errors['email'][0], 'must be valid email'), true, "La validation retourne une erreur pour un email non valide en");
 $tester->assertEqual(str_contains($errors['username'][1], 'must not be empty'), true, "La validation retourne une erreur pour un champ vide en");
 
 // on met en français pour tester les traductions du Core
+$tester->header("Test traduction fr");
 $GLOBALS['i18n'] = new I18n('fr');
 $validator->clearErrors(); // on efface les erreurs précédentes
 $result = $validator->validate($data, $rules);
@@ -55,6 +61,7 @@ $tester->assertEqual(str_contains($errors['username'][0], 'doit être rempli'), 
 
 
 // Test de la méthode isValid avant validation
+$tester->header("Test isValid()");
 $validator2 = new FormValidator();
 try {
     $validator2->isValid();
@@ -63,6 +70,7 @@ try {
 }
 
 // Test de genApiResult
+$tester->header("Test genApiResult() pour reponses Ajax Front");
 $GLOBALS['i18n'] = new I18n('en');
 $validator->clearErrors(); // on efface les erreurs précédentes
 $result = $validator->validate($data, $rules);

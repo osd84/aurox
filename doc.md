@@ -254,6 +254,38 @@ $errors = $validator->getErrors(); // on regarde les erreurs
 
 ```
 
+Validator disponibles
+
+```php
+use OsdAurox\Validator
+
+Validator::notEmpty()
+Validator::required()
+
+Validator::stringType()
+Validator::intType()
+Validator::floatType()
+
+Validator::email()
+
+Validator::length([min: int|null = null], [max: int|null = null])
+Validator::max(maximum: float|int)
+Validator::min(minimum: float|int)
+
+Validator::startWith(prefix: string, [caseSensitive: bool = true])
+```
+
+On peut les enchaîner 
+
+
+```php
+result = Validator::create('field')
+    ->required()
+    ->intType()
+    ->min(0)
+    ->max(100)
+    ->validate(50);
+```
 Les traductions des Validateurs sont stockées dans : [Translations.php](src/OsdAurox/Translations.php)
 C'est chargé par le module [I18n.php](src/OsdAurox/I18n.php)
 
