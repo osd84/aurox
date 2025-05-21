@@ -19,7 +19,8 @@
         "mobiledetect/mobiledetectlib": "^4.8",
         "phpmailer/phpmailer": "^6.9",
         "ext-pdo": "*",
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "ext-mbstring": "*"
     },
     "require-dev": {
         "osd84/brutaltestrunner": "^3.0"
