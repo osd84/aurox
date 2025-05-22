@@ -256,12 +256,15 @@ $errors = $validator->getErrors(); // on regarde les erreurs
 
 Validator disponibles
 
+Note : required() > optionnal()
+
 ```php
 use OsdAurox\Validator
 
-Validator::notEmpty()
-Validator::required()
+Validator::optional() // la règle ne lève pas d'erreur si le champ est empty
+Validator::required() // si présent le champ est requis, même si optional() est actif
 
+Validator::notEmpty() // une valeur non vide
 Validator::stringType()
 Validator::intType()
 Validator::floatType()
