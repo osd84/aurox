@@ -11,6 +11,7 @@ class Validator
 
     private array $rules = [];
     public string $field = '';
+    public bool $optional = false;
 
     // crée un nouveau Validateur
     public static function create($field): Validator
@@ -20,6 +21,12 @@ class Validator
         return $validator;
     }
 
+    public function optional(): Validator
+    {
+        $this->optional = true;
+        return $this;
+    }
+
 
     public function validate($input)
     {
@@ -27,11 +34,16 @@ class Validator
         foreach ($this->rules as $rule) {
             $resultRule = $rule($input);
             if ($resultRule['valid'] === false) {
-                $errors[] = [
-                    'field' => $this->field,
-                    'valid' => $resultRule['valid'],
-                    'msg' => $resultRule['msg']
-                ];
+
+                if($this->optional && empty($input)) {
+                    continue;
+                } else {
+                    $errors[] = [
+                        'field' => $this->field,
+                        'valid' => $resultRule['valid'],
+                        'msg' => $resultRule['msg']
+                    ];
+                }
             }
         }
         return $errors;
@@ -95,6 +107,8 @@ class Validator
 
     public function required(): Validator
     {
+        $this->optional = false;
+
         $this->rules[] = function ($input) {
             $msg = I18n::t('field is required');
 

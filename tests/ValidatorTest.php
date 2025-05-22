@@ -325,4 +325,81 @@ $result = Validator::create('field')
     ->validate('');
 $tester->assertEqual($result[0]['valid'], false, 'combinaison : valeur vide doit échouer');
 
+
+
+// Tests pour optional()
+$tester->header("Test de la méthode optional()");
+
+// Test avec une chaîne vide
+$result = Validator::create('field')
+    ->optional()
+    ->required()
+    ->validate('');
+$tester->assertEqual(count($result), 1, 'optional + required : doit bloquer, required est plus fort');
+
+// Test avec null
+$result = Validator::create('field')
+    ->optional()
+    ->notEmpty()
+    ->validate(null);
+$tester->assertEqual(count($result), 0, 'optional : null doit passer');
+
+// Test avec une valeur valide
+$result = Validator::create('field')
+    ->optional()
+    ->email()
+    ->validate('test@example.com');
+$tester->assertEqual(count($result), 0, 'optional : email valide doit passer');
+
+// Test avec valeur invalide (ne doit pas être ignoré)
+$result = Validator::create('field')
+    ->optional()
+    ->email()
+    ->validate('invalid-email');
+$tester->assertEqual($result[0]['valid'], false, 'optional : email invalide ne doit pas passer');
+
+// Test combiné avec plusieurs validateurs
+$result = Validator::create('field')
+    ->optional()
+    ->notEmpty()
+    ->length(3, 10)
+    ->validate('');
+$tester->assertEqual(count($result), 0, 'optional : champ vide avec multiples validateurs doit passer');
+
+// Test avec une valeur non vide mais invalide
+$result = Validator::create('field')
+    ->optional()
+    ->length(3, 10)
+    ->validate('ab');
+$tester->assertEqual($result[0]['valid'], false, 'optional : valeur non vide invalide ne doit pas passer');
+
+// Test avec tableau vide
+$result = Validator::create('field')
+    ->optional()
+    ->notEmpty()
+    ->validate([]);
+$tester->assertEqual(count($result), 0, 'optional : tableau vide doit passer');
+
+// Test avec chaîne contenant uniquement des espaces
+$result = Validator::create('field')
+    ->optional()
+    ->notEmpty()
+    ->validate('   ');
+$tester->assertEqual(count($result), 1, 'optional : chaîne avec espaces ne doit pas passer');
+
+// Test avec chaîne vide
+$result = Validator::create('field')
+    ->optional()
+    ->notEmpty()
+    ->validate('');
+$tester->assertEqual(count($result), 0, 'optional : chaîne vide doit passer');
+
+// Test désactivation de optional
+$validator = Validator::create('field');
+$validator->optional();
+$validator->notEmpty();
+$result = $validator->validate('');
+$tester->assertEqual(count($result), 0, 'optional : doit rester optionnel même après ajout de règles');
+
+
 $tester->footer(exit: false);
