@@ -54,6 +54,35 @@ class BaseModel {
     }
 
     /**
+     * Vérifie si un enregistrement avec l'ID spécifié existe dans la table
+     *
+     * @param PDO $pdo
+     * @param int $id sécurisé
+     * @return bool true si l'enregistrement existe, false sinon
+     * @throws RuntimeException Si une erreur de connexion à la base de données survient
+     */
+    public static function exist($pdo, $id): bool
+    {
+        try {
+            if (!filter_var($id, FILTER_VALIDATE_INT)) {
+                return false;
+            }
+            $id = (int) $id;
+            if(empty($id)) {
+                return false;
+            }
+
+            $table = static::TABLE;
+            $stmt = $pdo->prepare("SELECT id FROM $table WHERE id = :id LIMIT 1");
+            $stmt->execute(['id' => $id]);
+            return (bool) $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log('Database connection error: ' . $e->getMessage());
+            throw new RuntimeException('Database connection error.');
+        }
+    }
+
+    /**
      *
      * Permet de retourner un array via FETCH_ASSOC en cherchant par un champ spécifique
      *

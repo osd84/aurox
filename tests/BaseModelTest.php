@@ -97,11 +97,31 @@ try {
 } catch (InvalidArgumentException $e) {
     $tester->assertEqual(1,1 ,'getByIds : ID non numérique lève bien une exception');
 }
-
 // Test avec select spécifique
 $result = BaseModel::getByIds($pdo, 'posts', [1], 'title');
 $tester->assertEqual(in_array('title', array_keys($result[0])), true, 'getByIds : select spécifique retourne uniquement les colonnes demandées');
 $tester->assertEqual(in_array('id', array_keys($result[0])), false, 'getByIds : select spécifique retourne uniquement les colonnes demandées');
+
+
+
+// Tests pour exist
+$tester->header("Test de la méthode exist()");
+
+// Test avec ID existant
+$result = PostsModel::exist($pdo, 1);
+$tester->assertEqual($result, true, 'exist : ID existant doit retourner true');
+// Test avec ID inexistant
+$result = PostsModel::exist($pdo, 999);
+$tester->assertEqual($result, false, 'exist : ID inexistant doit retourner false');
+// Test avec ID zéro (généralement invalide)
+$result = PostsModel::exist($pdo, 0);
+$tester->assertEqual($result, false, 'exist : ID zéro doit retourner false');
+// Test avec valeur non numérique (qui sera convertie en entier)
+$result = PostsModel::exist($pdo, "abc");
+$tester->assertEqual($result, false, 'exist : ID non numérique converti en 0 doit retourner false');
+// Test avec valeur numérique sous forme de chaîne
+$result = PostsModel::exist($pdo, "1");
+$tester->assertEqual($result, true, 'exist : ID numérique sous forme de chaîne doit être converti et retourner true');
 
 
 $tester->footer(exit: false);
