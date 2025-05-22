@@ -189,8 +189,12 @@ class BaseModel {
      */
     public static function getRules(): array
     {
-        # Return respect/validation rules
+//        return [
+//            'email' => Validator::create('email')->email(),
+//            'username' => Validator::create('username')->notEmpty()->required(),
+//        ];
         throw new Exception('Not implemented');
+
     }
 
     public static function validate(): bool

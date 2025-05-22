@@ -96,14 +96,17 @@ class FormValidator
 
 
 
-    // je veux valider un tableau de données avec respect/validation
+    // je veux valider un tableau de données avec OsdAurox\Validator
     public function validate(array $data, array $rules)
     {
         $this->is_valid = true;
         if(count($this->errors) > 0) {
             $this->is_valid = false;
         }
-        foreach ($rules as $rule) {
+        foreach ($rules as $field => $rule) {
+                if($field != $rule->field) {
+                    throw new \Exception("Field name in rule and data must be the same");
+                }
                 $field_val = $data[$rule->field] ?? null;
                 $errors = $rule->validate($field_val);
                 foreach ($errors as $error) {

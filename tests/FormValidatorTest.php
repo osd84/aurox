@@ -35,8 +35,8 @@ $tester->header("Test avec une instance de Validator");
 $GLOBALS['i18n'] = new I18n('en');
 // Test de la méthode validate avec respect/validation
 $rules = [
-    Validator::create('email')->email(),
-    Validator::create('username')->notEmpty(),
+    'email' => Validator::create('email')->email(),
+    'username' => Validator::create('username')->notEmpty(),
 ];
 $data = [
     'email' => 'invalid-email',

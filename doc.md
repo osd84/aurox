@@ -249,8 +249,8 @@ use OsdAurox\Validator
 
 // règles
 $rules = [
-Validator::create('email')->email(),
-Validator::create('username')->notEmpty(),
+    'email' => Validator::create('email')->email(),
+    'username' => Validator::create('username')->notEmpty(),
 ];
 
 // données à validées
