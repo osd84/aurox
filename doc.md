@@ -91,10 +91,31 @@ Base:redirect($url) // redirect comme il faut
 
 ## BaseModel
 
+
+Alias pour les requêtes SQL via PDO, ce n'est pas un ORM, juste des alias. 
+Il faut faire attention et lire la doc, certains arguments des fonctions sont sensibles au Sqli, et c'est normal.
+Par contre les arguments utilisés pour la recherche sont sécurisés via bind et PDO.
+
 ```php
-// SELECT JSON_ARRAYAGG( JSON_OBJECT( 'id', wg.id, 'name', wg.name, 'name_translated', COALESCE(NULLIF(wg.name_$locale, ''), wg.name, '') )
-// as myKey
+use \OsdAurox\BaseModel
+
+BaseModel::get(pdo, id: int, [select: string = '*']): mixed // retourne la row via sont $id,  sqli possible sur $select
+BaseModel::getBy(pdo, field: string, value: mixed): array|false // retourne la row via recherche sur champ, $value sécurisé, $field sqli possible
+BaseModel::getAllBy(pdo, field: string, value: mixed): // retourne les rows via recherche sur champ, $value sécurisé, $field sqli possible
+BaseModel::getByIds(pdo, table: string, ids: array, [select: string = '*']): array // retourne les row via PDO::FETCH_ASSOC , $table et $select sont sensibles au Sqli, par contre $ids est sécurisé
+BaseModel::count() // total d'un table
+BaseModel::delete(pdo, id): bool // $id sécurisé
+BaseModel::check_uniq(pdo, field, value): bool // regarde si la valeur pour le champ est unique en table, sqli possible sur $field, securisé sur $value
+
+BaseModel::idsExistsOrEmpty(pdo, table: string, ids: array): bool // retourne True si $ids est vide ou si les $ids existent bien dans la table de la bdd, sinon False
+
+
+BaseModel::getRules(): array // retourne une liste des OsdAurox\Validator liés à ce modele
+BaseModel::validate(): bool
+
+
 $array = BaseModel::jsonArrayAggDecode($wine, 'myKey');  // Raccourcis pour extraire un JSON_ARRAYAGG ou [ ] si erreur; d'un résultat Array PDO
+// SELECT JSON_ARRAYAGG( JSON_OBJECT( 'id', wg.id, 'name', wg.name, 'name_translated', COALESCE(NULLIF(wg.name_$locale, ''), wg.name, '') )
 >>> [ [ 'id' => 1, 'name' => 'foo', 'name_translated' => 'bar'], ... ]
 ```
 

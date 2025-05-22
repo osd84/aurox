@@ -47,4 +47,61 @@ $tester->assertEqual($r, [], 'jsonArrayAggDecode() keyNoJson ok');
 $r = BaseModel::jsonArrayAggDecode($entity, 'keyNoJson', default: ['my', 'default']);
 $tester->assertEqual($r, ['my', 'default'], 'jsonArrayAggDecode() keyNoJson + default ok');
 
+
+// Tests pour idsExistsOrEmpty
+$tester->header("Test de la méthode idsExistsOrEmpty()");
+
+$result = BaseModel::idsExistsOrEmpty($pdo, 'posts', []);
+$tester->assertEqual($result, true, 'idsExistsOrEmpty : tableau vide doit retourner true');
+// Test avec ID existant
+$result = BaseModel::idsExistsOrEmpty($pdo, 'posts', [1]);
+$tester->assertEqual($result, true, 'idsExistsOrEmpty : ID existant doit retourner true');
+// Test avec plusieurs IDs existants
+$result = BaseModel::idsExistsOrEmpty($pdo, 'posts', [1, 2]);
+$tester->assertEqual($result, true, 'idsExistsOrEmpty : plusieurs IDs existants doivent retourner true');
+// Test avec ID inexistant
+$result = BaseModel::idsExistsOrEmpty($pdo, 'posts', [999]);
+$tester->assertEqual($result, false, 'idsExistsOrEmpty : ID inexistant doit retourner false');
+// Test avec ID invalide
+try {
+    BaseModel::idsExistsOrEmpty($pdo, 'posts', ['abc']);
+    $tester->assertEqual(0,1 ,'idsExistsOrEmpty : ID non numérique doit lever une exception');
+} catch (InvalidArgumentException $e) {
+    $tester->assertEqual(1, 1,'idsExistsOrEmpty : ID non numérique lève bien une exception');
+}
+
+// Tests pour getByIds
+$tester->header("Test de la méthode getByIds()");
+// Test avec tableau vide
+$result = BaseModel::getByIds($pdo, 'posts', []);
+$tester->assertEqual($result, [], 'getByIds : tableau vide doit retourner tableau vide');
+
+// Test avec un seul ID
+$result = BaseModel::getByIds($pdo, 'posts', [1]);
+$tester->assertEqual(count($result), 1, 'getByIds : un ID doit retourner un résultat');
+$tester->assertEqual($result[0]['id'], 1, 'getByIds : ID correct retourné');
+$tester->assertEqual($result[0]['title'], 'title1', 'getByIds : données correctes retournées');
+
+// Test avec plusieurs IDs
+$result = BaseModel::getByIds($pdo, 'posts', [1, 2]);
+$tester->assertEqual(count($result), 2, 'getByIds : deux IDs doivent retourner deux résultats');
+
+// Test avec ID inexistant
+$result = BaseModel::getByIds($pdo, 'posts', [999]);
+$tester->assertEqual($result, [], 'getByIds : ID inexistant doit retourner tableau vide');
+
+// Test avec ID invalide
+try {
+    BaseModel::getByIds($pdo, 'posts', ['abc']);
+    $tester->assertEqual(0,1 ,'getByIds : ID non numérique doit lever une exception');
+} catch (InvalidArgumentException $e) {
+    $tester->assertEqual(1,1 ,'getByIds : ID non numérique lève bien une exception');
+}
+
+// Test avec select spécifique
+$result = BaseModel::getByIds($pdo, 'posts', [1], 'title');
+$tester->assertEqual(in_array('title', array_keys($result[0])), true, 'getByIds : select spécifique retourne uniquement les colonnes demandées');
+$tester->assertEqual(in_array('id', array_keys($result[0])), false, 'getByIds : select spécifique retourne uniquement les colonnes demandées');
+
+
 $tester->footer(exit: false);
