@@ -390,7 +390,8 @@ Sec::isAdminBool()    // regarde le $_SESSION['user']['role'] == 'admin'
 Sec::isRoleOrDie($role, $flash = true, $redirect = true)
 Sec::isRoleBool($role)  // $role == 'user' , regarde si $_SESSION['user']['role'] == $role et retourne true / false
 Sec::isLogged($flash = true, $redirect = true)
-Sec::isLoggedBool()  // retoune true ou false si utilisateur connecté
+Sec::isLoggedBool()  // retourne true ou false si utilisateur connecté
+Sec::getUserIdOrDie() // retour l'id de l'user courant ou lève une exception
 
 Sec::noneCsp() // retourne le NONCE Csp courant (typo)
 

@@ -242,5 +242,17 @@ class Sec
         return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
     }
 
+    public static function getUserIdOrDie(): ?int
+    {
+        if (!isset($_SESSION['user'])) {
+            throw new \LogicException('User not logged');
+        }
+        if (!isset($_SESSION['user']['id'])) {
+            throw new \LogicException('User not logged');
+        }
+        return (int) $_SESSION['user']['id'];
+    }
+
+
 
 }
