@@ -103,16 +103,20 @@ class FormValidator
         if(count($this->errors) > 0) {
             $this->is_valid = false;
         }
+        $alreadyRaised = [];
         foreach ($rules as $field => $rule) {
                 if($field != $rule->field) {
                     throw new \Exception("Field name in rule and data must be the same");
                 }
                 $field_val = $data[$rule->field] ?? null;
                 $errors = $rule->validate($field_val);
-                $errors = array_unique($errors);
                 foreach ($errors as $error) {
+                    $flag = trim($rule->field . '-' . $error['msg']);
+                    if (!in_array($flag, $alreadyRaised)) {
                         $this->addError($rule->field, $error['msg']);
+                        $alreadyRaised[] = $flag;
                     }
+                }
         }
         return $this->isValid();
     }
