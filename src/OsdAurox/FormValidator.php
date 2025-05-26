@@ -109,9 +109,10 @@ class FormValidator
                 }
                 $field_val = $data[$rule->field] ?? null;
                 $errors = $rule->validate($field_val);
+                $errors = array_unique($errors);
                 foreach ($errors as $error) {
-                    $this->addError($rule->field, $error['msg']);
-                }
+                        $this->addError($rule->field, $error['msg']);
+                    }
         }
         return $this->isValid();
     }
