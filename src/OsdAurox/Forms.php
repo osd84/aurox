@@ -777,7 +777,7 @@ class Forms
         return $html;
     }
 
-    public static function SearchFormRow($searchText = null): string
+    public static function searchFormRow($searchText = null): string
     {
         $placeholder = I18n::t('Search');
         $searchText = Sec::h($searchText) ?? '';
@@ -804,5 +804,44 @@ class Forms
                 HTML;
 
 
+    }
+
+    /**
+     * Utilitaire pour générer l'attribut value d'un input HTML
+     * Si la clef n'existe pas dans le tableau, retourne value=''
+     * Si la clef existe mais est null ou '' retourne value=''
+     * Pour les types supportés (int, float, string, bool) retourne value='Sec::hNoHtml($value)'
+     *
+     * Sécurisé contre XSS
+     *
+     * @param array $entity
+     * @param string $key
+     * @param bool $safe Si true, la valeur est considérée comme déjà sécurisée
+     * @return string
+     * @throws \Exception Si le type n'est pas supporté
+     */
+    public static function valueAttrOrBlank(?array $entity, string $key, bool $safe = false): string
+    {
+        if(empty($entity) || !is_array($entity)) {
+            return '';
+        }
+        if (!array_key_exists($key, $entity)) {
+            return '';
+        }
+
+        $value = $entity[$key];
+
+        if ($value === null || $value === '') {
+            return "value=''";
+        }
+
+        if (!is_scalar($value)) {
+            throw new \Exception('This type of var is not supported by valueAttrOrBlank, use scalar');
+        }
+        if ($safe) {
+            return "value='" . $value . "'";
+        }
+
+        return "value='" . Sec::hNoHtml($value) . "'";
     }
 }

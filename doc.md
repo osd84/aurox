@@ -237,9 +237,15 @@ Fmt::bool($field)
 
 ## Forms
 
-Génération auto de formulaire BS
+Alias et raccourcis pour générer des formulaires HTML Boostrap
 
 todo
+
+```php
+Forms()
+
+Forms::valueAttrOrBlank(entity: array, key: string, [safe: bool = false]): string // Gère le champ value='' dans un input en lui passant une entité 
+```
 
 ## Validator & FormValidator
 
