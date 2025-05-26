@@ -114,6 +114,7 @@ BaseModel::idsExistsOrEmpty(pdo, table: string, ids: array): bool // retourne Tr
 BaseModel::getRules(): array // retourne une liste des OsdAurox\Validator liés à ce modele
 BaseModel::validate(): bool
 
+BaseModel::getSelect([required: bool = true], [selected: int|null = null]): string // retourne un element Select HTML
 
 $array = BaseModel::jsonArrayAggDecode($wine, 'myKey');  // Raccourcis pour extraire un JSON_ARRAYAGG ou [ ] si erreur; d'un résultat Array PDO
 // SELECT JSON_ARRAYAGG( JSON_OBJECT( 'id', wg.id, 'name', wg.name, 'name_translated', COALESCE(NULLIF(wg.name_$locale, ''), wg.name, '') )
@@ -245,6 +246,20 @@ todo
 Forms()
 
 Forms::valueAttrOrBlank(entity: array, key: string, [safe: bool = false]): string // Gère le champ value='' dans un input en lui passant une entité 
+```
+
+Exemple d'utlisation
+
+```php
+Forms()
+
+$formValidator = new FormValidator();
+$myEntity = ['title' => 'A title']
+
+$form = new Forms(AppUrls::LOGIN, $formValidator, $myEntity);
+<?= $form->input('title', required: true, id: 'title') ?>
+
+
 ```
 
 ## Validator & FormValidator
