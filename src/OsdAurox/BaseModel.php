@@ -108,6 +108,55 @@ class BaseModel {
         }
     }
 
+
+    /**
+     * Récupère tous les enregistrements avec options de tri et limite
+     *
+     * @param PDO $pdo
+     * @param string|null $orderBy Attention sqli possible sur le nom de colonne
+     * @param string $orderDir sécurisé, 'ASC' ou 'DESC'
+     * @param int|null $limit sécurisé, Nombre maximum d'enregistrements à retourner
+     * @return array
+     * @throws RuntimeException Si une erreur de connexion à la base de données survient
+     */
+    public static function getAll(
+        PDO $pdo,
+        ?string $orderBy = 'id',
+        string $orderDir = 'ASC',
+        ?int $limit = 100
+    ): array {
+        try {
+            $table = static::TABLE;
+            $sql = "SELECT * FROM $table";
+
+            if ($orderBy !== null) {
+                $orderDir = strtoupper($orderDir) === 'DESC' ? 'DESC' : 'ASC';
+                $sql .= " ORDER BY $orderBy $orderDir";
+            }
+
+            if ($limit !== null) {
+                $sql .= " LIMIT :limit";
+            }
+
+            $stmt = $pdo->prepare($sql);
+
+            if ($limit !== null) {
+                $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+            }
+
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (PDOException $e) {
+            if($e->getCode() === '42S22') {
+                throw new RuntimeException('Column `' . Sec::hNoHtml($orderBy) . '` in table `' . Sec::hNoHtml(static::TABLE) . '` does not exist');
+            }
+            error_log('Database connection error: ' . $e->getMessage());
+            throw new RuntimeException('Database connection error.');
+        }
+    }
+
+
     /**
      *
      * Permet de retourner un array via FETCH_ASSOC en cherchant par un champ spécifique

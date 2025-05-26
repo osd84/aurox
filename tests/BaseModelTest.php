@@ -124,4 +124,35 @@ $result = PostsModel::exist($pdo, "1");
 $tester->assertEqual($result, true, 'exist : ID numérique sous forme de chaîne doit être converti et retourner true');
 
 
+// Test pour getAll
+$tester->header("Test de la méthode getAll()");
+
+// Test basique sans paramètres
+$result = PostsModel::getAll($pdo);
+$tester->assertEqual(count($result) > 0, true, 'getAll : doit retourner des résultats');
+// Test avec tri ascendant
+$result = PostsModel::getAll($pdo, 'title', 'ASC');
+$tester->assertEqual($result[0]['title'], 'title1', 'getAll : tri ascendant sur title fonctionne');
+// Test avec tri descendant
+$result = PostsModel::getAll($pdo, 'title', 'DESC');
+$tester->assertEqual($result[0]['title'], 'title2', 'getAll : tri descendant sur title fonctionne');
+// Test avec limite
+$result = PostsModel::getAll($pdo, limit: 1);
+$tester->assertEqual(count($result), 1, 'getAll : limite fonctionne correctement');
+// Test avec tri et limite combinés
+$result = PostsModel::getAll($pdo, 'title', 'ASC', 1);
+$tester->assertEqual(count($result), 1, 'getAll : tri et limite combinés fonctionnent');
+$tester->assertEqual($result[0]['title'], 'title1', 'getAll : tri et limite retournent le bon enregistrement');
+// Test avec direction de tri invalide (devrait defaulter à ASC)
+$result = PostsModel::getAll($pdo, 'title', 'INVALID');
+$tester->assertEqual($result[0]['title'], 'title1', 'getAll : direction de tri invalide utilise ASC par défaut');
+
+// Test avec une colonne de tri qui n'existe pas (devrait gérer l'erreur PDO)
+try {
+    PostsModel::getAll($pdo, 'colonne_inexistante');
+    $tester->assertEqual(0, 1, 'getAll : devrait lever une exception pour une colonne inexistante');
+} catch (RuntimeException $e) {
+    $tester->assertEqual(1, 1, 'getAll : gère correctement l\'erreur pour une colonne inexistante');
+}
+
 $tester->footer(exit: false);

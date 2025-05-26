@@ -101,6 +101,7 @@ use \OsdAurox\BaseModel
 
 BaseModel::get(pdo, id: int, [select: string = '*']): mixed // retourne la row via sont $id,  sqli possible sur $select
 BaseModel::getBy(pdo, field: string, value: mixed): array|false // retourne la row via recherche sur champ, $value sécurisé, $field sqli possible
+BaseModel::getAll(pdo: PDO, [orderBy: null|string = 'id'], [orderDir: string = 'ASC'], [limit: int|null = 100]): array
 BaseModel::getAllBy(pdo, field: string, value: mixed): // retourne les rows via recherche sur champ, $value sécurisé, $field sqli possible
 BaseModel::getByIds(pdo, table: string, ids: array, [select: string = '*']): array // retourne les row via PDO::FETCH_ASSOC , $table et $select sont sensibles au Sqli, par contre $ids est sécurisé
 BaseModel::count() // total d'un table
