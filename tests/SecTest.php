@@ -50,3 +50,107 @@ $tester->assertEqual(42, $userId, "Doit retourner l'ID utilisateur correct");
 $_SESSION['user'] = ['id' => '123', 'role' => 'user'];
 $userId = Sec::getUserIdOrDie();
 $tester->assertEqual(123, $userId, "Doit convertir l'ID en entier");
+
+$tester->header("Test hArrayKey()");
+$result = Sec::hArrayKey([], 'name');
+$tester->assertEqual($result, [], "Devrait retourner un tableau vide pour un tableau vide");
+// Test avec clé inexistante
+$data = [['age' => 25]];
+$result = Sec::hArrayKey($data, 'name');
+$tester->assertEqual($result, [], "Devrait retourner un tableau vide si la clé n'existe pas");
+// Test avec données simples
+$data = [
+    ['name' => 'John'],
+    ['name' => 'Jane'],
+    ['name' => 'Bob']
+];
+$result = Sec::hArrayKey($data, 'name');
+$tester->assertEqual($result, ['John', 'Jane', 'Bob'], "Devrait extraire correctement les valeurs");
+// Test avec contenus HTML
+$data = [
+    ['content' => '<p>Hello</p>'],
+    ['content' => '<script>alert("XSS")</script>'],
+    ['content' => '<b>Bold</b>']
+];
+$result = Sec::hArrayKey($data, 'content');
+$tester->assertEqual(
+    in_array('<p>', $result),
+    false,
+    "Les balises HTML devraient être supprimées"
+);
+$tester->assertEqual(
+    in_array('<script>', $result),
+    false,
+    "Les balises script devraient être supprimées"
+);
+// Test avec valeurs null ou vides
+$data = [
+    ['value' => null],
+    ['value' => ''],
+    ['value' => 'test']
+];
+$result = Sec::hArrayKey($data, 'value');
+$tester->assertEqual(
+    $result,
+    ['', '', 'test'],
+    "Les valeurs null et vides devraient être converties en chaînes vides"
+);
+
+// Test avec types mixtes
+$data = [
+    ['value' => 123],
+    ['value' => true],
+    ['value' => 'string'],
+    ['value' => 3.14]
+];
+$result = Sec::hArrayKey($data, 'value');
+$expected = ['123', '1', 'string', '3.14'];
+$tester->assertEqual(
+    $result,
+    $expected,
+    "Devrait gérer correctement différents types de données"
+);
+
+
+// Test tableau vide
+$tester->header("Test de hArrayInt()");
+$result = Sec::hArrayInt([], 'id');
+$tester->assertEqual($result, [], "Devrait retourner un tableau vide pour un tableau vide");
+// Test données valides
+$data = [
+    ['id' => '1'],
+    ['id' => '42'],
+    ['id' => '-5'],
+    ['id' => '0']
+];
+$result = Sec::hArrayInt($data, 'id');
+$tester->assertEqual($result, [1, 42, -5, 0], "Devrait convertir correctement les chaînes en entiers");
+// Test avec valeurs non numériques
+$data = [
+    ['id' => 'abc'],
+    ['id' => '12.34'],
+    ['id' => 'null'],
+    ['id' => '']
+];
+$result = Sec::hArrayInt($data, 'id');
+$tester->assertEqual($result, [0, 12, 0, 0], "Devrait convertir les valeurs non numériques en 0");
+// Test avec clé inexistante
+$data = [
+    ['autre' => '1'],
+    ['autre' => '2']
+];
+$result = Sec::hArrayInt($data, 'id');
+$tester->assertEqual($result, [], "Devrait retourner un tableau vide si la clé n'existe pas");
+// Test avec valeurs mixtes
+$data = [
+    ['id' => '123'],
+    ['id' => '<script>alert(456)</script>'],
+    ['id' => ' 789 '],
+    ['id' => true],
+    ['id' => false]
+];
+$result = Sec::hArrayInt($data, 'id');
+$tester->assertEqual($result, [123, 0, 789, 1, 0], "Devrait gérer correctement les valeurs mixtes");
+
+
+$tester->footer(exit: false);

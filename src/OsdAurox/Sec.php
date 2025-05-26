@@ -253,6 +253,48 @@ class Sec
         return (int) $_SESSION['user']['id'];
     }
 
+    /**
+     * Extrait et sécurise les valeurs d'une clé spécifique d'un tableau multidimensionnel
+     *
+     * @param array $array Tableau multidimensionnel source
+     * @param string $key Clé à extraire
+     * @param bool $strictFiltering Si true, utilise strip_tags + htmlspecialchars (hNoHtml), sinon uniquement htmlspecialchars (h)
+     * @return array Tableau des valeurs extraites et sécurisées
+     */
+    public static function hArrayKey(array $array, string $key): array
+    {
+        if(!is_array($array) || empty($array)) {
+            return [];
+        }
 
+        if (!array_key_exists($key, $array[0])) {
+            return [];
+        }
+
+        $values = array_column($array, $key);
+        if(!$values) {
+            return [];
+        }
+        return array_map([self::class, 'hNoHtml'], $values);
+    }
+
+    /**
+     * Extrait les IDs d'un tableau et les convertit en entiers
+     *
+     * @param array $array Tableau source
+     * @return array Tableau des IDs convertis en entiers
+     */
+    public static function hArrayInt(array $array, string $key): array
+    {
+        if(!is_array($array) || empty($array)) {
+            return [];
+        }
+        $safeArr = self::hArrayKey($array, $key);
+        if(empty($safeArr)) {
+            return [];
+        }
+
+        return array_map('intval', $safeArr);
+    }
 
 }

@@ -411,7 +411,9 @@ Sec::jsonDatas()   // Retourne une request JSON en tableau
 Sec::getRealIpAddr()  // retourne vrai adresse ip du src request
 
 Sec::h($string) // alias htmlspecialchars
-Sec::hNoHtml($string) // alias htmlspecialchars
+Sec::hNoHtml($string) // alias htmlspecialchars + suppression tags HTML
+hArrayKey(array: array, key: string): array // alias htmlspecialchars hNoHtml sur tableau
+hArrayInt(array: array, key: string): array  // alias htmlspecialchars hNoHtml sur tableau + cast en (int)
 
 Sec::safeForLikeStrong($string)   // sécurise fortement un string pour son utilisation en LIKE SQL
 Sec::safeForLike($string)   // sécurise légerement un string pour son utilisation en LIKE SQL
