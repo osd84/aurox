@@ -517,6 +517,8 @@ $form = new Forms($action_url,
 <?php endif; ?>
 
 
+<?= $form->errorDiv('fieldName') ?> <!-- Retourne au format HTML les erreurs de validation d'un formulaire -->
+
 ```
 
 ## MobileDetect

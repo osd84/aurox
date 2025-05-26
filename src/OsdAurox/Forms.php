@@ -844,4 +844,18 @@ class Forms
 
         return "value='" . Sec::hNoHtml($value) . "'";
     }
+
+    public function errorDiv(string $fieldName): string
+    {
+        $errors = $this->validator->getError($fieldName);
+        if (empty($errors)) {
+            return '';
+        }
+
+        $html = '';
+        foreach ($errors as $err) {
+            $html .= '<div class="text-danger">* ' . I18n::t($err) . '</div>';
+        }
+        return $html;
+    }
 }

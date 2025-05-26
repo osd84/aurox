@@ -3,6 +3,7 @@
 require_once '../aurox.php';
 
 use OsdAurox\Forms;
+use OsdAurox\FormValidator;
 use OsdAurox\I18n;
 use osd84\BrutalTestRunner\BrutalTestRunner;
 
@@ -127,5 +128,39 @@ $arr = null;
 $result1 = Forms::valueAttrOrBlank($arr, 'fakeKey');
 $tester->assertEqual($result1, '', "Une entité nulle, retourne '' ");
 
+
+// Préparation
+$validator = new FormValidator();
+$forms = new Forms('test.php', $validator);
+$GLOBALS['i18n'] = new I18n('fr');
+
+$tester->header("Test errorDiv()");
+$result = $forms->errorDiv('champInexistant');
+$tester->assertEqual($result, '', "Retourne une chaîne vide quand il n'y a pas d'erreur");
+// avec erreur
+$validator->addError('email', 'Email invalide');
+$result = $forms->errorDiv('email');
+$expected = '<div class="text-danger">* Email invalide</div>';
+$tester->assertEqual($result, $expected, "Affiche correctement une seule erreur");
+// Test errorDiv avec plusieurs erreurs
+$validator->clearErrors();
+$validator->addError('password', 'Mot de passe trop court');
+$validator->addError('password', 'Doit contenir un chiffre');
+$result = $forms->errorDiv('password');
+$expected = '<div class="text-danger">* Mot de passe trop court</div>' .
+    '<div class="text-danger">* Doit contenir un chiffre</div>';
+$tester->assertEqual($result, $expected, "Affiche correctement plusieurs erreurs");
+// Test errorDiv avec traduction
+$validator->clearErrors();
+$validator->addError('name', 'NAME_REQUIRED');
+$result = $forms->errorDiv('name');
+$translated = '<div class="text-danger">* NAME_REQUIRED</div>';
+$tester->assertEqual($result, $translated, "Traduit correctement les messages d'erreur");
+// Test errorDiv avec caractères spéciaux
+$validator->clearErrors();
+$validator->addError('field', 'Message avec <script> & caractères spéciaux');
+$result = $forms->errorDiv('field');
+$tester->assertEqual(str_contains($result, '&lt;script&gt;'), true, "Échappe correctement les balises HTML");
+$tester->assertEqual(str_contains($result, '&amp;'), true, "Échappe correctement les caractères spéciaux");
 
 $tester->footer(exit: false);
