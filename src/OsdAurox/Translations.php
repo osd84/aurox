@@ -11,6 +11,9 @@ Class Translations {
         'must be at most {max} characters' => 'doit contenir maximum {max} caractères',
         'must be between {min} and {max} characters' => 'doit contenir entre {min} et {max} caractères',
         'field is required' => 'champ obligatoire',
+        'must be a float' => 'doit être un nombre',
+        'must be a int' => 'doit être un nombre',
+        'must be a string' => 'doit être une chaine de caractères',
     ];
 
 }
