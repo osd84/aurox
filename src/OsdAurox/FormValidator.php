@@ -8,7 +8,7 @@ class FormValidator
 {
     // Propriété pour stocker les messages d'erreur
     private array $errors = [];
-    public ?bool $is_valid = False;
+    private ?bool $is_valid = null;
     public ?Api $o_api_response = null;
 
     public function isValid()
