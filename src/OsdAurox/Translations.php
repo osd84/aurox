@@ -13,6 +13,7 @@ Class Translations {
         'field is required' => 'champ obligatoire',
         'must be a float' => 'doit être un nombre',
         'must be a int' => 'doit être un nombre',
+        'must be a number' => 'doit être un nombre',
         'must be a string' => 'doit être une chaine de caractères',
     ];
 
