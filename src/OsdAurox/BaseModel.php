@@ -384,11 +384,11 @@ class BaseModel {
      * Retourne un select HTML avec les options de la table
      *
      * @param bool $required
-     * @param int|null $selected
+     * @param mixed $selected
      * @return string
      * @throws Exception
      */
-    public static function getSelect(bool $required = true, ?int $selected = null): string
+    public static function getSelect(bool $required = true, mixed $selected = null): string
     {
         throw new Exception('Not implemented');
     }
