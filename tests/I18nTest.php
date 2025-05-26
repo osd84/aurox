@@ -119,4 +119,22 @@ $GLOBALS['i18n'] = new I18n('fr');
 $currentLocale = I18n::currentLocale();
 $tester->assertEqual($currentLocale, 'fr', "currentLocale() retourne bien 'fr'");
 
+
+
+// Test avec valeur par défaut
+$tester->header("Test de getLocalizedFieldName()");
+$result = I18n::getLocalizedFieldName();
+$tester->assertEqual($result, 'name_fr', "Le champ par défaut devrait être 'name_fr'");
+// Test avec un nom de champ personnalisé
+$result = I18n::getLocalizedFieldName('description');
+$tester->assertEqual($result, 'description_fr', "Le champ devrait être 'description_fr'");
+// Test avec changement de locale
+$GLOBALS['i18n'] = new I18n('en');
+$result = I18n::getLocalizedFieldName('title');
+$tester->assertEqual($result, 'title_en', "Le champ devrait être 'title_en'");
+// Test avec caractères spéciaux
+$result = I18n::getLocalizedFieldName("contenu<script>alert('123')</script>special_en");
+$tester->assertEqual($result, "contenualert(&#039;123&#039;)special_en_en", "protégé contre XSS");
+
+
 $tester->footer(exit: false);

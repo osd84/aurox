@@ -67,6 +67,28 @@ class I18n
         return $translator->translate(key : $key, placeholders: $placeholders, safe : $safe);
     }
 
+    /**
+     * Génère un nom de champ localisé et sécurisé en ajoutant la locale courante.
+     *
+     * @param string $fieldName Le nom de base du champ. Par défaut 'name' si non fourni.
+     * @return string Le nom du champ sécurisé avec la locale courante ajoutée.
+     * @throws \LogicException Si le traducteur n'est pas initialisé dans la portée globale.
+     */
+
+    public static function getLocalizedFieldName(string $fieldName = 'name'): string
+    {
+        if (!$fieldName) {
+            return '';
+        }
+
+        $translator = $GLOBALS['i18n'];
+        if (!$translator) {
+            throw new \LogicException('Out context; I18n not initialized');
+        }
+
+        return Sec::hNoHtml($fieldName . '_' . $translator->getLocale());
+    }
+
     public static function entity(array $entity, ?string $default = null, string $fieldName = 'name', bool $safe = false): string
     {
         if (!$entity) {

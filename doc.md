@@ -354,6 +354,7 @@ Traduire avec des fichiers JSON
 FIchier dans : [fr.php](translations/fr.php)
 
 ```php
+use OsdAurox\I18n;
 // intialisation du traducteur dans le scope 
 $GLOBALS['i18n'] = new I18n('en');
 
@@ -375,6 +376,14 @@ $r = I18n::entity($entity);
 // locale actuelle
 $locale = I18n::currentLocale();
 >>> 'fr'
+
+
+// Récupérer le d'un champ localisé en fonction de la locale actuelle
+$field = getLocalizedFieldName([fieldName: string = 'name']): string;
+>>> name_fr || name_en
+$field = I18n::getLocalizedFieldName('otherField');
+>>> otherField_fr || otherField_en
+
 ```
 
 ## Mailer
