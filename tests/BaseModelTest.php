@@ -146,7 +146,6 @@ $tester->assertEqual($result[0]['title'], 'title1', 'getAll : tri et limite reto
 // Test avec direction de tri invalide (devrait defaulter à ASC)
 $result = PostsModel::getAll($pdo, 'title', 'INVALID');
 $tester->assertEqual($result[0]['title'], 'title1', 'getAll : direction de tri invalide utilise ASC par défaut');
-
 // Test avec une colonne de tri qui n'existe pas (devrait gérer l'erreur PDO)
 try {
     PostsModel::getAll($pdo, 'colonne_inexistante');
@@ -154,5 +153,49 @@ try {
 } catch (RuntimeException $e) {
     $tester->assertEqual(1, 1, 'getAll : gère correctement l\'erreur pour une colonne inexistante');
 }
+
+
+// Tests pour getAllBy avec tri et limite
+$tester->header("Test de la méthode getAllBy() avec tri et limite");
+
+// Test basique sans tri ni limite
+$posts = PostsModel::getAllBy($pdo, 'status', 'draft');
+$tester->assertEqual(count($posts), 2, 'getAllBy : retourne le bon nombre de résultats sans tri ni limite');
+// Test avec tri ascendant
+$posts = PostsModel::getAllBy($pdo, 'status', 'draft', 'title', 'ASC');
+$tester->assertEqual($posts[0]['title'], 'title1', 'getAllBy : tri ascendant sur title fonctionne');
+$tester->assertEqual($posts[1]['title'], 'title2', 'getAllBy : tri ascendant sur title maintient l\'ordre');
+// Test avec tri descendant
+$posts = PostsModel::getAllBy($pdo, 'status', 'draft', 'title', 'DESC');
+$tester->assertEqual($posts[0]['title'], 'title2', 'getAllBy : tri descendant sur title fonctionne');
+$tester->assertEqual($posts[1]['title'], 'title1', 'getAllBy : tri descendant sur title maintient l\'ordre');
+// Test avec limite
+$posts = PostsModel::getAllBy($pdo, 'status', 'draft', limit: 1);
+$tester->assertEqual(count($posts), 1, 'getAllBy : limite fonctionne correctement');
+// Test avec tri et limite combinés
+$posts = PostsModel::getAllBy($pdo, 'status', 'draft', 'title', 'ASC', 1);
+$tester->assertEqual(count($posts), 1, 'getAllBy : tri et limite combinés fonctionnent');
+$tester->assertEqual($posts[0]['title'], 'title1', 'getAllBy : tri et limite retournent le bon enregistrement');
+// Test avec direction de tri invalide (devrait basculer à ASC)
+$posts = PostsModel::getAllBy($pdo, 'status', 'draft', 'title', 'INVALID');
+$tester->assertEqual($posts[0]['title'], 'title1', 'getAllBy : direction de tri invalide utilise ASC par défaut');
+// Test avec une colonne de tri qui n'existe pas
+try {
+    PostsModel::getAllBy($pdo, 'status', 'draft', 'colonne_inexistante');
+    $tester->assertEqual(0, 1, 'getAllBy : devrait lever une exception pour une colonne inexistante');
+} catch (RuntimeException $e) {
+    $tester->assertEqual(1, 1, 'getAllBy : gère correctement l\'erreur pour une colonne inexistante');
+}
+// Test avec champ de recherche inexistant
+try {
+    PostsModel::getAllBy($pdo, 'champ_inexistant', 'valeur');
+    $tester->assertEqual(0, 1, 'getAllBy : devrait lever une exception pour un champ de recherche inexistant');
+} catch (RuntimeException $e) {
+    $tester->assertEqual(1, 1, 'getAllBy : gère correctement l\'erreur pour un champ de recherche inexistant');
+}
+// Test avec valeur null
+$posts = PostsModel::getAllBy($pdo, 'status', null);
+$tester->assertEqual(count($posts), 0, 'getAllBy : gère correctement les valeurs null');
+
 
 $tester->footer(exit: false);

@@ -158,25 +158,52 @@ class BaseModel {
 
 
     /**
+     * Retourne tous les enregistrements correspondant à un critère de recherche
      *
-     * Permet de retourner un array via FETCH_ASSOC en cherchant par un champ spécifique
-     *
-     * Sqli possible sur le champ $field
-     *
-     * @param string $field attention sqli possible, le nom de la colonne où chercher
-     * @param mixed $value  sécurisé, la valeur qu'on cherche
-     *
-     * @return array L'enregistrement récupéré sous forme de tableau associatif, ou false si aucun enregistrement n'est trouvé.
-     * @throws RuntimeException Si une erreur de connexion à la base de données survient.
+     * @param PDO $pdo
+     * @param string $field Attention sqli possible sur le nom de colonne
+     * @param mixed $value Valeur sécurisée
+     * @param string|null $orderBy Attention sqli possible sur le nom de colonne
+     * @param string $orderDir 'ASC' ou 'DESC'
+     * @param int|null $limit Nombre maximum d'enregistrements à retourner
+     * @return array
+     * @throws RuntimeException Si une erreur de connexion à la base de données survient
      */
-    public static function getAllBy($pdo, string $field, mixed $value): array
-    {
+    public static function getAllBy(
+        PDO $pdo,
+        string $field,
+        mixed $value,
+        ?string $orderBy = 'id',
+        string $orderDir = 'ASC',
+        ?int $limit = 100
+    ): array {
         try {
             $table = static::TABLE;
-            $stmt = $pdo->prepare("SELECT * FROM $table WHERE $field = :search");
-            $stmt->execute(['search' => $value]);
-            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $sql = "SELECT * FROM $table WHERE $field = :search";
+
+            if ($orderBy !== null) {
+                $orderDir = strtoupper($orderDir) === 'DESC' ? 'DESC' : 'ASC';
+                $sql .= " ORDER BY $orderBy $orderDir";
+            }
+
+            if ($limit !== null) {
+                $sql .= " LIMIT :limit";
+            }
+
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':search', $value);
+
+            if ($limit !== null) {
+                $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+            }
+
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
         } catch (PDOException $e) {
+            if($e->getCode() === '42S22') {
+                throw new RuntimeException('Column `' . Sec::hNoHtml($orderBy) . '` in table `' . Sec::hNoHtml(static::TABLE) . '` does not exist');
+            }
             error_log('Database connection error: ' . $e->getMessage());
             throw new RuntimeException('Database connection error.');
         }
