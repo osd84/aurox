@@ -39,7 +39,7 @@ class BaseModel {
      * @param $select string  attention sqli possible
      * @return mixed
      */
-    public static function get($pdo, $id, $select = '*')
+    public static function get(\PDO $pdo, mixed $id, string $select = '*')
     {
         try {
             $table = static::TABLE;
@@ -61,7 +61,7 @@ class BaseModel {
      * @return bool true si l'enregistrement existe, false sinon
      * @throws RuntimeException Si une erreur de connexion à la base de données survient
      */
-    public static function exist($pdo, $id): bool
+    public static function exist(\PDO $pdo, mixed $id): bool
     {
         try {
             if (!filter_var($id, FILTER_VALIDATE_INT)) {
@@ -94,7 +94,7 @@ class BaseModel {
      * @return array|false L'enregistrement récupéré sous forme de tableau associatif, ou false si aucun enregistrement n'est trouvé.
      * * @throws RuntimeException Si une erreur de connexion à la base de données survient.
      */
-    public static function getBy($pdo, string $field, mixed $value): array|false
+    public static function getBy(\PDO $pdo, string $field, mixed $value): array|false
     {
         try {
             $table = static::TABLE;
@@ -209,7 +209,7 @@ class BaseModel {
         }
     }
 
-    public static function count($pdo)
+    public static function count(\PDO $pdo)
     {
         $table = static::TABLE;
         $stmt = $pdo->prepare("SELECT COUNT(*) FROM $table");
@@ -224,15 +224,12 @@ class BaseModel {
      * @param int $id  sécurisé
      * @return bool
      */
-    public static function delete($pdo, int $id): bool
+    public static function delete(\PDO $pdo, int $id): int
     {
-        $id = (int) $id;
+        $id = (int)$id;
         $stmt = $pdo->prepare("DELETE FROM " . static::TABLE . " WHERE id = :id");
         $stmt->execute(['id' => $id]);
-        if($stmt->rowCount() == 0) {
-            return false;
-        }
-        return true;
+        return $stmt->rowCount();
     }
 
     /**
@@ -321,7 +318,7 @@ class BaseModel {
      * @param array $ids
      * @return array
      */
-    public static function getByIds($pdo, string $table, array $ids, string $select='*'): array
+    public static function getByIds(\PDO $pdo, string $table, array $ids, string $select='*'): array
     {
         if (empty($ids)) {
             return [];
@@ -350,7 +347,7 @@ class BaseModel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public static function idsExistsOrEmpty($pdo, string $table, array $ids): bool
+    public static function idsExistsOrEmpty(\PDO $pdo, string $table, array $ids): bool
     {
         if (empty($ids)) {
             return True;
