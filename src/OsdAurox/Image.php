@@ -6,7 +6,7 @@ use Imagick;
 
 class Image
 {
-    function resize(string $sourcePath, int $maxWidth, int $maxHeight): string
+    public static function resize(string $sourcePath, int $maxWidth, int $maxHeight): string
     {
 
         if (!file_exists($sourcePath)) {
@@ -39,7 +39,7 @@ class Image
         return $destinationPath;
     }
 
-    public function reduceToMaxSize(string $sourcePath, float $maxSize = 2): string
+    public static function reduceToMaxSize(string $sourcePath, float $maxSize = 2): string
     {
         // Convertir la taille maximale (en Mo) en octets
         $maxSizeInBytes = $maxSize * 1024 * 1024;
@@ -73,15 +73,15 @@ class Image
         return $destinationPath;
     }
 
-    public function resizeAndReduce(string $sourcePath, int $maxWidth, int $maxHeight, float $maxSize): string
+    public static function resizeAndReduce(string $sourcePath, int $maxWidth, int $maxHeight, float $maxSize): string
     {
         // Étape 1 : Redimensionner l'image
-        $resizedPath = $this->resize($sourcePath, $maxWidth, $maxHeight);
+        $resizedPath = Image::resize($sourcePath, $maxWidth, $maxHeight);
 
         // Étape 2 : Vérifier la taille de l'image redimensionnée
         if (filesize($resizedPath) / (1024 * 1024) > $maxSize) {
             // Réduire la taille si elle dépasse la taille maximale autorisée
-            return $this->reduceToMaxSize($resizedPath, $maxSize);
+            return Image::reduceToMaxSize($resizedPath, $maxSize);
         }
 
         // Sinon, retourner simplement le chemin redimensionné

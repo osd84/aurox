@@ -25,30 +25,28 @@ imagedestroy($image);
 
 // Tests
 try {
-    $imageHandler = new Image();
-
     // Test : Redimensionnement dans des dimensions plus petites
-    $resizedPath = $imageHandler->resize($imagePath, 400, 300);
+    $resizedPath = Image::resize($imagePath, 400, 300);
     $tester->assertEqual(file_exists($resizedPath), true, 'Le fichier redimensionné existe');
     list($width, $height) = getimagesize($resizedPath);
     $tester->assertEqual($width, 400, 'La largeur est correcte');
     $tester->assertEqual($height, 300, 'La hauteur est correcte');
 
     // Test : Redimensionnement tout en gardant les proportions
-    $resizedPathProportional = $imageHandler->resize($imagePath, 500, 500);
+    $resizedPathProportional = Image::resize($imagePath, 500, 500);
     list($width, $height) = getimagesize($resizedPathProportional);
     $tester->assertEqual($width, 500, 'La largeur est correcte pour proportions maintenues');
     $tester->assertEqual($height, 375, 'La hauteur est correcte pour proportions maintenues');
 
     // Test : Dimensions plus grandes que l'original
-    $resizedPathTooLarge = $imageHandler->resize($imagePath, 1000, 800);
+    $resizedPathTooLarge = Image::resize($imagePath, 1000, 800);
     list($width, $height) = getimagesize($resizedPathTooLarge);
     $tester->assertEqual($width, 1000, 'La largeur est plus grande aux dimensions d’origine');
     $tester->assertEqual($height, 750, 'La hauteur est plus grande que les dimensions d’origine');
 
     // Test : Fichier invalide ou inexistant
     try {
-        $imageHandler->resize('non_existent_file.jpg', 300, 200);
+        Image::resize('non_existent_file.jpg', 300, 200);
         $tester->assertEqual(false, true, 'Exception non levée pour un fichier inexistant');
     } catch (Exception $e) {
         $tester->assertEqual(true, true, 'Exception levée pour un fichier inexistant');
@@ -56,7 +54,7 @@ try {
 
     // Test : Largeur ou hauteur invalides
     try {
-        $r = $imageHandler->resize($imagePath, -100, 100);
+        $r = Image::resize($imagePath, -100, 100);
         $tester->assertEqual(false, true, 'Exception non levée pour une largeur invalide');
     } catch (Exception $e) {
         $tester->assertEqual(true, true, 'Exception levée pour une largeur invalide');
@@ -85,10 +83,8 @@ imagedestroy($image);
 
 // Tests
 try {
-    $imageHandler = new Image();
-
     // Test 1 : Réduction de la taille pour atteindre au maximum 2 Mo
-    $reducedPath = $imageHandler->reduceToMaxSize($imagePath, 2);
+    $reducedPath = Image::reduceToMaxSize($imagePath, 2);
     $tester->assertEqual(file_exists($reducedPath), true, 'Le fichier réduit existe');
     $sizeInBytes = filesize($reducedPath);
     $tester->assertEqual($sizeInBytes <= 2 * 1024 * 1024, true, 'La taille est inférieure ou égale à 2 Mo');
@@ -100,13 +96,13 @@ try {
     imagejpeg($image, $smallImagePath, 50); // Compression modérée
     imagedestroy($image);
 
-    $reducedSmallImage = $imageHandler->reduceToMaxSize($smallImagePath, 2);
+    $reducedSmallImage = Image::reduceToMaxSize($smallImagePath, 2);
     $tester->assertEqual(file_exists($reducedSmallImage), true, 'Le fichier réduit existe pour une petite image');
     $tester->assertEqual(filesize($reducedSmallImage) <= 500 * 1024, true, 'La taille de l’image reste petite (500 Ko environ)');
 
     // Test 3 : Fichier inexistant
     try {
-        $imageHandler->reduceToMaxSize('test_images/non_existent.jpg', 2);
+        Image::reduceToMaxSize('test_images/non_existent.jpg', 2);
         $tester->assertEqual(false, true, 'Exception non levée pour un fichier inexistant');
     } catch (Exception $e) {
         $tester->assertEqual(true, true, 'Exception levée pour un fichier inexistant');
@@ -145,14 +141,12 @@ imagedestroy($image);
 
 // Tests
 try {
-    $imageHandler = new Image();
-
     // Test 1 : Redimensionner et réduire pour un fichier plus petit que 2 Mo
     $maxWidth = 800;
     $maxHeight = 600;
     $maxSize = 2; // 2 Mo
 
-    $resultPath = $imageHandler->resizeAndReduce($imagePath, $maxWidth, $maxHeight, $maxSize);
+    $resultPath = Image::resizeAndReduce($imagePath, $maxWidth, $maxHeight, $maxSize);
 
     // Vérification 1 : Le fichier redimensionné/réduit existe
     $tester->assertEqual(file_exists($resultPath), true, 'Le fichier redimensionné/réduit existe.');
@@ -172,13 +166,13 @@ try {
     imagejpeg($image, $smallImage, 75); // Fichier compressé
     imagedestroy($image);
 
-    $resultPathSmall = $imageHandler->resizeAndReduce($smallImage, 300, 300, 2);
+    $resultPathSmall = Image::resizeAndReduce($smallImage, 300, 300, 2);
     $tester->assertEqual(file_exists($resultPathSmall), true, 'Le fichier réduit existe pour une petite image.');
     $tester->assertEqual(filesize($resultPathSmall) <= filesize($smallImage), true, 'La taille n’a pas beaucoup changé pour une petite image.');
 
     // Test 3 : Gestion des fichiers inexistants
     try {
-        $imageHandler->resizeAndReduce('test_images/non_existent.jpg', 300, 300, 2);
+        Image::resizeAndReduce('test_images/non_existent.jpg', 300, 300, 2);
         $tester->assertEqual(false, true, 'Exception non levée pour un fichier inexistant.');
     } catch (Exception $e) {
         $tester->assertEqual(true, true, 'Exception levée pour un fichier inexistant.');
