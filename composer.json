@@ -19,7 +19,8 @@
         "phpmailer/phpmailer": "^6.9",
         "ext-pdo": "*",
         "ext-curl": "*",
-        "ext-mbstring": "*"
+        "ext-mbstring": "*",
+        "ext-imagick": "*"
     },
     "require-dev": {
         "osd84/brutaltestrunner": "^3.0"

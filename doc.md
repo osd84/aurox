@@ -530,10 +530,21 @@ Une re-implémentation de `Detection\MobileDetect` en version plus "light" inté
 Il y a un Alias dans Base::isMobile() qui retourne Vrai si Mobile ou Tablet
 Il est recommandé d'utiliser directement Base::isMobile() au lieu de MobileDetect
 
-```
+```php
+use OsdAurox\MobileDetect();
 $detect = new MobileDetect();
 $detect->isMobile()
 $detect->isTablet()
+```
+
+## Images
+
+```php
+use OsdAurox\Image
+
+Image::resize(sourcePath: string, maxWidth: int, maxHeight: int): string   // redimensionne une image 
+Image::reduceToMaxSize(sourcePath: string, [maxSize: float|int = 2]): string // réduit la qualité d'une image par boucle jusqu'à la taille indiqué
+Image::resizeAndReduce(sourcePath: string, maxWidth: int, maxHeight: int, maxSize: float): string // redimensionne puis réduit la taille
 ```
 
 ## TESTS
