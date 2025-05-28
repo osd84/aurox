@@ -15,6 +15,13 @@ use OsdAurox\Sec;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title><?=  Sec::hNoHtml($title ?? "Aurox - BDD") ?></title>
+    <!-- Boostrap -->
+    <link rel="stylesheet" href="/plugin/bootstrap-5.0.2-dist/css/bootstrap.rtl.min.css">
+    <link rel="stylesheet" href="/plugin/bootstrap-5.0.2-dist/css/bootstrap-grid.rtl.min.css">
+    <link rel="stylesheet" href="/plugin/bootstrap-5.0.2-dist/css/bootstrap-reboot.rtl.min.css">
+    <!-- Boostrap Js -->
+    <script src="/plugin//bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
+
     <!-- Ajoutez vos feuilles de style -->
     <link rel="stylesheet" href="/style.css">
 </head>

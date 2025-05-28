@@ -5,6 +5,7 @@ namespace OsdAurox;
 Class Translations {
 
     public static array $fr = [
+        // OsdAurox\Validator
         'must be valid email' => 'doit être une email valide',
         'must not be empty' => 'doit être rempli',
         'must be at least {min} characters' => 'doit contenir minimum {min} caractères',
@@ -15,6 +16,13 @@ Class Translations {
         'must be a int' => 'doit être un nombre',
         'must be a number' => 'doit être un nombre',
         'must be a string' => 'doit être une chaine de caractères',
+        // OsdAurox\Modal
+        'Close' => 'Fermer',
+        'Submit' => 'Envoyer',
+        'Cancel' => 'Annuler',
+        'Accept' => 'Accepter',
+        'Save' => 'Enregistrer',
+
     ];
 
 }
