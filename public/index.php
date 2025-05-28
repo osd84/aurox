@@ -33,10 +33,16 @@ require_once '../aurox.php';
         </div>
     </div>
 
-    <?= Modal::newLoader() ?>
-    <div class="row">
+    <?= Modal::newLoader(msg : 'Va se fermer dans 1 secondes') ?>
+    <div class="row mt-2">
         <div class="col-12">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-loader">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#modal-loader"
+                    onclick="setTimeout(() => {
+                            const modal = bootstrap.Modal.getInstance(document.getElementById('modal-loader'));
+                            modal.hide();
+                    }, 1000)"
+                >
                 Modal #2
             </button>
         </div>
