@@ -54,6 +54,13 @@ require_once '../aurox.php';
     <h3 class="mt-2">Gestionnaire minimaliste de Modal en JS</h3>
     <div class="row mt-2">
         <div class="col-12">
+            <p>
+                osd-modal-loader.js -> Affiche une modale bloquante pour indiquer que le site est en cours de chargement.
+            </p>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-12">
             <button type="button" class="btn btn-secondary" onclick="osdModalLoader.show('Chargement', 'Veuillez patienter, cliquez sur la croix pour fermer', true);">Affiche le loader</button>
         </div>
     </div>
@@ -76,7 +83,21 @@ require_once '../aurox.php';
     <h3 class="mt-2">Gestionnaire minimaliste de Modal en JS</h3>
     <div class="row mt-2">
         <div class="col-12">
-            <button type="button" class="btn btn-secondary" onclick="showAlert();">Affiche une alerte</button>
+            <p>
+                osd-modal-alert.js -> équivalent de alert()
+            </p>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-12">
+            <button type="button" class="btn btn-secondary" onclick="osdModalAlert.alert('Titre alerte', 'Contenu alerte');">Affiche une alerte</button>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-12">
+            <p>
+                osd-modal-confirm.js -> équivalent de confirm()
+            </p>
         </div>
     </div>
     <div class="row mt-2">
@@ -86,11 +107,6 @@ require_once '../aurox.php';
         </div>
     </div>
     <script>
-
-        async function showAlert() {
-            // création d'une modal alert
-            const alert = osdModalAlert.alert('Titre alerte', 'Contenu alerte')
-        }
 
         async function showConfirm() {
             const isConfirmed = await osdModalConfirm.confirm(

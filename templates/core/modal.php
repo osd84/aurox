@@ -13,7 +13,7 @@ if(!$modal instanceof Modal)
 <!-- Modal -->
 <div class="<?= Sec::hNoHtml($modal->class) ?>" id="<?= Sec::hNoHtml($modal->id) ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
      aria-labelledby="<?= Sec::hNoHtml($modal->id) ?>" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="<?= Sec::hNoHtml($modal->id) ?>Title"><?= Sec::hNoHtml($modal->title) ?></h5>
