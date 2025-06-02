@@ -34,7 +34,11 @@ class OsdModalLoader {
         document.body.insertAdjacentHTML('beforeend', modalHTML);
 
         this.modalDom = document.getElementById("osd-loader-modal");
-        this.modalBs = new bootstrap.Modal(this.modalDom);
+        this.modalBs = new bootstrap.Modal(this.modalDom,{
+                backdrop: 'static',
+                keyboard: false
+            }
+        );
     }
 
     /**
