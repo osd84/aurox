@@ -49,7 +49,7 @@ class Modal
     public function render()
     {
         // Définir le chemin vers le template
-        $templatePath = (APP_ROOT . '/templates/' . $this->template);
+        $templatePath = (APP_ROOT . '/templates/core/' . $this->template);
 
         // Vérifier si le fichier existe
         if (!file_exists($templatePath)) {

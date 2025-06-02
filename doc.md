@@ -550,6 +550,9 @@ Image::resizeAndReduce(sourcePath: string, maxWidth: int, maxHeight: int, maxSiz
 ## Modal
 
 La classe `Modal` fournit un système léger pour créer et gérer des fenêtres modales Bootstrap 5 dans l'application Aurox.
+
+Par default le template de la modale doit se trouver dans templates/core/modal.php
+
 ```php
 $modal = new Modal(title, msg, [type: string = 'info'], [template = null], [btnAccept = null], [btnCancel = null], 
                                 [id: string = 'modal-default'], [class: string = 'modal fade'], [showClose: true = true], 
