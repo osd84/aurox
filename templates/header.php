@@ -14,25 +14,27 @@ use OsdAurox\Sec;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title><?=  Sec::hNoHtml($title ?? "Aurox - BDD") ?></title>
+    <title><?= Sec::hNoHtml($title ?? "Aurox - BDD") ?></title>
     <!-- Boostrap -->
-    <link rel="stylesheet" href="/plugin/bootstrap-5.0.2-dist/css/bootstrap.rtl.min.css">
-    <link rel="stylesheet" href="/plugin/bootstrap-5.0.2-dist/css/bootstrap-grid.rtl.min.css">
-    <link rel="stylesheet" href="/plugin/bootstrap-5.0.2-dist/css/bootstrap-reboot.rtl.min.css">
+    <link rel="stylesheet" href="/plugin/bootstrap-5.0.2-dist/css/bootstrap.min.css">
     <!-- Boostrap Js -->
     <script src="/plugin//bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Ajoutez vos feuilles de style -->
     <link rel="stylesheet" href="/style.css">
 </head>
-<body class="container">
-<header>
-    <h1><?= Sec::hNoHtml($headerTitle ?? "Bienvenue sur mon site"); ?></h1>
-    <nav class="navbar">
-        <ul>
-            <li><a href="<?= Sec::hNoHtml(AppUrls::HOME) ?>">Accueil</a></li>
-            <li><a href="<?= Sec::hNoHtml(AppUrls::NOT_FOUND) ?>">404</a></li>
-        </ul>
-    </nav>
-</header>
-<hr>
+<body>
+<div class="container">
+
+    <header class="py-3">
+        <h1><?= Sec::hNoHtml($headerTitle ?? "Bienvenue sur mon site"); ?></h1>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="<?= Sec::hNoHtml(AppUrls::HOME) ?>">Accueil</a></li>
+                    <li class="nav-item"><a class="nav-link" href="<?= Sec::hNoHtml(AppUrls::NOT_FOUND) ?>">404</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <hr>

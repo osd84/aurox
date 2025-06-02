@@ -11,7 +11,7 @@ require_once '../aurox.php';
 
 ?>
 <?php require('../templates/header.php'); ?>
-<main class="main-content">
+<main class="py-4">
     <h1>Accueil</h1>
     <p>Contenu de la page</p>
 
@@ -28,16 +28,25 @@ require_once '../aurox.php';
     <div class="row">
         <div class="col-12">
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-default">
-                Modal #1
+                Modale classique #1
             </button>
         </div>
     </div>
 
-    <?= Modal::newLoader() ?>
-    <div class="row">
+    <?= Modal::newLoader(showClose: True) ?>
+    <div class="row mt-2">
         <div class="col-12">
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-loader">
-                Modal #2
+                Modale de chargement #2
+            </button>
+        </div>
+    </div>
+
+    <?= Modal::newPrompt(showClose: True) ?>
+    <div class="row mt-2">
+        <div class="col-12">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-prompt">
+                Modale de saisie #3
             </button>
         </div>
     </div>

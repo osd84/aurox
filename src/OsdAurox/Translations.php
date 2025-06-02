@@ -22,7 +22,10 @@ Class Translations {
         'Cancel' => 'Annuler',
         'Accept' => 'Accepter',
         'Save' => 'Enregistrer',
-
+        'Loading...' => 'Chargement...',
+        'Please wait while the content is loading..' => 'Veuillez patienter pendant le chargement du contenu..',
+        'Please complete the form below' => 'Veuillez compléter le formulaire ci-dessous',
+        'Enter the required information :' => 'Veuillez entrer les informations requises :',
     ];
 
 }
