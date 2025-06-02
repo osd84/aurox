@@ -20,6 +20,10 @@ use OsdAurox\Sec;
     <!-- Boostrap Js -->
     <script src="/plugin//bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
 
+    <!-- Ajoutez vos scripts -->
+    <script src="/js/osd-modal-loader.js"></script>
+    <script src="/js/osd-modal-alert.js"></script>
+
     <!-- Ajoutez vos feuilles de style -->
     <link rel="stylesheet" href="/style.css">
 </head>

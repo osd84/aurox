@@ -591,6 +591,11 @@ use OsdAurox\Modal;
 </div>
 ```
 
+## loader-manager.js
+
+Permet d'afficher une modale bloquante de chargement
+
+
 ## TESTS
 
 Create a mysql database `aurox_test`
