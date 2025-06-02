@@ -98,4 +98,7 @@ $locale = $_SESSION['locale'] ?? 'fr';
 $GLOBALS['i18n']->setLocale($locale);
 
 
+// On stocke le referer dans la session
+Sec::storeReferer();
+
 AppUrls::existOr404();

@@ -431,6 +431,10 @@ Sec::noneCsp() // retourne le NONCE Csp courant (typo)
 Sec::getPage() // méthode securisée pour lire le $_GET['page']
 Sec::getPerPage() // méthode securisée pour lire le $_GET['per_page']
 
+
+Sec::storeReferer(); // enregistre le referer de la req actuelle
+Sec::getReferer(); // retourne le referer de la req precedente
+
 ```
 
 ## ViewsShortcuts

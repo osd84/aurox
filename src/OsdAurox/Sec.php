@@ -297,4 +297,39 @@ class Sec
         return array_map('intval', $safeArr);
     }
 
+    public static function storeReferer(): void
+    {
+        $requestUri = $_SERVER['REQUEST_URI'] ?? null;
+        $host = $_SERVER['HTTP_HOST'] ?? null;
+
+        if(empty($requestUri) || empty($host)) {
+            return;
+        }
+
+        $_SESSION['previous_url'] = [
+            'url' => $requestUri,
+            'host' => $host,
+            'timestamp' => time()
+        ];
+    }
+
+    public static function getReferer(): ?string
+    {
+        if (!isset($_SESSION['previous_url'])) {
+            return null;
+        }
+
+        $data = $_SESSION['previous_url'];
+        $currentHost = $_SERVER['HTTP_HOST'] ?? null;
+
+        // Vérification du host
+        if (empty($currentHost) || $data['host'] !== $currentHost) {
+            unset($_SESSION['previous_url']);
+            return null;
+        }
+
+        return $data['url'];
+    }
+
+
 }
