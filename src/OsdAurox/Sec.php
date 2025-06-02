@@ -331,5 +331,24 @@ class Sec
         return $data['url'];
     }
 
+    public static function redirectReferer(string $defaultPath = '/'): void
+    {
+        $referer = self::getReferer();
+
+        if (empty($referer)) {
+            $redirectUrl = $defaultPath;
+        } else {
+            // Vérification que l'URL est relative (commence par /) pour éviter les open redirects
+            if (strpos($referer, '/') !== 0 || strpos($referer, '//') === 0) {
+                // URL invalide ou tentative d'URL absolue, utiliser le chemin par défaut
+                $redirectUrl = $defaultPath;
+            } else {
+                $redirectUrl = $referer;
+            }
+        }
+        header('Location: ' . $redirectUrl);
+        exit;
+    }
+
 
 }

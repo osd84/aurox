@@ -434,6 +434,7 @@ Sec::getPerPage() // méthode securisée pour lire le $_GET['per_page']
 
 Sec::storeReferer(); // enregistre le referer de la req actuelle
 Sec::getReferer(); // retourne le referer de la req precedente
+Sec::redirectReferer(); // redirect sur Referer si existe
 
 ```
 
