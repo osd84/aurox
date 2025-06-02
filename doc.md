@@ -547,6 +547,47 @@ Image::reduceToMaxSize(sourcePath: string, [maxSize: float|int = 2]): string // 
 Image::resizeAndReduce(sourcePath: string, maxWidth: int, maxHeight: int, maxSize: float): string // redimensionne puis réduit la taille
 ```
 
+## Modal
+
+La classe `Modal` fournit un système léger pour créer et gérer des fenêtres modales Bootstrap 5 dans l'application Aurox.
+```php
+$modal = new Modal(title, msg, [type: string = 'info'], [template = null], [btnAccept = null], [btnCancel = null], 
+                                [id: string = 'modal-default'], [class: string = 'modal fade'], [showClose: true = true], 
+                                [showInput: false = false], [showBtn: true = true])
+```
+
+```html
+<?php
+use OsdAurox\Modal;
+?>
+<?= Modal::newModal('Ma petite Modal', 'Contenu de la modal', 'info') ?>
+<div class="row">
+    <div class="col-12">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-default">
+            Modale classique #1
+        </button>
+    </div>
+</div>
+
+<?= Modal::newLoader(showClose: True) ?>
+<div class="row mt-2">
+    <div class="col-12">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-loader">
+            Modale de chargement #2
+        </button>
+    </div>
+</div>
+
+<?= Modal::newPrompt(showClose: True) ?>
+<div class="row mt-2">
+    <div class="col-12">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-prompt">
+            Modale de saisie #3
+        </button>
+    </div>
+</div>
+```
+
 ## TESTS
 
 Create a mysql database `aurox_test`
