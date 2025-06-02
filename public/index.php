@@ -93,7 +93,7 @@ require_once '../aurox.php';
         }
 
         async function showConfirm() {
-            const isConfirmed = await modalManager.confirm(
+            const isConfirmed = await osdModalConfirm.confirm(
                 'Confirmation',
                 'Voulez vous confirmer ?',
                 {
@@ -105,7 +105,7 @@ require_once '../aurox.php';
         }
 
         async function showConfirmDanger() {
-            const isConfirmed = await modalManager.confirm(
+            const isConfirmed = await osdModalConfirm.confirm(
                 'Confirmation',
                 'Voulez vous confirmer ?',
                 {

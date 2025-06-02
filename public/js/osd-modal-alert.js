@@ -33,17 +33,7 @@ class OsdModalAlert {
         this.modalDom = document.getElementById("osd-modal-alert");
         this.modalBs = new bootstrap.Modal(this.modalDom);
 
-        document.getElementById(`osd-modal-alert-confirm`).addEventListener('click', function() {
-            this.modalBs.hide();
-            this.modalDom.remove();
 
-        });
-
-        document.getElementById(`osd-modal-alert-confirm`).addEventListener('click', function() {
-            this.modalBs.hide();
-            this.modalDom.remove();
-
-        });
     }
 
     // Crée une modale d'alerte
@@ -56,6 +46,7 @@ class OsdModalAlert {
 
 
         document.getElementById(`osd-modal-alert-confirm`).classList.value = '';
+        document.getElementById(`osd-modal-alert-confirm`).classList.add('btn');
         document.getElementById(`osd-modal-alert-confirm`).classList.add(btnClass);
 
         document.getElementById(`osd-modal-alert-confirm`).textContent = btnText;

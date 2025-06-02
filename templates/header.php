@@ -23,6 +23,7 @@ use OsdAurox\Sec;
     <!-- Ajoutez vos scripts -->
     <script src="/js/osd-modal-loader.js"></script>
     <script src="/js/osd-modal-alert.js"></script>
+    <script src="/js/osd-modal-confirm.js"></script>
 
     <!-- Ajoutez vos feuilles de style -->
     <link rel="stylesheet" href="/style.css">
