@@ -56,4 +56,4 @@ use OsdAurox\Sec;
         </nav>
     </header>
     <hr>
-    <?php require_once APP_ROOT . '/templates/flash.php'; ?>
+    <?php require_once APP_ROOT . '/templates/helpers/flash.php'; ?>
