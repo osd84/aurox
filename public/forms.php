@@ -77,8 +77,12 @@ if(Sec::isPost()) {
                     <div class="card-body">
 
 
+                                <!-- input text classique -->
 
                                 <?= $form->input('email', label: I18n::t('Email'), type: 'email', required: true, row: false, div_class: '') ?>
+
+                                <!-- select2Ajax via Forms -->
+
                                 <?= $form->select2Ajax(
                                     ajax_url: AppUrls::CATEGORY_SELECT2,
                                     name : 'category_id',
