@@ -115,7 +115,9 @@ class Forms
         bool $show_label = true,
         string $div_class = 'mb-3',
         string $selected = null,
+        string $selectedLabel = null,
         int $minimumInputLength = 1,
+        bool $required = false,
     ) {
         // Échapper les valeurs pour empêcher les injections XSS
         $id = Sec::h($id);
@@ -142,15 +144,23 @@ class Forms
         }
 
         if ($show_label) {
-            $html .= '<label for="' . $id . '" class="form-label">' . $label . '</label>';
+            $html .= '<label for="' . $id . '" class="form-label" >' . $label;
+            if ($required) {
+                $html .= ' <span class="text-danger">*</span> ';
+            }
+            $html .= '</label>';
         }
 
         // Construction de la balise <select>
-        $html .= "<select id=\"{$id}\" name=\"{$name}\" class=\"{$class_select}\">";
+        $html .= '<select id="' . Sec::hNoHtml($id) . '" name="' .  Sec::hNoHtml($name)  . '" class="' . $class_select . '" ';
+        if ($required) {
+            $html .= ' required ';
+        }
+        $html .= '>';
 
         // Ajout d'une option sélectionnée par défaut si nécessaire
         if (!empty($selected)) {
-            $html .= "<option value=\"{$selected}\" selected></option>";
+            $html .= '<option value="{' . Sec::hNoHtml($selected) . '}" selected>' . Sec::hNoHtml($selectedLabel) . '</option>';
         }
 
         // Fermeture de la balise <select>

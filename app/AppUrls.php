@@ -24,6 +24,10 @@ class AppUrls
     public const PAGE_CONTACT = '/contact.php';
     public const RSS = '/rss.php';
 
+    public const PAGE_FORMS = '/forms.php';
+    public const PAGE_MODALS = '/modals.php';
+    public const CATEGORY_SELECT2 = '/category_select2.php';
+
 
     public static function getList(): array
     {
