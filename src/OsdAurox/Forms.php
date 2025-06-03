@@ -114,7 +114,8 @@ class Forms
         bool $div = true,
         bool $show_label = true,
         string $div_class = 'mb-3',
-        string $selected = null
+        string $selected = null,
+        int $minimumInputLength = 1,
     ) {
         // Échapper les valeurs pour empêcher les injections XSS
         $id = Sec::h($id);
@@ -168,7 +169,7 @@ class Forms
                     dataType: 'json',
                     delay: 250,
                 },
-                minimumInputLength: 1 // Nombre minimum de caractères pour déclencher la recherche
+                minimumInputLength: $minimumInputLength // Nombre minimum de caractères pour déclencher la recherche
             });
         });
     </script>";
@@ -413,7 +414,7 @@ class Forms
         string $id = null,
         string $placeholder = '',
         string $class = 'form-control',
-        $value = '',
+               $value = '',
         bool $required = false,
         bool $autocomplete = false,
         bool $div = true,
@@ -579,7 +580,7 @@ class Forms
         string $id = null,
         string $placeholder = '',
         string $class = 'form-control',
-        $value = '',
+               $value = '',
         bool $required = false,
         bool $autocomplete = false,
         bool $div = true,
@@ -746,7 +747,7 @@ class Forms
         $html .= 'let formData = new FormData(form);'. "\r";
         $html .= 'let formDataDict = Object.fromEntries(formData.entries());'. "\r";
         $html .= 'api.post("'. $this->action .'", formDataDict, {' . "\r";
-         $html .='loaderMessage: "Traitement en cours...",'  . "\r";
+        $html .='loaderMessage: "Traitement en cours...",'  . "\r";
         if($fn_succcess_name){
             $html .= "success: $fn_succcess_name"  . "\r";
         }
