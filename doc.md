@@ -99,7 +99,8 @@ Par contre les arguments utilisés pour la recherche sont sécurisés via bind e
 ```php
 use \OsdAurox\BaseModel
 
-BaseModel::get(pdo, id: int, [select: string = '*']): mixed // retourne la row via sont $id,  sqli possible sur $select
+BaseModel::get(pdo, id: int, [select: string = '*']): mixed // retourne la row via son $id,  sqli possible sur $select
+BaseModel::getWithRelations(pdo: PDO, id: mixed): array|null // retourne la row via son $îd, avec les relations pas implémenté par défault
 BaseModel::getBy(pdo, field: string, value: mixed): array|false // retourne la row via recherche sur champ, $value sécurisé, $field sqli possible
 BaseModel::getAll(pdo: PDO, [orderBy: null|string = 'id'], [orderDir: string = 'ASC'], [limit: int|null = 100]): array
 BaseModel::getAllBy(pdo, field: string, value: mixed): // retourne les rows via recherche sur champ, $value sécurisé, $field sqli possible
@@ -110,11 +111,21 @@ BaseModel::check_uniq(pdo, field, value): bool // regarde si la valeur pour le c
 
 BaseModel::idsExistsOrEmpty(pdo, table: string, ids: array): bool // retourne True si $ids est vide ou si les $ids existent bien dans la table de la bdd, sinon False
 
-
 BaseModel::getRules(): array // retourne une liste des OsdAurox\Validator liés à ce modele
+BaseModel::canEdit(pdo: PDO, id : int) // retourne vrai si l'utilisateur logué actuel peut éditer cette entité pas implémenté par défault
+BaseModel::canEditOrDie(pdo: PDO, id : int;
 BaseModel::validate(): bool
 
 BaseModel::getSelect([required: bool = true], [selected: int|null = null]): string // retourne un element Select HTML
+
+// Convention de nommage
+
+BaseModel::getWith<RelationName>(\PDO $pdo, mixed $id): array // Pour les méthodes qui retournent un array entité en chargeant des relations spécifiques
+BaseModel::calc<VarName>(\PDO $pdo, $entity): mixed value // Pour les méthodes qui calcule des champs dynamiques
+BaseModel::fetch<FieldName>(\PDO $pdo, $entity): mixed value // Quand on doit aller récupérer un champ unique d'une relation ou autre
+BaseModel::translate<VarName>(array $entity): string // Pour les méthode qui retourne des labels ou des noms interne traduis
+BaseModel::resolve<RelationName>(\PDO $pdo, array $entity): array // Pour les méthodes qui cherchent et injectent dans l'array une relation dans $array['<relation_table_name>'] = array
+
 
 $array = BaseModel::jsonArrayAggDecode($wine, 'myKey');  // Raccourcis pour extraire un JSON_ARRAYAGG ou [ ] si erreur; d'un résultat Array PDO
 // SELECT JSON_ARRAYAGG( JSON_OBJECT( 'id', wg.id, 'name', wg.name, 'name_translated', COALESCE(NULLIF(wg.name_$locale, ''), wg.name, '') )
