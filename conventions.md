@@ -14,6 +14,8 @@ Un petit référentiel pour essayer de se discipliner un peu.
 + Timestamp `myvar_at`
 + Date `myvar_date`
 
+Nom des tables au singulier.
+
 ## PHP 
 
 + Var `$myVar`
