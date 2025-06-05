@@ -118,14 +118,17 @@ BaseModel::validate(): bool
 
 BaseModel::getSelect([required: bool = true], [selected: int|null = null]): string // retourne un element Select HTML
 
-// Convention de nommage
+// Conseils de nommage des méthodes
 
 BaseModel::getWith<RelationName>(\PDO $pdo, mixed $id): array // Pour les méthodes qui retournent un array entité en chargeant des relations spécifiques
-BaseModel::calc<VarName>(\PDO $pdo, $entity): mixed value // Pour les méthodes qui calcule des champs dynamiques
+BaseModel::calc<VarName>(\PDO $pdo, $entity): mixed value // Pour les méthodes qui calculent des champs dynamiques
 BaseModel::fetch<FieldName>(\PDO $pdo, $entity): mixed value // Quand on doit aller récupérer un champ unique d'une relation ou autre
-BaseModel::translate<VarName>(array $entity): string // Pour les méthode qui retourne des labels ou des noms interne traduis
+BaseModel::translate<VarName>(array $entity): string // Pour les méthodes qui retournent des noms internes traduits
+BaseModel::format<VarName>(array $entity): string // Pour les méthodes qui formatent des noms internes pour affichage
+BaseModel::gen<VarName>(array $entity): mixed value // Pour les méthodes qui génèrent des compteurs ou nom spéciaux, des path
+BaseModel::count<Name>(\PDO $pdo): int // Pour les méthodes qui comptent des rows sans calculs COUNT != SUM
 BaseModel::resolve<RelationName>(\PDO $pdo, array $entity): array // Pour les méthodes qui cherchent et injectent dans l'array une relation dans $array['<relation_table_name>'] = array
-
+BaseModel::update<fieldName>() // Pour les méthodes qui mettent à jour un Field spécifique et commit
 
 $array = BaseModel::jsonArrayAggDecode($wine, 'myKey');  // Raccourcis pour extraire un JSON_ARRAYAGG ou [ ] si erreur; d'un résultat Array PDO
 // SELECT JSON_ARRAYAGG( JSON_OBJECT( 'id', wg.id, 'name', wg.name, 'name_translated', COALESCE(NULLIF(wg.name_$locale, ''), wg.name, '') )

@@ -19,13 +19,7 @@ use RuntimeException;
  * Attention: Certaines méthodes présentent des risques d'injection SQL lorsque les paramètres ne sont pas
  * correctement sécurisés. Ces risques sont documentés dans les méthodes concernées.
  *
- * Conventions de nommage:
- *
- * BaseModel::getWith<RelationName>(\PDO $pdo, mixed $id): array // Pour les méthodes qui retournent un array entité en chargeant des relations spécifiques
- * BaseModel::calc<VarName>(\PDO $pdo, $entity): mixed value // Pour les méthodes qui calcule des champs dynamiques
- * BaseModel::fetch<FieldName>(\PDO $pdo, $entity): mixed value // Quand on doit aller récupérer un champ unique d'une relation ou autre
- * BaseModel::translate<VarName>(array $entity): string // Pour les méthode qui retourne des labels ou des noms interne traduis
- * BaseModel::resolve<RelationName>(\PDO $pdo, array $entity): array // Pour les méthodes qui cherchent et injectent dans l'array une relation dans $array['<relation_table_name>'] = array
+ * Conventions de nommage: lire la documentation pour voir les conseils de nommage utilisées sur les méthodes.
  *
  */
 abstract class BaseModel {
