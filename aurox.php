@@ -79,6 +79,7 @@ if (!AppConfig::get('debug')) {
 // DB
 Dbo::getInstance(
     AppConfig::get('host'),
+    AppConfig::get('port'),
     AppConfig::get('db'),
     AppConfig::get('user'),
     AppConfig::get('pass', safe: true),

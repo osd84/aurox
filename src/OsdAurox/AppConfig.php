@@ -31,6 +31,7 @@ Class AppConfig {
     public string $devUrl;
     public string $discordWebhook;
     public string $host;
+    public string $port;
     public string $loginUrlForm;
     public string $mailContactDest;
     public string $mailFrom;
@@ -70,17 +71,23 @@ Class AppConfig {
         $this->appTitle = $conf['appTitle'] ?? 'DefaultTitle';
         $this->appUrl = $conf['appUrl'];
         $this->appVersion = $conf['appVersion'] ?? '1.0.0';
-        $this->charset = $conf['charset'] ?? 'utf8mb4';
-        $this->db = $conf['db'] ?? 'default_db';
         $this->debug = $conf['debug'] ?? false;
         $this->devIp = $conf['devIp'] ?? '127.0.0.1';
         $this->devUrl = $conf['devUrl'] ?? 'http://localhost';
         $this->discordWebhook = $conf['discordWebhook'] ?? '';
         $this->featureRegister = $conf['featureRegister'] ?? false;
         $this->featureUserAllowAdminCreate = $conf['featureUserAllowAdminCreate'] ?? false;
+        // MysqlConf
         $this->host = $conf['host'] ?? '127.0.0.1';
+        $this->port = $conf['port'] ?? '3306';
+        $this->db = $conf['db'] ?? 'default_db';
+        $this->user = $conf['user'] ?? 'root';
+        $this->pass = $conf['pass'] ?? '';
+        $this->charset = $conf['charset'] ?? 'utf8mb4';
+        // LoginConf
         $this->lang = $conf['lang'] ?? ['fr'];
         $this->loginUrlForm = $conf['loginUrlForm'] ?? '/';
+        // MailConf
         $this->mailContactDest = $conf['mailContactDest'] ?? false;
         $this->mailFrom = $conf['mailFrom'] ?? false;
         $this->mailHost = $conf['mailHost'] ?? false;
@@ -90,13 +97,11 @@ Class AppConfig {
         $this->mailTls = $conf['mailTls'] ?? false;
         $this->mailUser = $conf['mailUser'] ?? false;
         $this->nonce = $conf['nonce'] ?? false;
-        $this->pass = $conf['pass'] ?? '';
         $this->passwordComplexity = $conf['passwordComplexity'] ?? '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/';
         $this->passwordMaxLength = $conf['passwordMaxLength'] ?? 255;
         $this->passwordMinLength = $conf['passwordMinLength'] ?? 8;
         $this->prodUrl = $conf['prodUrl'] ?? 'http://localhost';
         $this->salt = $conf['salt'] ?? '';
-        $this->user = $conf['user'] ?? 'root';
         $this->ban_file_path  = $conf['ban_file_path'] ?? '';
     }
 
