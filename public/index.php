@@ -15,6 +15,7 @@ require_once '../aurox.php';
     <h1>Accueil</h1>
     <p>
         Cette mini application sert à tester les fonctionnalités de base de l'application côté FRONT. <br>
+        Et les tests unitaires. <br>
         Pour avoir de vrais starter pack voir sur <a href="https://aurox.fr">La Documentation</a>
     </p>
 
