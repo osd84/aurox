@@ -12,13 +12,13 @@ class Mailer
     public function __construct() {
         $mail = new PHPMailer(DEBUG);
         $mail->isSMTP();
-        $mail->Host = AppConfig::get('mail_host');
+        $mail->Host = AppConfig::get('mailHost');
         $mail->SMTPAuth = true;
-        $mail->Username = AppConfig::get('mail_user');
-        $mail->Password = AppConfig::get('mail_pass');
-        $mail->SMTPSecure = AppConfig::get('mail_ssl') ? 'ssl' : 'tls';
-        $mail->Port = AppConfig::get('mail_port');
-        $mail->setFrom(AppConfig::get('mail_from'), AppConfig::get('appName'));
+        $mail->Username = AppConfig::get('mailUser');
+        $mail->Password = AppConfig::get('mailPass');
+        $mail->SMTPSecure = AppConfig::get('mailSsl') ? 'ssl' : 'tls';
+        $mail->Port = AppConfig::get('mailPort');
+        $mail->setFrom(AppConfig::get('mailFrom'), AppConfig::get('appName'));
         $mail->isHTML();
         $mail->CharSet = 'UTF-8';
 

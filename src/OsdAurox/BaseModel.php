@@ -8,7 +8,21 @@ use PDO;
 use PDOException;
 use RuntimeException;
 
-class BaseModel {
+/**
+ * Classe abstraite fournissant des fonctionnalités de base pour les modèles d'accès aux données.
+ *
+ * Cette classe implémente le modèle de conception Active Record pour interagir avec la base de données
+ * et fournit des méthodes communes pour effectuer des opérations CRUD (Create, Read, Update, Delete).
+ *
+ * Les classes filles doivent définir la constante TABLE pour spécifier la table de base de données associée.
+ *
+ * Attention: Certaines méthodes présentent des risques d'injection SQL lorsque les paramètres ne sont pas
+ * correctement sécurisés. Ces risques sont documentés dans les méthodes concernées.
+ *
+ * Conventions de nommage: lire la documentation pour voir les conseils de nommage utilisées sur les méthodes.
+ *
+ */
+abstract class BaseModel {
 
 
     public const TABLE = "unknown";
@@ -39,7 +53,7 @@ class BaseModel {
      * @param $select string  attention sqli possible
      * @return mixed
      */
-    public static function get(\PDO $pdo, mixed $id, string $select = '*')
+    public static function get(\PDO $pdo, mixed $id, string $select = '*'): ?array
     {
         try {
             $table = static::TABLE;
@@ -51,6 +65,24 @@ class BaseModel {
             error_log('Database connection error: ' . $e->getMessage());
             throw new RuntimeException('Database connection error.');
         }
+    }
+
+    /**
+     * Récupère un enregistrement avec ses relations associées depuis la base de données.
+     *
+     * Cette méthode permet de récupérer un enregistrement spécifique identifié par son ID
+     * ainsi que les données des relations associées à cet enregistrement.
+     *
+     * @param \PDO $pdo Instance de connexion PDO à la base de données
+     * @param mixed $id Identifiant unique de l'enregistrement à récupérer
+     *
+     * @return array|null Tableau contenant l'enregistrement avec ses relations ou null si non trouvé
+     *
+     * @throws Exception Si la méthode n'est pas implémentée
+     */
+    public static function getWithRelations(\PDO $pdo, mixed $id): ?array
+    {
+        throw new Exception('Not implemented');
     }
 
     /**
@@ -388,6 +420,38 @@ class BaseModel {
     public static function getSelect(bool $required = true, mixed $selected = null): string
     {
         throw new Exception('Not implemented');
+    }
+
+    public static function canEditOrDie(\PDO $pdo, int $id): void
+    {
+        if (!self::canEdit($pdo, $id)) {
+            throw new RuntimeException('You do not have the rights to edit this.');
+        }
+    }
+
+    /**
+     * Vérifie si l'utilisateur a le droit de modifier l'élément spécifié par son identifiant.
+     *
+     * Cette méthode détermine si l'utilisateur actuel a le droit de modifier un élément
+     * en fonction de son identifiant. Les administrateurs ont toujours les droits d'édition.
+     * Pour les autres utilisateurs, cette fonctionnalité n'est pas encore implémentée.
+     *
+     * @param \PDO $pdo La connexion à la base de données
+     * @param int $id L'identifiant de l'élément à vérifier
+     * @return bool Retourne true si l'utilisateur peut modifier l'élément, false sinon
+     * @throws \RuntimeException Si l'utilisateur n'est pas administrateur (fonctionnalité non implémentée)
+     */
+    public static function canEdit(\PDO $pdo, int $id): bool
+    {
+        if(empty($id)) {
+            return false;
+        }
+
+        if(Sec::isAdminBool()) {
+            return true;
+        }
+
+        throw new RuntimeException('Not implemented');
     }
 
 }

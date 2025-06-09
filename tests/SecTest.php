@@ -152,5 +152,143 @@ $data = [
 $result = Sec::hArrayInt($data, 'id');
 $tester->assertEqual($result, [123, 0, 789, 1, 0], "Devrait gérer correctement les valeurs mixtes");
 
+$tester->header("Test storeReferer() && getReferer()");
+unset($_SERVER['REQUEST_URI']);
+unset($_SERVER['HTTP_HOST']);
+Sec::storeReferer();
+$tester->assertEqual(
+    isset($_SESSION['previous_url']),
+    false,
+    "Ne devrait pas stocker d'URL si REQUEST_URI et HTTP_HOST sont manquants"
+);
+// Test avec REQUEST_URI défini mais HTTP_HOST manquant
+$_SERVER['REQUEST_URI'] = '/test-page';
+unset($_SERVER['HTTP_HOST']);
+Sec::storeReferer();
+$tester->assertEqual(
+    isset($_SESSION['previous_url']),
+    false,
+    "Ne devrait pas stocker d'URL si HTTP_HOST est manquant"
+);
+// Test avec HTTP_HOST défini mais REQUEST_URI manquant
+unset($_SERVER['REQUEST_URI']);
+$_SERVER['HTTP_HOST'] = 'example.com';
+Sec::storeReferer();
+$tester->assertEqual(
+    isset($_SESSION['previous_url']),
+    false,
+    "Ne devrait pas stocker d'URL si REQUEST_URI est manquant"
+);
+
+// ---- Test 2: storeReferer() avec des valeurs valides ----
+// Configuration des valeurs valides
+$_SERVER['REQUEST_URI'] = '/test-page';
+$_SERVER['HTTP_HOST'] = 'example.com';
+$beforeTimestamp = time();
+Sec::storeReferer();
+$afterTimestamp = time();
+// Vérification du stockage correct
+$tester->assertEqual(
+    isset($_SESSION['previous_url']),
+    true,
+    "Devrait stocker l'URL dans la session"
+);
+$tester->assertEqual(
+    $_SESSION['previous_url']['url'],
+    '/test-page',
+    "Devrait stocker l'URL correcte"
+);
+$tester->assertEqual(
+    $_SESSION['previous_url']['host'],
+    'example.com',
+    "Devrait stocker le host correct"
+);
+$tester->assertEqual(
+    $_SESSION['previous_url']['timestamp'] >= $beforeTimestamp &&
+    $_SESSION['previous_url']['timestamp'] <= $afterTimestamp, true,
+    "Devrait stocker un timestamp valide"
+);
+// ---- Test 3: getReferer() quand aucune URL n'est stockée ----
+$_SESSION = []; // Réinitialisation de la session
+$result = Sec::getReferer();
+$tester->assertEqual(
+    $result,
+    null,
+    "Devrait retourner null si aucune URL n'est stockée"
+);
+
+// ---- Test 4: getReferer() avec host correspondant ----
+// Préparation de la session
+$_SESSION['previous_url'] = [
+    'url' => '/dashboard',
+    'host' => 'example.com',
+    'timestamp' => time()
+];
+$_SERVER['HTTP_HOST'] = 'example.com';
+$result = Sec::getReferer();
+$tester->assertEqual(
+    $result,
+    '/dashboard',
+    "Devrait retourner l'URL stockée quand le host correspond"
+);
+$tester->assertEqual(
+    isset($_SESSION['previous_url']),
+    true,
+    "La session ne devrait pas être supprimée après la récupération"
+);
+// ---- Test 5: getReferer() avec host différent ----
+// Préparation de la session
+$_SESSION['previous_url'] = [
+    'url' => '/dashboard',
+    'host' => 'example.com',
+    'timestamp' => time()
+];
+$_SERVER['HTTP_HOST'] = 'autre-domaine.com';
+$result = Sec::getReferer();
+$tester->assertEqual(
+    $result,
+    null,
+    "Devrait retourner null quand le host ne correspond pas"
+);
+$tester->assertEqual(
+    isset($_SESSION['previous_url']),
+    false,
+    "La session devrait être supprimée quand le host ne correspond pas"
+);
+
+// ---- Test 6: getReferer() avec HTTP_HOST manquant ----
+// Préparation de la session
+$_SESSION['previous_url'] = [
+    'url' => '/dashboard',
+    'host' => 'example.com',
+    'timestamp' => time()
+];
+unset($_SERVER['HTTP_HOST']);
+
+$result = Sec::getReferer();
+$tester->assertEqual(
+    $result,
+    null,
+    "Devrait retourner null quand HTTP_HOST est manquant"
+);
+$tester->assertEqual(
+    isset($_SESSION['previous_url']),
+    false,
+    "La session devrait être supprimée quand HTTP_HOST est manquant"
+);
+
+// ---- Test 7: Séquence complète storeReferer() puis getReferer() ----
+// Stockage initial
+$_SERVER['REQUEST_URI'] = '/profile';
+$_SERVER['HTTP_HOST'] = 'app.example.com';
+Sec::storeReferer();
+// Récupération avec le même host
+$result = Sec::getReferer();
+$tester->assertEqual(
+    $result,
+    '/profile',
+    "Devrait retourner l'URL correcte dans un scénario réel"
+);
+
 
 $tester->footer(exit: false);

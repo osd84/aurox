@@ -79,6 +79,7 @@ if (!AppConfig::get('debug')) {
 // DB
 Dbo::getInstance(
     AppConfig::get('host'),
+    AppConfig::get('port'),
     AppConfig::get('db'),
     AppConfig::get('user'),
     AppConfig::get('pass', safe: true),
@@ -97,5 +98,8 @@ $GLOBALS['i18n'] = new I18n();
 $locale = $_SESSION['locale'] ?? 'fr';
 $GLOBALS['i18n']->setLocale($locale);
 
+
+// On stocke le referer dans la session
+Sec::storeReferer();
 
 AppUrls::existOr404();

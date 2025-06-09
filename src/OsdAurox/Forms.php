@@ -114,7 +114,10 @@ class Forms
         bool $div = true,
         bool $show_label = true,
         string $div_class = 'mb-3',
-        string $selected = null
+        string $selected = null,
+        string $selectedLabel = null,
+        int $minimumInputLength = 1,
+        bool $required = false,
     ) {
         // Échapper les valeurs pour empêcher les injections XSS
         $id = Sec::h($id);
@@ -141,15 +144,23 @@ class Forms
         }
 
         if ($show_label) {
-            $html .= '<label for="' . $id . '" class="form-label">' . $label . '</label>';
+            $html .= '<label for="' . $id . '" class="form-label" >' . $label;
+            if ($required) {
+                $html .= ' <span class="text-danger">*</span> ';
+            }
+            $html .= '</label>';
         }
 
         // Construction de la balise <select>
-        $html .= "<select id=\"{$id}\" name=\"{$name}\" class=\"{$class_select}\">";
+        $html .= '<select id="' . Sec::hNoHtml($id) . '" name="' .  Sec::hNoHtml($name)  . '" class="' . $class_select . '" ';
+        if ($required) {
+            $html .= ' required ';
+        }
+        $html .= '>';
 
         // Ajout d'une option sélectionnée par défaut si nécessaire
         if (!empty($selected)) {
-            $html .= "<option value=\"{$selected}\" selected></option>";
+            $html .= '<option value="{' . Sec::hNoHtml($selected) . '}" selected>' . Sec::hNoHtml($selectedLabel) . '</option>';
         }
 
         // Fermeture de la balise <select>
@@ -168,7 +179,7 @@ class Forms
                     dataType: 'json',
                     delay: 250,
                 },
-                minimumInputLength: 1 // Nombre minimum de caractères pour déclencher la recherche
+                minimumInputLength: $minimumInputLength // Nombre minimum de caractères pour déclencher la recherche
             });
         });
     </script>";
@@ -413,7 +424,7 @@ class Forms
         string $id = null,
         string $placeholder = '',
         string $class = 'form-control',
-        $value = '',
+               $value = '',
         bool $required = false,
         bool $autocomplete = false,
         bool $div = true,
@@ -579,7 +590,7 @@ class Forms
         string $id = null,
         string $placeholder = '',
         string $class = 'form-control',
-        $value = '',
+               $value = '',
         bool $required = false,
         bool $autocomplete = false,
         bool $div = true,
@@ -746,7 +757,7 @@ class Forms
         $html .= 'let formData = new FormData(form);'. "\r";
         $html .= 'let formDataDict = Object.fromEntries(formData.entries());'. "\r";
         $html .= 'api.post("'. $this->action .'", formDataDict, {' . "\r";
-         $html .='loaderMessage: "Traitement en cours...",'  . "\r";
+        $html .='loaderMessage: "Traitement en cours...",'  . "\r";
         if($fn_succcess_name){
             $html .= "success: $fn_succcess_name"  . "\r";
         }

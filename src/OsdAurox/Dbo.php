@@ -15,6 +15,7 @@ class Dbo
     public string $pass;
     public string $charset;
     public string $dsn;
+    private string $port;
 
     private function __construct()
     {
@@ -29,6 +30,7 @@ class Dbo
 
     private function init(
         string $host = 'localhost',
+        string $port = '3306',
         string $dbname = 'default_db',
         string $user = 'root',
         string $pass = '',
@@ -37,18 +39,21 @@ class Dbo
     {
 
         $this->host = $host;
+        $this->port = $port;
         $this->user = $user;
         $this->pass = $pass;
         $this->charset = $charset;
         $this->dbname = $dbname;
 
-        $this->dsn = "mysql:host=$host;dbname=$dbname;charset=$this->charset";
+        $this->dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=$this->charset";
+
 
         $this->pdoCon();
     }
 
     public static function getInstance(
         string $host = 'localhost',
+        string $port = '3306',
         string $dbname = 'default_db',
         string $user = 'root',
         string $pass = '',
@@ -58,7 +63,7 @@ class Dbo
         if (self::$dbo_instance == null) {
             self::$dbo_instance = new self();
 
-            self::$dbo_instance->init($host, $dbname, $user, $pass, $charset);
+            self::$dbo_instance->init($host, $port, $dbname, $user, $pass, $charset);
         }
 
         return self::$dbo_instance;

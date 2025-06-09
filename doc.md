@@ -99,7 +99,8 @@ Par contre les arguments utilisés pour la recherche sont sécurisés via bind e
 ```php
 use \OsdAurox\BaseModel
 
-BaseModel::get(pdo, id: int, [select: string = '*']): mixed // retourne la row via sont $id,  sqli possible sur $select
+BaseModel::get(pdo, id: int, [select: string = '*']): mixed // retourne la row via son $id,  sqli possible sur $select
+BaseModel::getWithRelations(pdo: PDO, id: mixed): array|null // retourne la row via son $îd, avec les relations pas implémenté par défault
 BaseModel::getBy(pdo, field: string, value: mixed): array|false // retourne la row via recherche sur champ, $value sécurisé, $field sqli possible
 BaseModel::getAll(pdo: PDO, [orderBy: null|string = 'id'], [orderDir: string = 'ASC'], [limit: int|null = 100]): array
 BaseModel::getAllBy(pdo, field: string, value: mixed): // retourne les rows via recherche sur champ, $value sécurisé, $field sqli possible
@@ -110,11 +111,24 @@ BaseModel::check_uniq(pdo, field, value): bool // regarde si la valeur pour le c
 
 BaseModel::idsExistsOrEmpty(pdo, table: string, ids: array): bool // retourne True si $ids est vide ou si les $ids existent bien dans la table de la bdd, sinon False
 
-
 BaseModel::getRules(): array // retourne une liste des OsdAurox\Validator liés à ce modele
+BaseModel::canEdit(pdo: PDO, id : int) // retourne vrai si l'utilisateur logué actuel peut éditer cette entité pas implémenté par défault
+BaseModel::canEditOrDie(pdo: PDO, id : int;
 BaseModel::validate(): bool
 
 BaseModel::getSelect([required: bool = true], [selected: int|null = null]): string // retourne un element Select HTML
+
+// Conseils de nommage des méthodes
+
+BaseModel::getWith<RelationName>(\PDO $pdo, mixed $id): array // Pour les méthodes qui retournent un array entité en chargeant des relations spécifiques
+BaseModel::calc<VarName>(\PDO $pdo, $entity): mixed value // Pour les méthodes qui calculent des champs dynamiques
+BaseModel::fetch<FieldName>(\PDO $pdo, $entity): mixed value // Quand on doit aller récupérer un champ unique d'une relation ou autre
+BaseModel::translate<VarName>(array $entity): string // Pour les méthodes qui retournent des noms internes traduits
+BaseModel::format<VarName>(array $entity): string // Pour les méthodes qui formatent des noms internes pour affichage
+BaseModel::gen<VarName>(array $entity): mixed value // Pour les méthodes qui génèrent des compteurs ou nom spéciaux, des path
+BaseModel::count<Name>(\PDO $pdo): int // Pour les méthodes qui comptent des rows sans calculs COUNT != SUM
+BaseModel::resolve<RelationName>(\PDO $pdo, array $entity): array // Pour les méthodes qui cherchent et injectent dans l'array une relation dans $array['<relation_table_name>'] = array
+BaseModel::update<fieldName>() // Pour les méthodes qui mettent à jour un Field spécifique et commit
 
 $array = BaseModel::jsonArrayAggDecode($wine, 'myKey');  // Raccourcis pour extraire un JSON_ARRAYAGG ou [ ] si erreur; d'un résultat Array PDO
 // SELECT JSON_ARRAYAGG( JSON_OBJECT( 'id', wg.id, 'name', wg.name, 'name_translated', COALESCE(NULLIF(wg.name_$locale, ''), wg.name, '') )
@@ -431,6 +445,11 @@ Sec::noneCsp() // retourne le NONCE Csp courant (typo)
 Sec::getPage() // méthode securisée pour lire le $_GET['page']
 Sec::getPerPage() // méthode securisée pour lire le $_GET['per_page']
 
+
+Sec::storeReferer(); // enregistre le referer de la req actuelle
+Sec::getReferer(); // retourne le referer de la req precedente
+Sec::redirectReferer(); // redirect sur Referer si existe
+
 ```
 
 ## ViewsShortcuts
@@ -546,6 +565,55 @@ Image::resize(sourcePath: string, maxWidth: int, maxHeight: int): string   // re
 Image::reduceToMaxSize(sourcePath: string, [maxSize: float|int = 2]): string // réduit la qualité d'une image par boucle jusqu'à la taille indiqué
 Image::resizeAndReduce(sourcePath: string, maxWidth: int, maxHeight: int, maxSize: float): string // redimensionne puis réduit la taille
 ```
+
+## Modal
+
+La classe `Modal` fournit un système léger pour créer et gérer des fenêtres modales Bootstrap 5 dans l'application Aurox.
+
+Par default le template de la modale doit se trouver dans templates/core/modal.php
+
+```php
+$modal = new Modal(title, msg, [type: string = 'info'], [template = null], [btnAccept = null], [btnCancel = null], 
+                                [id: string = 'modal-default'], [class: string = 'modal fade'], [showClose: true = true], 
+                                [showInput: false = false], [showBtn: true = true])
+```
+
+```html
+<?php
+use OsdAurox\Modal;
+?>
+<?= Modal::newModal('Ma petite Modal', 'Contenu de la modal', 'info') ?>
+<div class="row">
+    <div class="col-12">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-default">
+            Modale classique #1
+        </button>
+    </div>
+</div>
+
+<?= Modal::newLoader(showClose: True) ?>
+<div class="row mt-2">
+    <div class="col-12">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-loader">
+            Modale de chargement #2
+        </button>
+    </div>
+</div>
+
+<?= Modal::newPrompt(showClose: True) ?>
+<div class="row mt-2">
+    <div class="col-12">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-prompt">
+            Modale de saisie #3
+        </button>
+    </div>
+</div>
+```
+
+## loader-manager.js
+
+Permet d'afficher une modale bloquante de chargement
+
 
 ## TESTS
 
