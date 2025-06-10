@@ -1,5 +1,7 @@
 <?php
 
+file_put_contents(__DIR__ . '/date.log', date('Y-m-d H:i:s') . "\n");
+
 // Scan tous les fichiers *Test.php
 foreach (glob(__DIR__ . '/*Test.php') as $file) {
     echo "\n================================\n";
