@@ -1,6 +1,6 @@
 <?php
 
-file_put_contents(__DIR__ . '/date.log', date('Y-m-d H:i:s') . "\n");
+file_put_contents(__DIR__ . '/date.log', date('Y-m-d H:i') . "\n");
 
 // Scan tous les fichiers *Test.php
 foreach (glob(__DIR__ . '/*Test.php') as $file) {
