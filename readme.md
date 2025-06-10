@@ -30,6 +30,8 @@ Ce dépôt contient un **kit de démarrage** dans [`/public`](public) avec un ex
 Le code est en **phase de R&D**. Beaucoup de composants sont encore au stade de prototype :  
 tests, benchmarks, sécurité et documentation sont à venir.
 
+Démo : https://demo-site.aurox.fr/
+
 ![screen.png](public/img/screen.png)
 
 ---
