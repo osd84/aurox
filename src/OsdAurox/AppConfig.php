@@ -31,6 +31,7 @@ Class AppConfig {
     public string $devUrl;
     public string $discordWebhook;
     public string $host;
+    public string $dbActive;
     public string $port;
     public string $loginUrlForm;
     public string $mailContactDest;
@@ -78,6 +79,7 @@ Class AppConfig {
         $this->featureRegister = $conf['featureRegister'] ?? false;
         $this->featureUserAllowAdminCreate = $conf['featureUserAllowAdminCreate'] ?? false;
         // MysqlConf
+        $this->dbActive = $conf['dbActive'] ?? false;
         $this->host = $conf['host'] ?? '127.0.0.1';
         $this->port = $conf['port'] ?? '3306';
         $this->db = $conf['db'] ?? 'default_db';
