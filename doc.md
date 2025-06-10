@@ -626,5 +626,5 @@ cd tests && php run.php
 
 Quiet mode 
 ```sh
-php run.php  | grep  'fails' | grep -v Cannot | grep -v '0 fails' ; echo "test terminés"     
+php run.php | grep -E 'fails|Exécution' 
 ```
