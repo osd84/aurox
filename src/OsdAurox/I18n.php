@@ -145,16 +145,18 @@ class I18n
      */
     public static function date(string $date): string
     {
-        $locale = self::currentLocale();
-        $format = 'Y-m-d';
-
-        if ($locale == 'fr') {
-            $format = 'd/m/Y';
-        }
-
         // check if date
         if (strtotime($date) === false) {
             return '';
+        }
+
+        $locale = self::currentLocale();
+        $format = 'Y-m-d';
+
+        if($locale) {
+            // on récupère le format dans le fichier de traduction
+            // on peut écraser se format en modifiant /translations/locale.php
+            $format = self::t('__date');
         }
 
         return Sec::hNoHtml(date($format, strtotime($date)));
@@ -171,20 +173,20 @@ class I18n
      */
     public static function dateTime(string $date, bool $showSec = false): string
     {
-        $locale = self::currentLocale();
-        $format = 'Y-m-d H:i';
-
-        if ($locale == 'fr') {
-            $format = 'd/m/Y H:i';
-        }
-
         // check if date
         if (strtotime($date) === false) {
             return '';
         }
 
-        if($showSec) {
-            $format .= ':s';
+        $locale = self::currentLocale();
+        $format = 'd/m/Y H:i:s';
+
+        if ($locale) {
+            $format = self::t('__dateTime');
+        }
+
+        if(!$showSec) {
+            $format = str_replace(':s', '', $format);
         }
 
         return Sec::hNoHtml(date($format, strtotime($date)));
