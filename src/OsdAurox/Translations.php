@@ -6,6 +6,8 @@ Class Translations {
 
     public static array $fr = [
         // OsdAurox\Validator
+        '__testOverwrite' => 'get From Core',
+        '__testOverwrite2' => 'get From Core',
         'must be valid email' => 'doit être une email valide',
         'must not be empty' => 'doit être rempli',
         'must be at least {min} characters' => 'doit contenir minimum {min} caractères',

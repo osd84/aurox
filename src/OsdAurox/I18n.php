@@ -26,7 +26,7 @@ class I18n
             // on injecte les traductions de Aurox Core si existent
             $locale = $this->locale;
             if (isset(Translations::$$locale)) {
-                $this->translations = array_merge(Translations::$fr, $this->translations);
+                $this->translations = array_merge(Translations::$$locale, $this->translations);
             }
 
             return true;
