@@ -134,4 +134,60 @@ class I18n
         return $out;
     }
 
+    /**
+     * Formate une date selon le format spécifié, avec adaptation au format français si la locale actuelle est française.
+     * Sécurisé contre les XSS via Sec::hNoHtml
+     *
+     * @param string $date La date à formater (compatible avec strtotime)
+     * @param string $format Le format de date souhaité (par défaut 'd/m/Y')
+     * @return string La date formatée et sécurisée contre les injections HTML
+     * @throws \LogicException Si le contexte I18n n'est pas initialisé
+     */
+    public static function date(string $date): string
+    {
+        $locale = self::currentLocale();
+        $format = 'Y-m-d';
+
+        if ($locale == 'fr') {
+            $format = 'd/m/Y';
+        }
+
+        // check if date
+        if (strtotime($date) === false) {
+            return '';
+        }
+
+        return Sec::hNoHtml(date($format, strtotime($date)));
+    }
+
+    /**
+     * Formate une date-heure selon le format spécifié, avec adaptation au format français si la locale actuelle est française.
+     * Sécurisé contre les XSS via Sec::hNoHtml
+     *
+     * @param string $date La date à formater (compatible avec strtotime)
+     * @param string $format Le format de date-heure souhaité (par défaut 'd/m/Y H:i:s')
+     * @return string La date-heure formatée et sécurisée contre les injections HTML
+     * @throws \LogicException Si le contexte I18n n'est pas initialisé
+     */
+    public static function dateTime(string $date, bool $showSec = false): string
+    {
+        $locale = self::currentLocale();
+        $format = 'Y-m-d H:i';
+
+        if ($locale == 'fr') {
+            $format = 'd/m/Y H:i';
+        }
+
+        // check if date
+        if (strtotime($date) === false) {
+            return '';
+        }
+
+        if($showSec) {
+            $format .= ':s';
+        }
+
+        return Sec::hNoHtml(date($format, strtotime($date)));
+    }
+
 }

@@ -137,4 +137,29 @@ $result = I18n::getLocalizedFieldName("contenu<script>alert('123')</script>speci
 $tester->assertEqual($result, "contenualert(&#039;123&#039;)special_en_en", "protégé contre XSS");
 
 
+$tester->header("Test I18n::date");
+// Test avec locale française
+$GLOBALS['i18n']->setLocale('fr');
+$tester->assertEqual(I18n::date('2025-01-15'), '15/01/2025', "La méthode date() doit retourner au format français (d/m/Y) quand la locale est 'fr'");
+// Test avec locale anglaise
+$GLOBALS['i18n']->setLocale('en');
+$tester->assertEqual(I18n::date('2025-01-15'), '2025-01-15', "La méthode date() respecte le format personnalisé quand la locale n'est pas 'fr'");
+// Test de sécurisation XSS
+$date = '2025-01-15"><script>alert("XSS")</script>';
+$tester->assertEqual(I18n::date($date), '', "La méthode date() doit sécuriser les entrées contre les XSS");
+
+$tester->header("Test I18n::dateTime");
+// Test avec locale française
+$GLOBALS['i18n']->setLocale('fr');
+$tester->assertEqual(I18n::dateTime('2025-01-15 12:01:23'), '15/01/2025 12:01', "La méthode date() doit retourner au format français (d/m/Y) quand la locale est 'fr'");
+$tester->assertEqual(I18n::dateTime('2025-01-15 12:01:23', showSec: True), '15/01/2025 12:01:23', "La méthode date() doit retourner au format français (d/m/Y) quand la locale est 'fr'");
+// Test avec locale anglaise
+$GLOBALS['i18n']->setLocale('en');
+$tester->assertEqual(I18n::dateTime('2025-01-15 12:01:23'), '2025-01-15 12:01', "La méthode date() respecte le format personnalisé quand la locale n'est pas 'fr'");
+$tester->assertEqual(I18n::dateTime('2025-01-15 12:01:23', showSec: True), '2025-01-15 12:01:23', "La méthode date() respecte le format personnalisé quand la locale n'est pas 'fr'");
+// Test de sécurisation XSS
+$date = '2025-01-15"><script>alert("XSS")</script>';
+$tester->assertEqual(I18n::dateTime($date), '', "La méthode date() doit sécuriser les entrées contre les XSS");
+
+
 $tester->footer(exit: false);
