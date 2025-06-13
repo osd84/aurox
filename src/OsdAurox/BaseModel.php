@@ -323,7 +323,7 @@ abstract class BaseModel {
      * @param array|null $default
      * @return array
      */
-    public static function jsonArrayAggDecode(array $array, string $key, array $default = null): array
+    public static function jsonArrayAggDecode(array $array, string $key, ?array $default = null): array
     {
         if(!is_array($default)) {
             $default = [];
