@@ -180,7 +180,7 @@ class Forms
                     delay: 250,
                 },
                 minimumInputLength: $minimumInputLength // Nombre minimum de caractères pour déclencher la recherche
-            });
+            })
         });
     </script>";
 
