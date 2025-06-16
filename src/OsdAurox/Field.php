@@ -1,10 +1,6 @@
 <?php
 
-namespace src;
-
-use DateTime;
-use OsdAurox\I18n;
-use OsdAurox\Sec;
+namespace OsdAurox;
 
 class Field
 {
@@ -94,7 +90,7 @@ class Field
         // determination du type de champ
         $type = $field['type'] ?? null;
         if(!$type || !in_array($type, self::TYPES_LIST)) {
-            throw new \Exception('Invalid rule type');
+            throw new \Exception('Invalid rule type : ' . Sec::hNoHtml($type) . '');
         }
         $this->type = $type;
         if($type == 'fk') {

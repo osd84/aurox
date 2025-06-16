@@ -14,10 +14,8 @@ $tester->header(__FILE__);
 $GLOBALS['i18n'] = new I18n('fr');
 
 $rules = [
-    'email' => ['type' => 'email(20)'],
-    'username' => ['type' => 'varchar(20)', 'notEmpty' => true],
-//    Validator::create('email')->email()->length(20),
-//    Validator::create('username')->notEmpty(),
+    'email' => ['type' => 'mail', 'minLength' => 20, 'maxLength' => 25],
+    'username' => ['type' => 'varchar', 'notEmpty' => true],
 ];
 $data = [
     'email' => 'invalid-email',
@@ -26,17 +24,21 @@ $data = [
 
 $tester->header("Test de la méthode combiné");
 
-$result = $rules[0]->validate($data['email']);
+
+$validator = new Validator();
+$result = $validator->validate($rules, $data);
+
 $tester->assertEqual($result[0]['msg'],  'doit être une email valide', 'email + length : doit être une email valide');
-$tester->assertEqual($result[1]['msg'],  'doit contenir minimum 20 caractères', 'email + length : doit contenir minimum 20 caractères');
+$tester->assertEqual($result[1]['msg'],  'doit contenir entre 20 et 25 caractères', 'email + length : doit contenir minimum 20 caractères');
+$tester->assertEqual($result[2]['msg'],  'doit être rempli', 'notEmpty ok');
 
 // test notEmpty
 $tester->header("Test de la méthode notEmpty()");
 
-$result = Validator::create('username')->notEmpty()->validate($data['username']);
+$result = $validator->validate(['username' => ['type' => 'varchar', 'notEmpty' => true]], $data);
 $tester->assertEqual($result[0]['msg'], 'doit être rempli', 'notEmpty : doit être rempli');
 
-$result = Validator::create('username')->notEmpty()->validate(null);
+$result = $validator->validate(['username' => ['type' => 'varchar', 'notEmpty' => true]], null);
 $tester->assertEqual($result[0]['msg'], 'doit être rempli', 'notEmpty : doit être rempli');
 
 

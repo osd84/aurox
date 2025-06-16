@@ -5,13 +5,14 @@ namespace OsdAurox;
 
 
 use DateTime;
-use src\Field;
+use OsdAurox\Field;
 
 class Validator
 {
     public string $field = ''; // Nom du champs
     public array $rule = []; // Règle en cours de tests
     public array $errors = []; // Erreur en train d'être levée
+    public array $formValidatorErrors = [];
 
     public array $rules = []; // history des règles testées sur la session
     public array $fieldChecked = []; // liste des champ testés
@@ -19,6 +20,7 @@ class Validator
 
 
     public bool $valid = false;
+    public bool $validationIsOk = false;
 
 
     public function __construct()
@@ -30,9 +32,9 @@ class Validator
     public function validate(array $rules, array $datasInput): array
     {
         $errors = [];
+        $this->formValidatorErrors = [];
 
         $this->rules[] = $rules;
-        $this->error = [];
         $this->fieldIgnored = array_diff_key(array_keys($datasInput), array_keys($rules));
 
         foreach ($rules as $fieldName => $fieldArray) {
@@ -217,44 +219,33 @@ class Validator
                 }
             }
 
-        }
-
-
-
-
-        foreach ($this->rules as $rule) {
-            $resultRule = $rule($input);
-            if ($resultRule['valid'] === false) {
-
-                if ($this->optional && empty($input)) {
-                    continue;
-                } else {
-                    $errors[] = [
-                        'field' => $this->field,
-                        'valid' => $resultRule['valid'],
-                        'msg' => $resultRule['msg']
-                    ];
-                }
+            foreach ($field->errors as $msg) {
+                $this->formValidatorErrors[] = [
+                    'field' => $fieldName,
+                    'valid' => false,
+                    'msg' => $msg
+                ];
             }
+
         }
-        return $errors;
+        $this->validationIsOk = True;
+        return $this->formValidatorErrors;
     }
 
 
     public function isValid($input)
     {
-        foreach ($this->rules as $rule) {
-            $resultRule = $rule($input);
-            if ($resultRule['valid'] === false) {
-                return false;
-            }
+        if(!$this->validationIsOk) {
+            throw new \Exception('validation not ok, call validate() first');
         }
-        return true;
+        return count($this->errors) === 0;
     }
 
 
     public function validateEmail(Field $field): array
     {
+        $msg = I18n::t('must be valid email');
+
         if (!is_string($field->input)) {
             $valid = false;
         }
@@ -355,8 +346,8 @@ class Validator
 
     public function ValidateLength(Field $field): array
     {
-        $min = $field->min ?? null;
-        $max = $field->max ?? null;
+        $min = $field->minLength ?? null;
+        $max = $field->maxLength ?? null;
 
         $msg = '';
         $valid = false;
