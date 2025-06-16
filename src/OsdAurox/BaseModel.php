@@ -24,10 +24,216 @@ use RuntimeException;
  */
 abstract class BaseModel {
 
+    /**
+     * @var int   Identifiant unique de l'objet
+     */
+    public int $id;
+
+    /**
+     * @var string 		String d'erreur
+     */
+    public string $error;
+
+    /**
+     * @var string  String d'erreur maqsuée car elle peut être utilisée pour stocker du contenu technique
+     */
+    public string $errorHidden;
+
+    /**
+     * @var string[]	Tableaux des erreurs au format string
+     */
+    public array $errors = [];
+
+    /**
+     * @var array  array<string,string>	pour stocker les erreurs issues de ->validateField()
+     */
+    private array $validateFieldsErrors = [];
+
+    /**
+     * @var string 		ID pour identifier l'objet metier exemple : project
+     */
+    public string $element;
+
+    /**
+     * @var string|int   Champ contenant l'identifiant de la clé parente si ce champ en a une (chaîne). Par exemple 'fk_product'.
+     * *                 Identifiant de la clé parente elle-même (entier). Par exemple, dans certaines classes comme 'Comment', 'ActionComm' ou 'AdvanceTargetingMailing'.
+     */
+    public string|int $fkElement;
+
+
+    /**
+     * @var string 		Nom de la table (sans préfixe) où l'objet est stocké
+     */
+    public string $tableElement;
+
+    /**
+     * @var string 		Nom de la sous-table des lignes, exemple facture -> facturedet
+     */
+    public string $tableElementLine = '';
+
+
+    /**
+     * @var array<string,array{type:string,label:string,langfile?:string,enabled:int<0,2>|string,position:int,notnull?:int,visible:int<-6,5>|string,alwayseditable?:int<0,1>,noteditable?:int<0,1>,default?:string,index?:int,foreignkey?:string,searchall?:int<0,1>,isameasure?:int<0,1>,css?:string,csslist?:string,help?:string,showoncombobox?:int<0,4>,disabled?:int<0,1>,arrayofkeyval?:array<int|string,string>,autofocusoncreate?:int<0,1>,comment?:string,copytoclipboard?:int<1,2>,validate?:int<0,1>,showonheader?:int<0,1>}>
+     *                              Tableau contenant tous les champs avec leurs propriétés. Ne pas l'utiliser comme une variable statique. Il peut être modifié par le constructeur.
+     */
+    public array $fields = [];
+
+
+    /**
+     * @var mixed		Tableau d'objets liés, défini et utilisé lors de l'appel de ->create() pour créer des liens lors de la création de l'objet.
+     */
+    public mixed $linkedObjects;
+
+    /**
+     * @var int[][]		Tableau des IDs des objets liés. Chargé avec ->fetchObjectLinked
+     */
+    public array $linkedObjectsIds;
+
+    /**
+     * @var array<int,bool>	Tableau de booléens avec l'ID de l'objet en tant que clé, et une valeur de true si linkedObjects est complètement chargé pour cet ID. Chargé avec ->fetchObjectLinked. Important pour réduire le temps de génération des PDF.
+     */
+    private array $linkedObjectsFullLoaded = [];
+
+    /**
+     * @var ?static		Pour stocker une copie clonée de l'objet avant édition (pour conserver une trace des anciennes propriétés).
+     */
+    public mixed $oldCopy;
+
+    /**
+     * @var string 		Pour stocker l'ancienne valeur d'une référence modifiée.
+     */
+    public string $oldRef;
+
+    /**
+     * @var string		Nom de la colonne contenant le champ de référence.
+     */
+    protected string $tableRefField = '';
+
+    /**
+     * @var array<string,mixed>		Peut être utilisé pour transmettre des informations lorsque seul l'objet est fourni à la méthode.
+     */
+    public $context = [];
+
+    /**
+     * @var TODO User
+     * @see fetch_user()
+     */
+    public mixed $user;
+
+    /**
+     * @var string 		Type d'objet d'origine. Combiné avec $originId, il permet de recharger $origin_object.
+     * @see fetch_origin()
+     */
+    public string $originType;
+
+    /**
+     * @var int 		L'identifiant de l'objet d'origine. Combiné avec $originType, il permet de recharger $origin_object.
+     * @see fetch_origin()
+     */
+    public int $originId;
+
+    /**
+     * @var	?BaseModel	Objet d'origine. Défini par fetch_origin() depuis $this->origin_type et $this->origin_id.
+     */
+    public ?BaseModel $originObject;
+
+    /**
+     * @var string 		Référence précédente de l'objet.
+     */
+    public string $refPrevious;
+
+    /**
+     * @var string 		Référence suivante de l'objet.
+     */
+    public string $refNext;
+
+    /**
+     * @var string 		Référence à stocker sur l'objet pour sauvegarder la nouvelle référence à utiliser, par exemple, lors de la validation d'un objet.
+     */
+    public string $newRef;
+
+
+    /**
+     * @var null|int|array<int, string>   Statut de l'objet (un entier).
+     *                 						Ou un tableau listant tous les statuts potentiels de l'objet :
+     *                                    	tableau : identifiant du statut => libellé traduit du statut.
+     *                                    	Dans certaines classes, le statut peut être null.
+     *                                    	Exemple : la classe Account.
+     * @see setStatut()
+     */
+    public null|int|array $status;
+
+    /**
+     * @var ?string 		Note privée.
+     * @see update_note()
+     */
+    public ?string $notePrivate;
+
+    /**
+     * @var ?string
+     * @deprecated Utilisez $note_private à la place.
+     * @see $notePrivate
+     */
+    public ?string $note;
+
+    /**
+     * @var
+     */
+    public array $lines;
+
+    /**
+     * @var mixed	Commentaires.
+     * @see fetchComments()
+     */
+    public array $comments = [];
+
+    /**
+     * @var string|\DateTime|null
+     */
+    public string|\DateTime|null $createdAt;
+
+    /**
+     * @var string|\DateTime|null
+     */
+    public string|\DateTime|null $publishedAt;
+
+    /**
+     * @var int
+     */
+    public int $userCreatedId;
+
+    /**
+     * @var int
+     */
+    public int $userModifiedId;
+
+    /**
+     * @var int<0,1> 1 si l'objet est un spécimen.
+     */
+    public int $specimen = 0;
+
+    /**
+     * @var string[]|array<string,string[]|array{parent:string,parentkey:string}>
+     *              Liste des tables enfants. Utilisé pour tester si nous pouvons supprimer l'objet.
+     */
+    protected array $childTables = [];
+
+    /**
+     * @var string[]	Liste des tables enfants. Utilisé pour connaître les objets à supprimer en cascade.
+     *               Si le nom est de la forme '@ClassName:FilePathClass:ParentFkFieldName', il appellera
+     *               la méthode deleteByParentField(parentId, ParentFkFieldName) pour rechercher et supprimer l'objet enfant.
+     */
+    protected array $childTableSonCascade = [];
+
+    /**
+     * @var int<0,1>	L'objet supporte-t-il les champs supplémentaires ? 0=Non, 1=Oui.
+     */
+    public int $isExtraFieldManaged = 0;
+
+    public mixed $db;
 
     public const TABLE = "unknown";
 
-    public int $id;
 
     public function getTable(): string
     {
@@ -159,12 +365,7 @@ abstract class BaseModel {
      * @return array
      * @throws RuntimeException Si une erreur de connexion à la base de données survient
      */
-    public static function getAll(
-        PDO $pdo,
-        ?string $orderBy = 'id',
-        string $orderDir = 'ASC',
-        ?int $limit = 100
-    ): array {
+    public static function getAll(PDO $pdo, ?string $orderBy = 'id', string $orderDir = 'ASC', ?int $limit = 100): array {
         try {
             $table = static::TABLE;
             $sql = "SELECT * FROM $table";
@@ -209,14 +410,7 @@ abstract class BaseModel {
      * @return array
      * @throws RuntimeException Si une erreur de connexion à la base de données survient
      */
-    public static function getAllBy(
-        PDO $pdo,
-        string $field,
-        mixed $value,
-        ?string $orderBy = 'id',
-        string $orderDir = 'ASC',
-        ?int $limit = 100
-    ): array {
+    public static function getAllBy(PDO $pdo, string $field, mixed $value, ?string $orderBy = 'id', string $orderDir = 'ASC', ?int $limit = 100): array {
         try {
             $table = static::TABLE;
             $sql = "SELECT * FROM $table WHERE $field = :search";
@@ -247,6 +441,28 @@ abstract class BaseModel {
             error_log('Database connection error: ' . $e->getMessage());
             throw new RuntimeException('Database connection error.');
         }
+    }
+
+
+    /**
+     * Récupère une valeur spécifique d'une table en fonction de l'ID et du champ demandé.
+     *
+     * @param PDO    $PDO   Instance de connexion PDO à la base de données.
+     * @param mixed  $id    Identifiant de l'élément à rechercher.
+     * @param string $field Nom du champ dont on souhaite récupérer la valeur. (sensible sqli)
+     *
+     * @return string|null Valeur du champ demandé ou null si aucune correspondance n'a été trouvée.
+     */
+    public static function getValueFrom(PDO $PDO, $id, $field): ?string
+    {
+        $table = static::TABLE;
+        $stmt = $PDO->prepare("SELECT $field FROM $table WHERE id = :id");
+        $stmt->execute(['id' => $id]);
+        $entity = $stmt->fetch();
+        if (empty($entity)) {
+            return null;
+        }
+        return $entity[$field];
     }
 
     public static function count(\PDO $pdo)

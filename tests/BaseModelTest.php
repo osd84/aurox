@@ -202,4 +202,9 @@ $posts = PostsModel::getAllBy($pdo, 'status', null);
 $tester->assertEqual(count($posts), 0, 'getAllBy : gère correctement les valeurs null');
 
 
+$tester->header('Test de getValueFrom()');
+$r = PostsModel::getValueFrom($pdo, 1, 'title');
+$tester->assertEqual($r, 'title1', 'getValueFrom ok');
+
+
 $tester->footer(exit: false);
