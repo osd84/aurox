@@ -30,7 +30,7 @@ class Field
     public ?int $min = null; // Valeur minimale (pour les nombres)
     public ?int $max = null; // Valeur maximale (pour les nombres)
     public bool $notEmpty = false; // Si le champ ne doit pas être vide
-    public ?array $startWith = null; // Tableau des motifs que le champ doit commencer avec
+    public ?string $startWith = null; // String d'avoir quoi doit commencer le champ
     public bool $positive = false; // Si le champ doit être un entier positif
     public ?array $inArray = null; // Tableau des valeurs possibles
     public ?string $regex = null; // Expression régulière pour valider la valeur
@@ -38,14 +38,11 @@ class Field
     // ===== Attributs de type =====
     public string $dateFormat = 'Y-m-d';
     public string $datetimeFormat = 'Y-m-d H:i:s';
-    public ?string $fkClassName = null;
-    public ?string $fkClassFilePath = null;
-    public ?string $fkClassModel = null;
+    public ?string $fkTableName = null;
+    public ?string $fkFieldName = null;
     public ?int $doublePrecision = 24;
     public ?int $doubleScale = 8;
-    public ?string $startWithPrefix = null;
     public ?bool $startWithCaseSensitive = null ;
-    public ?int $inArrayValues = null; // valeur autorisée pour un champ $inArray
 
 
 
@@ -65,17 +62,19 @@ class Field
         'varchar', // Champ varchar avec une longueur maximale précisée (à remplir dynamiquement)
         'text' ,                           // Texte long
         'html',                           // Texte HTML autorisé
-        'double', // Nombre double avec précision et échelle
         'float',                          // Champ de type flottant
         'price',                          // Champ de type prix (flottant ou format monétaire)
         'date' => ['format' => 'Y-m-d H:i:s'], // Date avec format standard complet
         'datetime' => ['format' => 'Y-m-d'],   // Date uniquement
-        'timestamp',                      // Champ horodatage
         'mail',                           // Champ email (validation incluse)
-        'phone' ,                          // Champ numéro de téléphone
+        'phoneFr' ,                          // Champ numéro de téléphone
         'url'                            // Champ URL
     ];
 
+    public function isString()
+    {
+        return in_array($this->type, ['varchar', 'text', 'html', 'mail', 'phone', 'url']);
+    }
 
 
     public function __construct(string $fieldName, array $field, mixed $input)
@@ -99,14 +98,13 @@ class Field
         }
         $this->type = $type;
         if($type == 'fk') {
-            $this->fkClassName = $field['fkClassName'] ?? null;
-            $this->fkClassFilePath = $field['fkClassFilePath'] ?? null;
-            $this->fkClassModel = $field['fkClassModel'] ?? null;
-            if(!$this->fkClassName) {
-                throw new \Exception('With fk type, you must specify fkClassName');
+            $this->fkTableName = $field['fkTableName'] ?? null;
+            $this->fkFieldName = $field['fkFieldName'] ?? null;
+            if(!$this->fkTableName) {
+                throw new \Exception('With fk type, you must specify fkTableName');
             }
-            if(!$this->fkClassFilePath && !$this->fkClassModel) {
-                throw new \Exception('With fk type, you must specify fkClassFilePath or fkClassModel');
+            if(!$this->fkFieldName) {
+                throw new \Exception('With fk type, you must specify fkFieldName');
             }
         }
 
@@ -132,17 +130,9 @@ class Field
         $this->datetimeFormat = $field['datetimeFormat'] ?? 'Y-m-d H:i:s';
         $this->doublePrecision = $field['doublePrecision'] ?? 24;
         $this->doubleScale = $field['doubleScale'] ?? 8;
-
-        $this->startWithPrefix = $field['startWithPrefix'] ?? null;
         $this->startWithCaseSensitive = $field['startWithCaseSensitive'] ?? false;
-        if($this->startWith && empty($this->startWithPrefix)) {
-            throw new \Exception('startWithPrefix is required if startWith is set');
-        }
 
-        $this->inArrayValues = $field['inArrayValues'] ?? null;
-        if($this->inArray && empty($this->inArrayValues)) {
-            throw new \Exception('inArrayValues is required if inArray is set');
-        }
+
 
         // ===== Informations pour l'HTML/DOM =====
         $this->class = $field['class'] ?? '';

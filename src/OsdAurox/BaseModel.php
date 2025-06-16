@@ -50,18 +50,16 @@ abstract class BaseModel {
      * FIELDS --- Descriptions
      *  'type' type de champ (
      * 'integer',
-     * 'fk',  // On doit ajouter  fkClassName, fkClassFilePath, fkClassModel
+     * 'fk',  // On doit ajouter  fkTableName, fkFieldName, fkClassModel
      * 'varchar',   // on peut ajouter 'minLength', 'maxLength'
      * 'text', // text long
      * 'html', // text html autorisé
-     * 'double',  // doublePrecision,  doubleScale
      * 'float',
      * 'price',
      * 'date', // on peut modifier 'dateFormat'
      * 'datetime', // on peut modifier 'dateTimeFormat'
-     * 'timestamp',
      * 'mail',
-     * 'phone',  // on peut ajouter 'minLength', 'maxLength'
+     * 'phoneFr',  // on peut ajouter 'minLength', 'maxLength'
      * 'url'    // on peut ajouter 'minLength', 'maxLength'
      * )
      *
@@ -85,14 +83,11 @@ abstract class BaseModel {
      *  'regex' => Si un regex doit valider le champ
      *  'dateFormat' => 'Y-m-d'
      *  'dateTimeFormat' => 'Y-m-d H:i:s'
-     *  'fkClassName' => Nom de la classe
-     *  'fkClassFilePath' => Fichier de la classe
-     *  'fkClassModel' => Pointeur vers la classe
+     *  'fkTableName' => Nom de la classe
+     *  'fkFieldName' => Fichier de la classe
      *  'doublePrecision' => 24
      *  'doubleScale' => 8
-     *  'startWithPrefix' => prefix pour la règle startWith
      *  'startWithCaseSensitive' => si regle startWith est caseSenstive
-     *  inArrayValues => array de valeur pour la règle inArrayValues
      *
      *   required => false
      *   optional => false
