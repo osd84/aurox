@@ -68,6 +68,14 @@ class Field
         'url'                            // Champ URL
     ];
 
+
+    public const array CONFUSE_LIST = [ // Champ souvent confondus ou mauvaise clef, lève une erreur si utilisés
+        'int',
+        'boolean',
+        'len',
+        'length'
+    ];
+
     public function isString()
     {
         return in_array($this->type, ['varchar', 'text', 'html', 'mail', 'phone', 'url']);
@@ -83,6 +91,12 @@ class Field
         }
         $this->errors = [];
         $this->valid = false;
+
+        foreach (self::CONFUSE_LIST as $confuse) {
+            if(array_key_exists($confuse, $field)) {
+                throw new \Exception('Le nom du champ est invalide : ' . Sec::hNoHtml($confuse) . '');
+            }
+        }
 
 
         $this->optional = $field['optional'] ?? false;

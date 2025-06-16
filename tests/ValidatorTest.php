@@ -341,44 +341,30 @@ $result = $validator->validate(['field' => ['type' => 'mail', 'optional' => true
 $tester->assertEqual($result[0]['valid'], false, 'optional : email invalide ne doit pas passer');
 
 // Test combiné avec plusieurs validateurs
-$result = $validator->validate(['field' => ['type' => 'varchar', 'optional' => true, 'notEmpty' => true, 'length' => [3, 10]]], ['field' => '']);
-$tester->assertEqual(count($result), 1, 'optional : champ vide avec multiples validateurs ne doit pas passer car "" != null ');
+$result = $validator->validate(['field' => ['type' => 'varchar', 'optional' => true, 'notEmpty' => true, 'minLength' => 3, 'maxLength' => 10]], ['field' => '']);
+$tester->assertEqual(count($result), 2, 'optional : champ vide avec multiples validateurs ne doit pas passer');
 
-$result = $validator->validate(['field' => ['type' => 'varchar', 'optional' => true, 'notEmpty' => true, 'length' => [3, 10]]], ['field' => null]);
+$result = $validator->validate(['field' => ['type' => 'varchar', 'optional' => true, 'notEmpty' => true, 'minLength' => 3, 'maxLength' => 10]], ['field' => null]);
 $tester->assertEqual(count($result), 0, 'optional : champ vide avec multiples validateurs ne doit passer car null ');
 
 
 // Test avec une valeur non vide mais invalide
-$result = $validator->validate(['field' => ['type' => 'varchar', 'optional' => true, 'notEmpty' => true, 'length' => [3, 10]]], ['field' => 'ab']);
+$result = $validator->validate(['field' => ['type' => 'varchar', 'optional' => true, 'notEmpty' => true, 'minLength' => 3, 'maxLength' => 10]], ['field' => 'ab']);
 $tester->assertEqual($result[0]['valid'], false, 'optional : valeur non vide invalide ne doit pas passer');
 
 // Test avec tableau vide
-$result = Validator::create('field')
-    ->optional()
-    ->notEmpty()
-    ->validate([]);
-$tester->assertEqual(count($result), 0, 'optional : tableau vide doit passer');
+$result = $validator->validate(['field' => ['type' => 'varchar', 'optional' => true, 'notEmpty' => true]], ['field' => []]);
+$tester->assertEqual(count($result), 3, 'optional : tableau vide ne doit pas passer');
 
 // Test avec chaîne contenant uniquement des espaces
-$result = Validator::create('field')
-    ->optional()
-    ->notEmpty()
-    ->validate('   ');
+$result = $validator->validate(['field' => ['type' => 'varchar', 'optional' => true, 'notEmpty' => true]], ['field' => '   ']);
 $tester->assertEqual(count($result), 1, 'optional : chaîne avec espaces ne doit pas passer');
 
 // Test avec chaîne vide
-$result = Validator::create('field')
-    ->optional()
-    ->notEmpty()
-    ->validate('');
-$tester->assertEqual(count($result), 0, 'optional : chaîne vide doit passer');
+$result = $validator->validate(['field' => ['type' => 'varchar', 'optional' => true, 'notEmpty' => true]], ['field' => '']);
+$tester->assertEqual(count($result), 1, 'optional : chaîne vide doit pas passer');
 
-// Test désactivation de optional
-$validator = Validator::create('field');
-$validator->optional();
-$validator->notEmpty();
-$result = $validator->validate('');
-$tester->assertEqual(count($result), 0, 'optional : doit rester optionnel même après ajout de règles');
-
+$result = $validator->validate(['field' => ['type' => 'varchar', 'optional' => true, 'notEmpty' => true]], ['field' => null]);
+$tester->assertEqual(count($result), 0, 'optional : chaîne null doit passer');
 
 $tester->footer(exit: false);
