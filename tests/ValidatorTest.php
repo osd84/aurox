@@ -14,8 +14,10 @@ $tester->header(__FILE__);
 $GLOBALS['i18n'] = new I18n('fr');
 
 $rules = [
-    Validator::create('email')->email()->length(20),
-    Validator::create('username')->notEmpty(),
+    'email' => ['type' => 'email(20)'],
+    'username' => ['type' => 'varchar(20)', 'notEmpty' => true],
+//    Validator::create('email')->email()->length(20),
+//    Validator::create('username')->notEmpty(),
 ];
 $data = [
     'email' => 'invalid-email',

@@ -1,0 +1,168 @@
+<?php
+
+namespace src;
+
+use DateTime;
+use OsdAurox\I18n;
+use OsdAurox\Sec;
+
+class Field
+{
+    public mixed $input = ''; // Valeur saisie
+    public string $field = ''; // Nom du champs
+    public string $type = ''; // Type du champ (varchar, int, etc.)
+    public array $errors = []; // Erreur en train d'être levée
+
+
+    public bool $optional = false;
+    public bool $required = false;
+    public bool $valid = false;
+    public array $options = []; // Valeurs possibles (ex : dropdown)
+    public string $label = ''; // Label affiché
+    public mixed $default = null; // Valeur par défaut
+    public bool $notEditable = false; // Si le champ ne peut pas être édité
+    public string $comment = ''; // Commentaire interne ou annexe. Ne sera pas affiché directement.
+
+
+    // ===== Validateurs =====
+    public ?int $maxLength = null; // Longueur maximale autorisée (varchar ou texte)
+    public ?int $minLength = null; // Longueur minimale autorisée
+    public ?int $min = null; // Valeur minimale (pour les nombres)
+    public ?int $max = null; // Valeur maximale (pour les nombres)
+    public bool $notEmpty = false; // Si le champ ne doit pas être vide
+    public ?array $startWith = null; // Tableau des motifs que le champ doit commencer avec
+    public bool $positive = false; // Si le champ doit être un entier positif
+    public ?array $inArray = null; // Tableau des valeurs possibles
+    public ?string $regex = null; // Expression régulière pour valider la valeur
+
+    // ===== Attributs de type =====
+    public string $dateFormat = 'Y-m-d';
+    public string $datetimeFormat = 'Y-m-d H:i:s';
+    public ?string $fkClassName = null;
+    public ?string $fkClassFilePath = null;
+    public ?string $fkClassModel = null;
+    public ?int $doublePrecision = 24;
+    public ?int $doubleScale = 8;
+    public ?string $startWithPrefix = null;
+    public ?bool $startWithCaseSensitive = null ;
+    public ?int $inArrayValues = null; // valeur autorisée pour un champ $inArray
+
+
+
+    // ===== Informations pour l'HTML/DOM =====
+    public string $class = ''; // Classe CSS utilisée pour création et mise à jour
+    public string $classView = ''; // Classe CSS utilisée pour le mode vue uniquement
+    public string $classList = ''; // Classe CSS utilisée dans les listes d'affichage (ex : colonnes de tableau)
+    public string $help = ''; // Texte d'aide ou descriptif
+    public bool $disabled = false; // Si le champ doit être désactivé
+    public bool $autoFocusOnCreate = false; // Si ce champ doit être autofocus lors de sa création
+
+
+
+    public const array TYPES_LIST = [
+        'integer',                        // Champ de type entier
+        'fk',     // Clé étrangère vers une classe et son chemin
+        'varchar', // Champ varchar avec une longueur maximale précisée (à remplir dynamiquement)
+        'text' ,                           // Texte long
+        'html',                           // Texte HTML autorisé
+        'double', // Nombre double avec précision et échelle
+        'float',                          // Champ de type flottant
+        'price',                          // Champ de type prix (flottant ou format monétaire)
+        'date' => ['format' => 'Y-m-d H:i:s'], // Date avec format standard complet
+        'datetime' => ['format' => 'Y-m-d'],   // Date uniquement
+        'timestamp',                      // Champ horodatage
+        'mail',                           // Champ email (validation incluse)
+        'phone' ,                          // Champ numéro de téléphone
+        'url'                            // Champ URL
+    ];
+
+
+
+    public function __construct(string $fieldName, array $field, mixed $input)
+    {
+        $this->input = $input;
+        $this->field = $fieldName;
+        if(!$fieldName) {
+            throw new \Exception('Le nom du champ est obligatoire');
+        }
+        $this->errors = [];
+        $this->valid = false;
+
+
+        $this->optional = $field['optional'] ?? false;
+        $this->required = $field['required'] ?? false;
+
+        // determination du type de champ
+        $type = $field['type'] ?? null;
+        if(!$type || !in_array($type, self::TYPES_LIST)) {
+            throw new \Exception('Invalid rule type');
+        }
+        $this->type = $type;
+        if($type == 'fk') {
+            $this->fkClassName = $field['fkClassName'] ?? null;
+            $this->fkClassFilePath = $field['fkClassFilePath'] ?? null;
+            $this->fkClassModel = $field['fkClassModel'] ?? null;
+            if(!$this->fkClassName) {
+                throw new \Exception('With fk type, you must specify fkClassName');
+            }
+            if(!$this->fkClassFilePath && !$this->fkClassModel) {
+                throw new \Exception('With fk type, you must specify fkClassFilePath or fkClassModel');
+            }
+        }
+
+        $this->options = $field['options'] ?? [];
+        $this->label = $field['label'] ?? '';
+        $this->default = $field['default'] ?? null;
+        $this->notEditable = $field['notEditable'] ?? false;
+        $this->comment = $field['comment'] ?? '';
+
+        // ===== Validateurs =====
+        $this->maxLength = $field['maxLength'] ?? null;
+        $this->minLength = $field['minLength'] ?? null;
+        $this->min = $field['min'] ?? null;
+        $this->max = $field['max'] ?? null;
+        $this->notEmpty = $field['notEmpty'] ?? false;
+        $this->startWith = $field['startWith'] ?? null;
+        $this->positive = $field['positive'] ?? false;
+        $this->inArray = $field['inArray'] ?? null;
+        $this->regex = $field['regex'] ?? null;
+
+        // ===== Attributs de type =====
+        $this->dateFormat = $field['dateFormat'] ?? 'Y-m-d';
+        $this->datetimeFormat = $field['datetimeFormat'] ?? 'Y-m-d H:i:s';
+        $this->doublePrecision = $field['doublePrecision'] ?? 24;
+        $this->doubleScale = $field['doubleScale'] ?? 8;
+
+        $this->startWithPrefix = $field['startWithPrefix'] ?? null;
+        $this->startWithCaseSensitive = $field['startWithCaseSensitive'] ?? false;
+        if($this->startWith && empty($this->startWithPrefix)) {
+            throw new \Exception('startWithPrefix is required if startWith is set');
+        }
+
+        $this->inArrayValues = $field['inArrayValues'] ?? null;
+        if($this->inArray && empty($this->inArrayValues)) {
+            throw new \Exception('inArrayValues is required if inArray is set');
+        }
+
+        // ===== Informations pour l'HTML/DOM =====
+        $this->class = $field['class'] ?? '';
+        $this->classView = $field['classView'] ?? '';
+        $this->classList = $field['classList'] ?? '';
+        $this->help = $field['help'] ?? '';
+        $this->disabled = $field['disabled'] ?? false;
+        $this->autoFocusOnCreate = $field['autoFocusOnCreate'] ?? false;
+
+        // Si il y a un valeur par défault on l'affecte
+        if(empty($input) && $this->default) {
+            $this->input = $this->default;
+        }
+
+        // Si c'est require on écrase l'option optional
+        if($this->required && $this->optional) {
+           $this->optional = false;
+        }
+
+    }
+
+
+}
