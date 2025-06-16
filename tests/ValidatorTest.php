@@ -44,13 +44,13 @@ $tester->assertEqual($result[0]['msg'], 'aucune donnée fournie pour la validati
 
 $tester->header("Test de la méthode length()");
 // test length
-$result = Validator::create('email')->length(min : 0, max: 10)->validate($data['email']);
-$tester->assertEqual($result[0]['msg'], 'doit contenir maximum 10 caractères', 'length : doit contenir maximum 10 caractères');
+$result = $validator->validate(['email' => ['type' => 'mail', 'minLength' => 0, 'maxLength' => 10]], $data);
+$tester->assertEqual($result[1]['msg'], 'doit contenir maximum 10 caractères', 'length : doit contenir maximum 10 caractères');
 
-$result = Validator::create('email')->length(min : 10, max: 0)->validate($data['email']);
-$tester->assertEqual($result[0]['msg'], 'doit contenir minimum 10 caractères', 'length : doit contenir minimum 10 caractères');
+$result = $validator->validate(['email' => ['type' => 'mail', 'minLength' => 15]], $data);
+$tester->assertEqual($result[1]['msg'], 'doit contenir minimum 15 caractères', 'length : doit contenir minimum 10 caractères');
 
-$result = Validator::create('email')->length(min : 5, max: 10)->validate($data['email']);
+$result = $validator->validate(['email' => ['type' => 'mail', 'minLength' => 5, 'maxLength' => 10]], $data);
 $tester->assertEqual($result[0]['msg'], 'doit contenir entre 5 et 10 caractères', 'length :  doit contenir entre 5 et 10 caractères');
 
 // test required
@@ -58,6 +58,7 @@ $tester->header("Test de la méthode required()");
 
 // Test avec une chaîne vide
 $result = Validator::create('field')->required()->validate('');
+
 $tester->assertEqual($result[0]['msg'], 'champ obligatoire', 'required : chaîne vide doit être invalide');
 $tester->assertEqual($result[0]['valid'], false, 'required : chaîne vide doit retourner false');
 
