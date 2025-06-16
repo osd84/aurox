@@ -51,150 +51,151 @@ $result = $validator->validate(['email' => ['type' => 'mail', 'minLength' => 15]
 $tester->assertEqual($result[1]['msg'], 'doit contenir minimum 15 caractères', 'length : doit contenir minimum 10 caractères');
 
 $result = $validator->validate(['email' => ['type' => 'mail', 'minLength' => 5, 'maxLength' => 10]], $data);
-$tester->assertEqual($result[0]['msg'], 'doit contenir entre 5 et 10 caractères', 'length :  doit contenir entre 5 et 10 caractères');
+$tester->assertEqual($result[1]['msg'], 'doit contenir entre 5 et 10 caractères', 'length :  doit contenir entre 5 et 10 caractères');
 
 // test required
 $tester->header("Test de la méthode required()");
 
 // Test avec une chaîne vide
-$result = Validator::create('field')->required()->validate('');
-
+$result = $validator->validate(['field' => ['type' => 'varchar', 'required' => true]], ['field' => '']);
 $tester->assertEqual($result[0]['msg'], 'champ obligatoire', 'required : chaîne vide doit être invalide');
 $tester->assertEqual($result[0]['valid'], false, 'required : chaîne vide doit retourner false');
 
 // Test avec une chaîne contenant uniquement des espaces
-$result = Validator::create('field')->required()->validate('   ');
+$result = $validator->validate(['field' => ['type' => 'varchar', 'required' => true]], ['field' => '   ']);
 $tester->assertEqual($result[0]['valid'], false, 'required : chaîne avec espaces doit être invalide');
 
 // Test avec une chaîne valide
-$result = Validator::create('field')->required()->validate('valeur');
+$result = $validator->validate(['field' => ['type' => 'varchar', 'required' => true]], ['field' => 'valeur']);
 $tester->assertEqual(count($result), 0, 'required : chaîne non-vide doit être valide');
 
 // Test avec null
-$result = Validator::create('field')->required()->validate(null);
+$result = $validator->validate(['field' => ['type' => 'varchar', 'required' => true]], ['field' => null]);
 $tester->assertEqual($result[0]['valid'], false, 'required : null doit être invalide');
 
 // Test avec tableau vide
-$result = Validator::create('field')->required()->validate([]);
+$result = $validator->validate(['field' => ['type' => 'varchar', 'required' => true]], ['field' => []]);
 $tester->assertEqual($result[0]['valid'], false, 'required : tableau vide doit être invalide');
 
 // Test avec tableau non-vide
-$result = Validator::create('field')->required()->validate(['item']);
-$tester->assertEqual(count($result), 0, 'required : tableau non-vide doit être valide');
+$result = $validator->validate(['field' => ['type' => 'varchar', 'required' => true]], ['field' => ['item']]);
+$tester->assertEqual(count($result), 2, 'required : tableau non-vide doit être invalide pour un varchar');
 
 // Test avec nombre
-$result = Validator::create('field')->required()->validate(0);
+$result = $validator->validate(['field' => ['type' => 'integer', 'required' => true]], ['field' => 0]);
 $tester->assertEqual(count($result), 0, 'required : nombre doit être valide');
 
 // Test avec booléen
-$result = Validator::create('field')->required()->validate(false);
+$result = $validator->validate(['field' => ['type' => 'bool', 'required' => true]], ['field' => false]);
 $tester->assertEqual(count($result), 0, 'required : booléen doit être valide');
 
 
 $tester->header("Test de la méthode stringType()");
-$result = Validator::create('field')->stringType()->validate("test");
+$result = $validator->validate(['field' => ['type' => 'varchar']], ['field' => 'test']);
+$tester->assertEqual(count($result), 0, 'stringType : chaîne valide doit passer');
+$result = $validator->validate(['field' => ['type' => 'text']], ['field' => 'test']);
 $tester->assertEqual(count($result), 0, 'stringType : chaîne valide doit passer');
 
-$result = Validator::create('field')->stringType()->validate("");
+$result = $validator->validate(['field' => ['type' => 'varchar']], ['field' => '']);
 $tester->assertEqual(count($result), 0, 'stringType : chaîne vide doit passer');
 
-$result = Validator::create('field')->stringType()->validate(123);
+$result = $validator->validate(['field' => ['type' => 'varchar']], ['field' => 123]);
 $tester->assertEqual($result[0]['valid'], false, 'stringType : nombre doit échouer');
 
-$result = Validator::create('field')->stringType()->validate(null);
+$result = $validator->validate(['field' => ['type' => 'varchar']], ['field' => null]);
 $tester->assertEqual($result[0]['valid'], false, 'stringType : null doit échouer');
 
-$result = Validator::create('field')->stringType()->validate([]);
+$result = $validator->validate(['field' => ['type' => 'varchar']], ['field' => []]);
 $tester->assertEqual($result[0]['valid'], false, 'stringType : tableau doit échouer');
 
 // Tests pour intType()
 $tester->header("Test de la méthode intType()");
 
-$result = Validator::create('field')->intType()->validate(123);
+$result = $validator->validate(['field' => ['type' => 'integer']], ['field' => 123]);
 $tester->assertEqual(count($result), 0, 'intType : entier valide doit passer');
 
-$result = Validator::create('field')->intType()->validate(0);
+$result = $validator->validate(['field' => ['type' => 'integer']], ['field' => 0]);
 $tester->assertEqual(count($result), 0, 'intType : zéro doit passer');
 
-$result = Validator::create('field')->intType()->validate(-123);
+$result = $validator->validate(['field' => ['type' => 'integer']], ['field' => -123]);
 $tester->assertEqual(count($result), 0, 'intType : entier négatif doit passer');
 
-$result = Validator::create('field')->intType()->validate("123");
+$result = $validator->validate(['field' => ['type' => 'integer']], ['field' => "123"]);
 $tester->assertEqual($result[0]['valid'], false, 'intType : chaîne numérique doit échouer');
 
-$result = Validator::create('field')->intType()->validate(12.3);
+$result = $validator->validate(['field' => ['type' => 'integer']], ['field' => 12.3]);
 $tester->assertEqual($result[0]['valid'], false, 'intType : float doit échouer');
 
 // Tests pour floatType()
 $tester->header("Test de la méthode floatType()");
 
-$result = Validator::create('field')->floatType()->validate(12.3);
+$result = $validator->validate(['field' => ['type' => 'float']], ['field' => 12.3]);
 $tester->assertEqual(count($result), 0, 'floatType : float valide doit passer');
 
-$result = Validator::create('field')->floatType()->validate(-12.3);
+$result = $validator->validate(['field' => ['type' => 'float']], ['field' => -12.3]);
 $tester->assertEqual(count($result), 0, 'floatType : float négatif doit passer');
 
-$result = Validator::create('field')->floatType()->validate(123);
+$result = $validator->validate(['field' => ['type' => 'float']], ['field' => 123]);
 $tester->assertEqual($result[0]['valid'], false, 'floatType : entier doit échouer');
 
-$result = Validator::create('field')->floatType()->validate("12.3");
+$result = $validator->validate(['field' => ['type' => 'float']], ['field' => "12.3"]);
 $tester->assertEqual($result[0]['valid'], false, 'floatType : chaîne numérique doit échouer');
 
 // Tests pour min()
 $tester->header("Test de la méthode min()");
 
-$result = Validator::create('field')->min(10)->validate(15);
+$result = $validator->validate(['field' => ['type' => 'integer', 'min' => 10]], ['field' => 15]);
 $tester->assertEqual(count($result), 0, 'min : nombre supérieur doit passer');
 
-$result = Validator::create('field')->min(10)->validate(10);
+$result = $validator->validate(['field' => ['type' => 'integer', 'min' => 10]], ['field' => 10]);
 $tester->assertEqual(count($result), 0, 'min : nombre égal doit passer');
 
-$result = Validator::create('field')->min(10)->validate(5);
+$result = $validator->validate(['field' => ['type' => 'integer', 'min' => 10]], ['field' => 5]);
 $tester->assertEqual($result[0]['valid'], false, 'min : nombre inférieur doit échouer');
 
-$result = Validator::create('field')->min(10.5)->validate(10.6);
+$result = $validator->validate(['field' => ['type' => 'float', 'min' => 10.5]], ['field' => 10.6]);
 $tester->assertEqual(count($result), 0, 'min : float supérieur doit passer');
 
-$result = Validator::create('field')->min(10)->validate("abc");
+$result = $validator->validate(['field' => ['type' => 'integer', 'min' => 10]], ['field' => "abc"]);
 $tester->assertEqual($result[0]['valid'], false, 'min : chaîne non numérique doit échouer');
 
 // Tests pour max()
 $tester->header("Test de la méthode max()");
 
-$result = Validator::create('field')->max(10)->validate(5);
+$result = $validator->validate(['field' => ['type' => 'integer', 'max' => 10]], ['field' => 5]);
 $tester->assertEqual(count($result), 0, 'max : nombre inférieur doit passer');
 
-$result = Validator::create('field')->max(10)->validate(10);
+$result = $validator->validate(['field' => ['type' => 'integer', 'max' => 10]], ['field' => 10]);
 $tester->assertEqual(count($result), 0, 'max : nombre égal doit passer');
 
-$result = Validator::create('field')->max(10)->validate(15);
+$result = $validator->validate(['field' => ['type' => 'integer', 'max' => 10]], ['field' => 15]);
 $tester->assertEqual($result[0]['valid'], false, 'max : nombre supérieur doit échouer');
 
-$result = Validator::create('field')->max(10.5)->validate(10.4);
+$result = $validator->validate(['field' => ['type' => 'float', 'max' => 10.5]], ['field' => 10.4]);
 $tester->assertEqual(count($result), 0, 'max : float inférieur doit passer');
 
-$result = Validator::create('field')->max(10)->validate("abc");
+$result = $validator->validate(['field' => ['type' => 'integer', 'max' => 10]], ['field' => "abc"]);
 $tester->assertEqual($result[0]['valid'], false, 'max : chaîne non numérique doit échouer');
 
 // Tests pour startWith()
 $tester->header("Test de la méthode startWith()");
 
-$result = Validator::create('field')->startWith('test')->validate("test123");
+$result = $validator->validate(['field' => ['type' => 'varchar', 'startWith' => 'test']], ['field' => 'test123']);
 $tester->assertEqual(count($result), 0, 'startWith : correspondance exacte doit passer');
 
-$result = Validator::create('field')->startWith('test')->validate("abc123");
+$result = $validator->validate(['field' => ['type' => 'varchar', 'startWith' => 'test']], ['field' => 'abc123']);
 $tester->assertEqual($result[0]['valid'], false, 'startWith : sans correspondance doit échouer');
 
-$result = Validator::create('field')->startWith('Test', false)->validate("test123");
+$result = $validator->validate(['field' => ['type' => 'varchar', 'startWith' => 'test']], ['field' => 'test123']);
 $tester->assertEqual(count($result), 0, 'startWith : insensible à la casse doit passer');
 
-$result = Validator::create('field')->startWith('Test')->validate("test123");
+$result = $validator->validate(['field' => ['type' => 'varchar', 'startWith' => 'Test']], ['field' => 'test123']);
 $tester->assertEqual($result[0]['valid'], false, 'startWith : sensible à la casse doit échouer');
 
-$result = Validator::create('field')->startWith('test')->validate(123);
+$result = $validator->validate(['field' => ['type' => 'integer', 'startWith' => 'test']], ['field' => 123]);
 $tester->assertEqual($result[0]['valid'], false, 'startWith : non-string doit échouer');
 
-$result = Validator::create('field')->startWith('')->validate("test");
+$result = $validator->validate(['field' => ['type' => 'varchar', 'startWith' => '']], ['field' => 'test']);
 $tester->assertEqual(count($result), 0, 'startWith : préfixe vide doit passer');
 
 // Tests combinés

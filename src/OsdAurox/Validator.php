@@ -66,7 +66,7 @@ class Validator
             }
 
             if ($field->type === 'integer') {
-                $r = $this->validateIntType($field->input);
+                $r = $this->validateIntType($field);
                 if (!$r['valid']) {
                     $field->errors[] = $r['msg'];
                     $this->errors[$fieldName] = $field->errors;
@@ -74,7 +74,7 @@ class Validator
             }
 
             if ($field->type === 'fk') {
-                $r = $this->validateFk($field->input);
+                $r = $this->validateFk($field);
                 if (!$r['valid']) {
                     $field->errors[] = $r['msg'];
                     $this->errors[$fieldName] = $field->errors;
@@ -115,6 +115,14 @@ class Validator
 
             if($field->type === 'datetime') {
                 $r = $this->validateDateTime($field);
+                if (!$r['valid']) {
+                    $field->errors[] = $r['msg'];
+                    $this->errors[$fieldName] = $field->errors;
+                }
+            }
+
+            if($field->type === 'bool') {
+                $r = $this->validateBoolean($field);
                 if (!$r['valid']) {
                     $field->errors[] = $r['msg'];
                     $this->errors[$fieldName] = $field->errors;
@@ -259,6 +267,7 @@ class Validator
     public function validateEmail(Field $field): array
     {
         $msg = I18n::t('must be valid email');
+        $valid = false;
 
         if (!is_string($field->input)) {
             $valid = false;
@@ -272,6 +281,25 @@ class Validator
             'msg' => $msg ?? ''];
 
     }
+
+    public function validateBoolean(Field $field): array
+    {
+        $msg = I18n::t('doit être une valeur booléenne');
+
+        // Vérifie si la valeur est un booléen strict
+        if (is_bool($field->input)) {
+            return [
+                'valid' => true,
+                'msg' => ''
+            ];
+        }
+
+        return [
+            'valid' => false,
+            'msg' => $msg
+        ];
+    }
+
 
 
     public function validateNotEmpty(Field $field): array
@@ -438,7 +466,7 @@ class Validator
     {
         $msg = I18n::t('must not contain html');
         $sanitized = Sec::hNoHtml($field->input);
-        $valid = $sanitized === $field->input;
+        $valid = $sanitized == $field->input;
         return [
             'valid' => $valid,
             'msg' => $msg

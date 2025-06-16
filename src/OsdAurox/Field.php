@@ -23,8 +23,8 @@ class Field
     // ===== Validateurs =====
     public ?int $maxLength = null; // Longueur maximale autorisée (varchar ou texte)
     public ?int $minLength = null; // Longueur minimale autorisée
-    public ?int $min = null; // Valeur minimale (pour les nombres)
-    public ?int $max = null; // Valeur maximale (pour les nombres)
+    public ?float $min = null; // Valeur minimale (pour les nombres)
+    public ?float $max = null; // Valeur maximale (pour les nombres)
     public bool $notEmpty = false; // Si le champ ne doit pas être vide
     public ?string $startWith = null; // String d'avoir quoi doit commencer le champ
     public bool $positive = false; // Si le champ doit être un entier positif
@@ -56,6 +56,7 @@ class Field
         'integer',                        // Champ de type entier
         'fk',     // Clé étrangère vers une classe et son chemin
         'varchar', // Champ varchar avec une longueur maximale précisée (à remplir dynamiquement)
+        'bool',
         'text' ,                           // Texte long
         'html',                           // Texte HTML autorisé
         'float',                          // Champ de type flottant

@@ -50,6 +50,7 @@ abstract class BaseModel {
      * FIELDS --- Descriptions
      *  'type' type de champ (
      * 'integer',
+     * 'bool',
      * 'fk',  // On doit ajouter  fkTableName, fkFieldName, fkClassModel
      * 'varchar',   // on peut ajouter 'minLength', 'maxLength'
      * 'text', // text long
