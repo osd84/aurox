@@ -32,18 +32,22 @@ abstract class BaseModel {
     public string $error; // String d'erreur
     public string $errorHidden; // String d'erreur masquée car elle peut être utilisée pour stocker du contenu technique
     public array $errors = []; //  	Tableaux des erreurs au format string
-    private array $validateFieldsErrors = []; //  array<string,string>	pour stocker les erreurs issues de ->validateField()
+    public array $validateFieldsErrors = []; //  array<string,string>	pour stocker les erreurs issues de Validator
     public int $fkParentId; //   Champ contenant l'identifiant de la clé parente si ce champ en a une.
     public string $fkParentClassName; //  $fkParentClassName
     public mixed $oldCopy; // Pour stocker une copie clonée de l'objet avant édition (pour conserver une trace des anciennes propriétés).
     public string $oldRef; // Pour stocker l'ancienne valeur d'une référence modifiée.
     public string $createdAt;
+
+    public array $linkedObjectsIds = []; // contient les Ids des objets liés chargés
+    public array $linkedObjects = []; // contient les objets lies via clef $element exemple [ 'user' => User ]
+
     public ?string $publishedAt;
-    public int $createdBy;
-    public int $updatedBy;
+    public ?string $updatedAt;
+    public ?int $createdBy;
+    public ?int $updatedBy;
     public const TABLE = "unknown";
     public string $element; // ID pour identifier l'objet metier exemple : project, post, user
-
 
     public function getTable(): string
     {

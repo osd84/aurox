@@ -28,12 +28,17 @@ class PostsModel extends BaseModel
 
     public function __construct(){
 
+        $this->linkedObjects = [
+            'author' => null // va stocker la relation author
+        ];
     }
-
 
     public function create(\PDO $pdo, $currentUserId): int
     {
         // Exemple d'implémentation.
+        if(!empty($this->id)) {
+            throw new \Exception('ID exist !, use update()');
+        }
 
         $stmt = "INSERT INTO " . static::TABLE .
                     " SET 
@@ -85,8 +90,12 @@ class PostsModel extends BaseModel
     }
 
 
-    public function update(\PDO $pdo, int $id, $currentUserId): bool
+    public function update(\PDO $pdo, $currentUserId): bool
     {
+        if(empty($this->id)) {
+            throw new \Exception('No ID, fetch() first');
+        }
+
         // Exemple d'implémentation de la méthode update.
         $stmt = /** @lang MySQL */
             "UPDATE " . static::TABLE .
@@ -132,7 +141,7 @@ class PostsModel extends BaseModel
             'meta_title' => $this->metaTitle,
             'meta_desc' => $this->metaDesc,
             'published_at' => $this->publishedAt,
-            'id' => $id,
+            'id' => $this->id,
         ]);
 
         return $success;
@@ -169,7 +178,7 @@ class PostsModel extends BaseModel
             $this->createdAt = $data['created_at'];
             $this->updatedAt = $data['updated_at'];
             $this->createdBy = (int) $data['created_by'];
-            $this->updatedBy = $data['updated_by'] ? (int) $data['updated_by'] : null;
+            $this->updatedBy = (int) $data['updated_by'];
 
             return true; // Enregistrement trouvé et chargé
         }
@@ -178,8 +187,11 @@ class PostsModel extends BaseModel
     }
 
 
-    public function remove(\PDO $pdo, int $id): bool
+    public function remove(\PDO $pdo): bool
     {
+        if(empty($this->id)) {
+            throw new \Exception('No ID, fetch() first');
+        }
         // Requête SQL pour supprimer un enregistrement en fonction de son ID
         $stmt = "DELETE FROM " . static::TABLE . " WHERE id = :id";
 
@@ -187,10 +199,18 @@ class PostsModel extends BaseModel
 
         // Exécution de la requête en passant l'ID comme paramètre
         return $stmt->execute([
-            'id' => $id,
+            'id' => $this->id,
         ]);
     }
 
+    public function fetchObjectLinked(\PDO $pdo)
+    {
+        // TODO pas faite encore devrait aller chercher une classe User
+        $this->linkedObjects['author'] = [
+            'id' => $this->authorId,
+            'name' => 'fake name',
+        ];
+    }
 
 
 }

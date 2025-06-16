@@ -13,6 +13,17 @@ $tester->header(__FILE__);
 
 $pdo = Dbo::getPdo();
 
+// remise en ordre des datas
+$stmt = $pdo->prepare('UPDATE posts SET 
+                 title = :title, updated_by = :updated_by, status = :status
+                 WHERE id = :id');
+$stmt->execute([
+    'title' => "title1",
+    'updated_by' => null, // null pour spécifier que la colonne doit accepter une valeur NULL
+    'status' => 'draft', // null pour spécifier que la colonne doit accepter une valeur NULL
+    'id' => 1
+]);
+
 $instancePost = new PostsModel();
 $tester->assertEqual($instancePost->getTable(), 'posts', 'getTable() ok');
 
@@ -205,6 +216,26 @@ $tester->assertEqual(count($posts), 0, 'getAllBy : gère correctement les valeur
 $tester->header('Test de getValueFrom()');
 $r = PostsModel::getValueFrom($pdo, 1, 'title');
 $tester->assertEqual($r, 'title1', 'getValueFrom ok');
+
+
+$tester->header('Test de fetch()');
+$post = new PostsModel();
+$r = $post->fetch($pdo, 1);
+$tester->assertEqual($r, true, 'update ok');
+$tester->assertEqual($post->title, 'title1', 'fetch ok');
+$tester->assertEqual($post->element, 'post', 'fetch ok');
+
+$tester->header('Test de fetchObjectLinked()');
+$post->fetchObjectLinked($pdo, 1);
+$tester->assertEqual($post->linkedObjects['author']['name'], 'fake name', 'fetchObjectLinked ok');
+
+$tester->header('Test de update()');
+$post->title = 'title1_modif';
+$post->update($pdo, currentUserId: 2);
+$r = $post->fetch($pdo, 1);
+$tester->assertEqual($r, true, 'update ok');
+$tester->assertEqual($post->title, 'title1_modif', 'update ok');
+$tester->assertEqual($post->updatedBy, 2, 'update updatedBy ok');
 
 
 $tester->footer(exit: false);
