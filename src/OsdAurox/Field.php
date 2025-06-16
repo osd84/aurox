@@ -61,8 +61,8 @@ class Field
         'html',                           // Texte HTML autorisé
         'float',                          // Champ de type flottant
         'price',                          // Champ de type prix (flottant ou format monétaire)
-        'date' => ['format' => 'Y-m-d H:i:s'], // Date avec format standard complet
-        'datetime' => ['format' => 'Y-m-d'],   // Date uniquement
+        'date', // Date avec format standard complet
+        'datetime',   // Date uniquement
         'mail',                           // Champ email (validation incluse)
         'phoneFr' ,                          // Champ numéro de téléphone
         'url'                            // Champ URL

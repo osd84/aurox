@@ -189,95 +189,95 @@ $tester->assertEqual($result[0]['valid'], false, 'startWith : sans correspondanc
 $result = $validator->validate(['field' => ['type' => 'varchar', 'startWith' => 'test']], ['field' => 'test123']);
 $tester->assertEqual(count($result), 0, 'startWith : insensible à la casse doit passer');
 
-$result = $validator->validate(['field' => ['type' => 'varchar', 'startWith' => 'Test']], ['field' => 'test123']);
+$result = $validator->validate(['field' => ['type' => 'varchar', 'startWith' => 'Test', 'startWithCaseSensitive' => true]], ['field' => 'test123']);
 $tester->assertEqual($result[0]['valid'], false, 'startWith : sensible à la casse doit échouer');
 
-$result = $validator->validate(['field' => ['type' => 'integer', 'startWith' => 'test']], ['field' => 123]);
+$result = $validator->validate(['field' => ['type' => 'integer', 'startWith' => 'test', 'startWithCaseSensitive' => true]], ['field' => 123]);
 $tester->assertEqual($result[0]['valid'], false, 'startWith : non-string doit échouer');
 
-$result = $validator->validate(['field' => ['type' => 'varchar', 'startWith' => '']], ['field' => 'test']);
-$tester->assertEqual(count($result), 0, 'startWith : préfixe vide doit passer');
+$exceptionCaught = false;
+try {
+    $result = $validator->validate(['field' => ['type' => 'varchar', 'startWith' => '']], ['field' => 'test']);
+} catch (Exception $e) {
+    $exceptionCaught = true;
+}
+$tester->assertEqual($exceptionCaught, true, 'startWith : sans préfixe vide doit lever une erreur');
+unset($exceptionCaught);
 
 // Tests combinés
 $tester->header("Tests combinés");
 
-$result = Validator::create('field')
-    ->required()
-    ->intType()
-    ->min(0)
-    ->max(100)
-    ->validate(50);
+
+$rules = ['field' => ['type' => 'integer', 'required' => true, 'min' => 0, 'max' => 100]];
+$result = $validator->validate($rules, ['field' => 50]);
 $tester->assertEqual(count($result), 0, 'combinaison : valeur valide doit passer');
 
-$result = Validator::create('field')
-    ->required()
-    ->stringType()
-    ->startWith('test')
-    ->validate("test123");
+$rules = ['field' => ['type' => 'varchar', 'required' => true, 'startWith' => 'test']];
+$result = $validator->validate($rules, ['field' => 'test123']);
 $tester->assertEqual(count($result), 0, 'combinaison : chaîne valide doit passer');
 
 
 // Tests pour positive()
 $tester->header("Test de la méthode positive()");
 
-$result = Validator::create('field')->positive()->validate(15);
+$result = $validator->validate(['field' => ['type' => 'integer', 'positive' => true]], ['field' => 15]);
 $tester->assertEqual(count($result), 0, 'positive : nombre positif doit passer');
 
-$result = Validator::create('field')->positive()->validate(0);
+$result = $validator->validate(['field' => ['type' => 'integer', 'positive' => true]], ['field' => 0]);
 $tester->assertEqual($result[0]['valid'], false, 'positive : zéro doit échouer');
 
-$result = Validator::create('field')->positive()->validate(-5);
+$result = $validator->validate(['field' => ['type' => 'integer', 'positive' => true]], ['field' => -5]);
 $tester->assertEqual($result[0]['valid'], false, 'positive : nombre négatif doit échouer');
 
-$result = Validator::create('field')->positive()->validate(10.5);
+$result = $validator->validate(['field' => ['type' => 'float', 'positive' => true]], ['field' => 10.5]);
 $tester->assertEqual(count($result), 0, 'positive : float positif doit passer');
 
-$result = Validator::create('field')->positive()->validate("15");
+$result = $validator->validate(['field' => ['type' => 'varchar', 'positive' => true]], ['field' => "15"]);
 $tester->assertEqual(count($result), 0, 'positive : chaîne numérique positive doit passer');
 
-$result = Validator::create('field')->positive()->validate("abc");
+$result = $validator->validate(['field' => ['type' => 'varchar', 'positive' => true]], ['field' => "abc"]);
 $tester->assertEqual($result[0]['valid'], false, 'positive : chaîne non numérique doit échouer');
 
 // Tests pour date()
 $tester->header("Test de la méthode date()");
 
-$result = Validator::create('field')->date()->validate("2024-03-13");
+$result = $validator->validate(['field' => ['type' => 'date']], ['field' => '2024-03-13']);
 $tester->assertEqual(count($result), 0, 'date : format Y-m-d valide doit passer');
 
-$result = Validator::create('field')->date()->validate("2024-13-13");
+$result = $validator->validate(['field' => ['type' => 'date']], ['field' => '2024-13-13']);
 $tester->assertEqual($result[0]['valid'], false, 'date : mois invalide doit échouer');
 
-$result = Validator::create('field')->date('d/m/Y')->validate("13/03/2024");
+$result = $validator->validate(['field' => ['type' => 'date', 'dateFormat' => 'd/m/Y']], ['field' => '13/03/2024']);
 $tester->assertEqual(count($result), 0, 'date : format d/m/Y valide doit passer');
 
-$result = Validator::create('field')->date()->validate("2024-03-13 14:30:00");
+$result = $validator->validate(['field' => ['type' => 'date']], ['field' => '2024-03-13 14:30:00']);
 $tester->assertEqual($result[0]['valid'], false, 'date : datetime dans date doit échouer');
 
-$result = Validator::create('field')->date()->validate("invalid-date");
+$result = $validator->validate(['field' => ['type' => 'date']], ['field' => "invalid-date"]);
 $tester->assertEqual($result[0]['valid'], false, 'date : format invalide doit échouer');
 
-$result = Validator::create('field')->date()->validate(12345);
+$result = $validator->validate(['field' => ['type' => 'date']], ['field' => 12345]);
 $tester->assertEqual($result[0]['valid'], false, 'date : nombre doit échouer');
 
 // Tests pour dateTime()
 $tester->header("Test de la méthode dateTime()");
 
-$result = Validator::create('field')->dateTime()->validate("2024-03-13 14:30:00");
+$result = $validator->validate(['field' => ['type' => 'datetime']], ['field' => "2024-03-13 14:30:00"]);
 $tester->assertEqual(count($result), 0, 'dateTime : format Y-m-d H:i:s valide doit passer');
 
-$result = Validator::create('field')->dateTime()->validate("2024-03-13");
+$result = $validator->validate(['field' => ['type' => 'datetime']], ['field' => "2024-03-13"]);
 $tester->assertEqual($result[0]['valid'], false, 'dateTime : date sans heure doit échouer');
 
-$result = Validator::create('field')->dateTime('d/m/Y H:i')->validate("13/03/2024 14:30");
+$result = $validator->validate(['field' => ['type' => 'datetime', 'dateTimeFormat' => 'd/m/Y H:i']], ['field' => "13/03/2024 14:30"]);
 $tester->assertEqual(count($result), 0, 'dateTime : format personnalisé valide doit passer');
 
-$result = Validator::create('field')->dateTime()->validate("2024-03-13 25:00:00");
+$result = $validator->validate(['field' => ['type' => 'datetime']], ['field' => "2024-03-13 25:00:00"]);
 $tester->assertEqual($result[0]['valid'], false, 'dateTime : heure invalide doit échouer');
 
-$result = Validator::create('field')->dateTime()->validate("invalid-datetime");
+$result = $validator->validate(['field' => ['type' => 'datetime']], ['field' => "invalid-datetime"]);
 $tester->assertEqual($result[0]['valid'], false, 'dateTime : format invalide doit échouer');
 
-$result = Validator::create('field')->dateTime()->validate(12345);
+$result = $validator->validate(['field' => ['type' => 'datetime']], ['field' => 12345]);
 $tester->assertEqual($result[0]['valid'], false, 'dateTime : nombre doit échouer');
 
 
