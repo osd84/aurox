@@ -271,7 +271,7 @@ class Validator
     public function validateEmail(Field $field): array
     {
         $msg = I18n::t('must be valid email');
-        $valid = false;
+        $valid = true;
 
         if (!is_string($field->input)) {
             $valid = false;

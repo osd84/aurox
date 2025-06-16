@@ -337,25 +337,19 @@ $result = $validator->validate(['field' => ['type' => 'mail', 'optional' => true
 $tester->assertEqual(count($result), 0, 'optional : email valide doit passer');
 
 // Test avec valeur invalide (ne doit pas être ignoré)
-$result = Validator::create('field')
-    ->optional()
-    ->email()
-    ->validate('invalid-email');
+$result = $validator->validate(['field' => ['type' => 'mail', 'optional' => true, 'notEmpty' => true]], ['field' => 'invalid-email']);
 $tester->assertEqual($result[0]['valid'], false, 'optional : email invalide ne doit pas passer');
 
 // Test combiné avec plusieurs validateurs
-$result = Validator::create('field')
-    ->optional()
-    ->notEmpty()
-    ->length(3, 10)
-    ->validate('');
-$tester->assertEqual(count($result), 0, 'optional : champ vide avec multiples validateurs doit passer');
+$result = $validator->validate(['field' => ['type' => 'varchar', 'optional' => true, 'notEmpty' => true, 'length' => [3, 10]]], ['field' => '']);
+$tester->assertEqual(count($result), 1, 'optional : champ vide avec multiples validateurs ne doit pas passer car "" != null ');
+
+$result = $validator->validate(['field' => ['type' => 'varchar', 'optional' => true, 'notEmpty' => true, 'length' => [3, 10]]], ['field' => null]);
+$tester->assertEqual(count($result), 0, 'optional : champ vide avec multiples validateurs ne doit passer car null ');
+
 
 // Test avec une valeur non vide mais invalide
-$result = Validator::create('field')
-    ->optional()
-    ->length(3, 10)
-    ->validate('ab');
+$result = $validator->validate(['field' => ['type' => 'varchar', 'optional' => true, 'notEmpty' => true, 'length' => [3, 10]]], ['field' => 'ab']);
 $tester->assertEqual($result[0]['valid'], false, 'optional : valeur non vide invalide ne doit pas passer');
 
 // Test avec tableau vide
