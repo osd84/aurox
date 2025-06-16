@@ -27,4 +27,10 @@ $tester->assertEqual('No', $resultEmptyString, "bool retourne 'No' pour une chaÃ
 $resultNonEmptyString = Fmt::bool('hello');
 $tester->assertEqual('Yes', $resultNonEmptyString, "bool retourne 'Yes' pour une chaÃ®ne non vide");
 
+
+// Test de dateTimeOrNull
+$tester->header("Test de dateTimeOrNull()");
+$dateTime = Fmt::dateTimeOrNull('2021-01-01 12:00:00');
+$tester->assertEqual($dateTime, '2021-01-01 12:00:00', "dateTimeOrNull retourne la date et l'heure");
+
 $tester->footer(exit: false);
