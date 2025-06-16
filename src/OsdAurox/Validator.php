@@ -58,6 +58,10 @@ class Validator
 
             $this->fieldChecked[] = $fieldName;
 
+            if($field->optional && $field->required === False && $field->input === null) {
+                continue;
+            }
+
             // si il y a des options, la valeur doit y être
             if ($field->options && !is_array($field->options)) {
                 $error = I18n::t('value must be an options array');;
@@ -819,7 +823,7 @@ class Validator
 
     public function validateDateTime(Field $field): array
     {
-        $format = $field->datetimeFormat;
+        $format = $field->dateTimeFormat;
         $msg = '';
 
         if (!is_string($field->input)) {

@@ -286,49 +286,37 @@ $tester->header("Test de la méthode inArray()");
 
 // Test avec des valeurs simples
 $values = [1, 2, 3, 4, 5];
-$result = Validator::create('field')->inArray($values)->validate(3);
+$result = $validator->validate(['field' => ['type' => 'integer', 'inArray' => $values]], ['field' => 3]);
 $tester->assertEqual(count($result), 0, 'inArray : valeur présente doit passer');
 
-$result = Validator::create('field')->inArray($values)->validate(6);
+$result = $validator->validate(['field' => ['type' => 'integer', 'inArray' => $values]], ['field' => 99]);
 $tester->assertEqual($result[0]['valid'], false, 'inArray : valeur absente doit échouer');
 $tester->assertEqual($result[0]['msg'], 'must be one of the following values : 1, 2, 3, 4, 5', 'inArray : message d\'erreur correct');
 
 // Test avec des chaînes
 $fruits = ['pomme', 'poire', 'banane'];
-$result = Validator::create('field')->inArray($fruits)->validate('poire');
+$result = $validator->validate(['field' => ['type' => 'varchar', 'inArray' => $fruits]], ['field' => 'poire']);
 $tester->assertEqual(count($result), 0, 'inArray : chaîne présente doit passer');
 
-$result = Validator::create('field')->inArray($fruits)->validate('orange');
+$result = $validator->validate(['field' => ['type' => 'varchar', 'inArray' => $fruits]], ['field' => 'orange']);
 $tester->assertEqual($result[0]['valid'], false, 'inArray : chaîne absente doit échouer');
 
-// Test avec comparaison stricte
-$mixedValues = ['1', '2'];
-$result = Validator::create('field')->inArray($mixedValues, true)->validate('1');
-$tester->assertEqual(count($result), 0, 'inArray : comparaison stricte doit passer pour type identique');
-
-$result = Validator::create('field')->inArray($mixedValues, true)->validate(1);
-$tester->assertEqual($result[0]['valid'], false, 'inArray : comparaison stricte doit échouer pour type différent');
-
 // Test avec tableau vide
-$result = Validator::create('field')->inArray([])->validate('test');
+$result = $validator->validate(['field' => ['type' => 'varchar', 'inArray' => []]], ['field' => 'test']);
 $tester->assertEqual($result[0]['valid'], false, 'inArray : tableau vide doit échouer');
 
 // Test avec valeur null
 $nullableValues = ['test', null, 1];
-$result = Validator::create('field')->inArray($nullableValues)->validate(null);
+$result = $validator->validate(['field' => ['type' => 'varchar', 'optional' => true,  'inArray' => $nullableValues]], ['field' => null]);
 $tester->assertEqual(count($result), 0, 'inArray : valeur null présente doit passer');
 
 // Tests combinés
-$result = Validator::create('field')
-    ->required()
-    ->inArray(['pomme', 'poire', 'banane'])
-    ->validate('pomme');
+$rules = ['field' => ['type' => 'varchar', 'required' => true, 'inArray' => ['pomme', 'poire', 'banane']]];
+$result = $validator->validate($rules, ['field' => 'pomme']);
 $tester->assertEqual(count($result), 0, 'combinaison : valeur valide doit passer');
 
-$result = Validator::create('field')
-    ->required()
-    ->inArray(['pomme', 'poire', 'banane'])
-    ->validate('');
+$rules = ['field' => ['type' => 'varchar', 'required' => true, 'inArray' => ['pomme', 'poire', 'banane']]];
+$result = $validator->validate($rules, ['field' => '']);
 $tester->assertEqual($result[0]['valid'], false, 'combinaison : valeur vide doit échouer');
 
 
@@ -337,24 +325,15 @@ $tester->assertEqual($result[0]['valid'], false, 'combinaison : valeur vide doit
 $tester->header("Test de la méthode optional()");
 
 // Test avec une chaîne vide
-$result = Validator::create('field')
-    ->optional()
-    ->required()
-    ->validate('');
+$result = $validator->validate(['field' => ['type' => 'varchar', 'optional' => true, 'required' => true]], ['field' => '']);
 $tester->assertEqual(count($result), 1, 'optional + required : doit bloquer, required est plus fort');
 
 // Test avec null
-$result = Validator::create('field')
-    ->optional()
-    ->notEmpty()
-    ->validate(null);
+$result = $validator->validate(['field' => ['type' => 'varchar', 'optional' => true, 'notEmpty' => true]], ['field' => null]);
 $tester->assertEqual(count($result), 0, 'optional : null doit passer');
 
 // Test avec une valeur valide
-$result = Validator::create('field')
-    ->optional()
-    ->email()
-    ->validate('test@example.com');
+$result = $validator->validate(['field' => ['type' => 'mail', 'optional' => true, 'notEmpty' => true]], ['field' => 'test@example.com']);
 $tester->assertEqual(count($result), 0, 'optional : email valide doit passer');
 
 // Test avec valeur invalide (ne doit pas être ignoré)

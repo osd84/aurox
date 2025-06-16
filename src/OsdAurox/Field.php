@@ -33,7 +33,7 @@ class Field
 
     // ===== Attributs de type =====
     public string $dateFormat = 'Y-m-d';
-    public string $datetimeFormat = 'Y-m-d H:i:s';
+    public string $dateTimeFormat = 'Y-m-d H:i:s';
     public ?string $fkTableName = null;
     public ?string $fkFieldName = null;
     public ?int $doublePrecision = 24;
@@ -124,7 +124,7 @@ class Field
 
         // ===== Attributs de type =====
         $this->dateFormat = $field['dateFormat'] ?? 'Y-m-d';
-        $this->datetimeFormat = $field['datetimeFormat'] ?? 'Y-m-d H:i:s';
+        $this->dateTimeFormat = $field['dateTimeFormat'] ?? 'Y-m-d H:i:s';
         $this->doublePrecision = $field['doublePrecision'] ?? 24;
         $this->doubleScale = $field['doubleScale'] ?? 8;
         $this->startWithCaseSensitive = $field['startWithCaseSensitive'] ?? false;
