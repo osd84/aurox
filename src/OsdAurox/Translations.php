@@ -21,6 +21,7 @@ Class Translations {
         'must be a int' => 'doit être un nombre',
         'must be a number' => 'doit être un nombre',
         'must be a string' => 'doit être une chaine de caractères',
+        'no data provided for validation' => 'aucune donnée fournie pour la validation',
         // OsdAurox\Modal
         'Close' => 'Fermer',
         'Submit' => 'Envoyer',

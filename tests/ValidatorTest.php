@@ -39,7 +39,7 @@ $result = $validator->validate(['username' => ['type' => 'varchar', 'notEmpty' =
 $tester->assertEqual($result[0]['msg'], 'doit être rempli', 'notEmpty : doit être rempli');
 
 $result = $validator->validate(['username' => ['type' => 'varchar', 'notEmpty' => true]], null);
-$tester->assertEqual($result[0]['msg'], 'doit être rempli', 'notEmpty : doit être rempli');
+$tester->assertEqual($result[0]['msg'], 'aucune donnée fournie pour la validation', 'aucune donnée fournie pour la validation');
 
 
 $tester->header("Test de la méthode length()");

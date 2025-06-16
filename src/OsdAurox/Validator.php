@@ -29,13 +29,27 @@ class Validator
 
     }
 
-    public function validate(array $rules, array $datasInput): array
+    public function validate(array $rules, ?array $datasInput): array
     {
         $errors = [];
         $this->formValidatorErrors = [];
 
         $this->rules[] = $rules;
+        if(empty($datasInput)) {
+            $this->errors['datasInput'] = [
+                'valid' => false,
+                'msg' => I18n::t('no data provided for validation')
+            ];
+
+            $this->formValidatorErrors[] = [
+                'field' => 'datasInput',
+                'valid' => false,
+                'msg' => I18n::t('no data provided for validation')
+            ];
+            return $this->formValidatorErrors;
+        }
         $this->fieldIgnored = array_diff_key(array_keys($datasInput), array_keys($rules));
+
 
         foreach ($rules as $fieldName => $fieldArray) {
 
