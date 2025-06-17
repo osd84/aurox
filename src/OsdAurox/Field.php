@@ -52,7 +52,7 @@ class Field
 
 
 
-    public const array TYPES_LIST = [
+    public const TYPES_LIST = [
         'integer',                        // Champ de type entier
         'fk',     // Clé étrangère vers une classe et son chemin
         'varchar', // Champ varchar avec une longueur maximale précisée (à remplir dynamiquement)
@@ -69,7 +69,7 @@ class Field
     ];
 
 
-    public const array CONFUSE_LIST = [ // Champ souvent confondus ou mauvaise clef, lève une erreur si utilisés
+    public const CONFUSE_LIST = [ // Champ souvent confondus ou mauvaise clef, lève une erreur si utilisés
         'int',
         'boolean',
         'len',
