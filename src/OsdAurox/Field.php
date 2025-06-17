@@ -73,7 +73,6 @@ class Field
     public const CONFUSE_LIST = [ // Champ souvent confondus ou mauvaise clef, lève une erreur si utilisés
         'int',
         'boolean',
-        'len',
         'length'
     ];
 
@@ -129,6 +128,14 @@ class Field
         // ===== Validateurs =====
         $this->maxLength = $field['maxLength'] ?? null;
         $this->minLength = $field['minLength'] ?? null;
+
+        // on autorise un petit alias à maxLength; minLength, len =>  [ <min>, <max> ]
+        $lenAlias = $field['len'] ?? null;
+        if(is_array($lenAlias)) {
+            $this->minLength = $lenAlias[0] ?? null;
+            $this->maxLength = $lenAlias[1] ?? null;
+        }
+
         $this->min = $field['min'] ?? null;
         $this->max = $field['max'] ?? null;
         $this->notEmpty = $field['notEmpty'] ?? false;

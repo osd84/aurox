@@ -313,66 +313,14 @@ abstract class BaseModel {
      *
      * Retourne les règles de validation de type OsdAurox\Validator
      *
+     *  Toutes les règles sont détailées ici : https://aurox.fr/doc.php/#baseModelGetRules
+     *
      * @return array
      * @throws Exception
      */
     public static function getRules(): array
     {
-        /**
-         * RULES --- Descriptions
-         *  'type' type de champ (
-         * 'integer',
-         * 'bool',
-         * 'fk',  // On doit ajouter  fkTableName, fkFieldName, fkClassModel
-         * 'varchar',   // on peut ajouter 'minLength', 'maxLength'
-         * 'text', // text long
-         * 'html', // text html autorisé
-         * 'float',
-         * 'price',
-         * 'date', // on peut modifier 'dateFormat'
-         * 'datetime', // on peut modifier 'dateTimeFormat'
-         * 'mail',
-         * 'phoneFr',  // on peut ajouter 'minLength', 'maxLength'
-         * 'url'    // on peut ajouter 'minLength', 'maxLength'
-         * )
-         *
-         *  // Général
-         * 'options' Valeur du select pour les options, example: array("0"=>"Draft","1"=>"Active","-1"=>"Cancel")
-         * 'label' nom du champ, il sera I18n().
-         * 'default' => Valeur par défault
-         * 'notEditable' champ éditatble True / False
-         * 'comment' pas utilisé juste pour laisser un commentaire et le voir dans l'applicaiton, affiché nulle part
-         *
-         *
-         * // validateurs
-         *  'minLength' : null | int
-         *  'maxLength' : null | int
-         *  'min' : null | int nombre mini
-         *  'max' : null | int  nombre max
-         *  'notEmpty' le champ doit avoir une valeur autre que '', ' ' , null
-         *  'startWith' => ['motif'] // le champ doit commencer par
-         *  'positive' : le champ doit être un entier positif
-         *  'inArray' => [ 'Val1' , ..] // La valeur du champ doit être dans ce tableau
-         *  'regex' => Si un regex doit valider le champ
-         *  'dateFormat' => 'Y-m-d'
-         *  'dateTimeFormat' => 'Y-m-d H:i:s'
-         *  'fkTableName' => Nom de la classe
-         *  'fkFieldName' => Fichier de la classe
-         *  'doublePrecision' => 24
-         *  'doubleScale' => 8
-         *  'startWithCaseSensitive' => si regle startWith est caseSenstive
-         *
-         *   required => false
-         *   optional => false
-         *
-         *   === HTMl DOM ===
-         *  'class' and 'classView' and 'classList' is the CSS style to use on field. 'class' is used in creation and update. 'classView' is used in view mode. 'classList' is used for columns in lists. For example: 'maxwidth200', 'wordbreak', 'tdoverflowmax200'
-         *  'help' is helper text
-         *  'disabled' is 1 if we want to have the field locked by a 'disabled' attribute. In most cases, this is never set into the definition of $fields into class, but is set dynamically by some part of code.
-         *  'autoFocusOnCreate' to have field having the focus on a create form. Only 1 field should have this property set to 1.
-         *
-         */
-
+        // détail dans la doc https://aurox.fr/doc.php/#baseModelGetRules
         $rules = [
             'email' => ['type' => 'mail'],
             'username' => ['type' => 'string', 'minLength' => 3, 'maxLength' => 255, 'required' => true],

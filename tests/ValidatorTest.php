@@ -16,10 +16,12 @@ $GLOBALS['i18n'] = new I18n('fr');
 $rules = [
     'email' => ['type' => 'mail', 'minLength' => 20, 'maxLength' => 25],
     'username' => ['type' => 'varchar', 'notEmpty' => true],
+    'lastname' => ['type' => 'varchar', 'len' => [20,25] ], // len est un raccourcis pour minLength + maxLength
 ];
 $data = [
     'email' => 'invalid-email',
     'username' => '',
+    'lastname' => 'invalid-name'
 ];
 
 $tester->header("Test de la méthode combiné");
@@ -31,6 +33,10 @@ $result = $validator->validate($rules, $data);
 $tester->assertEqual($result[0]['msg'],  'doit être une email valide', 'email + length : doit être une email valide');
 $tester->assertEqual($result[1]['msg'],  'doit contenir entre 20 et 25 caractères', 'email + length : doit contenir minimum 20 caractères');
 $tester->assertEqual($result[2]['msg'],  'doit être rempli', 'notEmpty ok');
+
+$tester->header("Test de la méthode len()");
+$tester->assertEqual($result[3]['msg'],  'doit contenir entre 20 et 25 caractères', 'lastname + len : doit contenir minimum 20 caractères');
+
 
 // test notEmpty
 $tester->header("Test de la méthode notEmpty()");
