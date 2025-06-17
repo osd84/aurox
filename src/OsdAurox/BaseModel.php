@@ -445,6 +445,8 @@ abstract class BaseModel {
      */
     public static function getSelect(bool $required = true, mixed $selected = null): string
     {
+//        public static function getSelect(bool $required = true, mixed $selected = null, string $domId = 'legalform-select',
+//                                         string $name = 'legalform-id', int $countryId = 1, bool $select2 = true): string
         throw new Exception('Not implemented');
     }
 
