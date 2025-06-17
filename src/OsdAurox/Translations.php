@@ -23,6 +23,7 @@ Class Translations {
         'must be a string' => 'doit être une chaine de caractères',
         'no data provided for validation' => 'aucune donnée fournie pour la validation',
         'must contain only alphanumeric characters' => 'ne doit contenir que des caractères alphanumériques',
+        'must contain only numeric characters as string' => 'ne doit contenir que des caractères numériques',
         // OsdAurox\Modal
         'Close' => 'Fermer',
         'Submit' => 'Envoyer',

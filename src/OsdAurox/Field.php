@@ -31,6 +31,7 @@ class Field
     public ?array $inArray = null; // Tableau des valeurs possibles
     public ?string $regex = null; // Expression régulière pour valider la valeur
     public ?bool $alpha = null; // Si le champ ne doit contenir sur des caractères alpha numérique
+    public ?bool $numericString = null; // Si le champ ne doit contenir que des caractères numériques mais est une string ex : ZipCode
 
     // ===== Attributs de type =====
     public string $dateFormat = 'Y-m-d';
@@ -144,6 +145,7 @@ class Field
         $this->inArray = $field['inArray'] ?? null;
         $this->regex = $field['regex'] ?? null;
         $this->alpha = $field['alpha'] ?? null;
+        $this->numericString = $field['numericString'] ?? null;
 
         // ===== Attributs de type =====
         $this->dateFormat = $field['dateFormat'] ?? 'Y-m-d';

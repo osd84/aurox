@@ -22,6 +22,7 @@ class Validator
     public bool $valid = false;
     public bool $validationIsOk = false;
 
+    public array $sanitizedDatas = [];
 
     public function __construct()
     {
@@ -29,10 +30,20 @@ class Validator
 
     }
 
+    public function clean(): array
+    {
+        if(empty($this->validationIsOk)) {
+            throw new \Exception('validation not ok, call validate() first');
+        }
+        return $this->sanitizedDatas;
+    }
+
     public function validate(array $rules, ?array $datasInput): array
     {
         $errors = [];
         $this->formValidatorErrors = [];
+        $this->sanitizedDatas = [];
+
 
         $this->rules[] = $rules;
         if(empty($datasInput)) {
@@ -253,6 +264,19 @@ class Validator
                 }
             }
 
+            if($field->numericString !== null) {
+                $r = $this->validateNumericString($field);
+                if (!$r['valid']) {
+                    $field->errors[] = $r['msg'];
+                    $this->errors[$fieldName] = $field->errors;
+                }
+            }
+
+            // on complète un tableau de données sanitized ou null
+            if(empty($field->errors)) {
+                $this->sanitizedDatas[$fieldName] = $field->input;
+            }
+
             foreach ($field->errors as $msg) {
                 $this->formValidatorErrors[] = [
                     'field' => $fieldName,
@@ -312,6 +336,26 @@ class Validator
         ];
     }
 
+    public function validateNumericString(Field $field): array
+    {
+        $msg = I18n::t('must contain only numeric characters as string');
+
+        // Vérifie si la valeur est une chaîne de caractères
+        if (!is_string($field->input)) {
+            return [
+                'valid' => false,
+                'msg' => $msg
+            ];
+        }
+
+        // Vérifie si la chaîne contient uniquement des chiffres (0-9)
+        $valid = preg_match('/^[0-9]+$/', $field->input) === 1;
+
+        return [
+            'valid' => $valid,
+            'msg' => $valid ? '' : $msg
+        ];
+    }
 
 
     public function validateNotEmpty(Field $field): array

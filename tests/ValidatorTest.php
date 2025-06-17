@@ -387,4 +387,42 @@ $result = $validator->validate(['field' => ['type' => 'varchar', 'alpha' => true
 $tester->assertEqual(count($result), 0, 'alpha : valeur alpha doit passer');
 
 
+
+$tester->header("Test de la méthode validateNumericString()");
+
+$result = $validator->validate(['field' => ['type' => 'varchar', 'numericString' => true, 'notEmpty' => true]], ['field' => 'not @ Aplha']);
+$tester->assertEqual($result[0]['valid'], false, 'numericString : valeur non numericString doit échouer');
+
+$result = $validator->validate(['field' => ['type' => 'varchar', 'numericString' => true, 'notEmpty' => true]], ['field' => 'not Aplha']);
+$tester->assertEqual($result[0]['valid'], false, 'numericString : valeur non numericString doit échouer');
+
+$result = $validator->validate(['field' => ['type' => 'varchar', 'numericString' => true, 'notEmpty' => true]], ['field' => 'not 156']);
+$tester->assertEqual($result[0]['valid'], false, 'numericString : valeur non numericString doit échouer');
+
+$result = $validator->validate(['field' => ['type' => 'varchar', 'numericString' => true, 'notEmpty' => true]], ['field' => '45 156']);
+$tester->assertEqual($result[0]['valid'], false, 'numericString : valeur non numericString doit échouer');
+
+$result = $validator->validate(['field' => ['type' => 'varchar', 'numericString' => true, 'notEmpty' => true]], ['field' => '123 ']);
+$tester->assertEqual(count($result), 0, 'numericString : valeur numerique en string doit passer car Validator va trim()');
+
+// Test de la méthode sanitizedDatas()
+$tester->header("Test de l'attribut clean()");
+
+$result = $validator->validate(
+    [
+        'field' => ['type' => 'varchar', 'numericString' => true, 'notEmpty' => true],
+        'field2' => ['type' => 'integer'],
+        'field3' => ['type' => 'integer'],
+        'field4' => ['type' => 'varchar'],
+        'field5' => ['type' => 'html'],
+    ],
+    ['field' => '123 ', 'field2' => '123', 'field3' => 123, 'field4' => '<span>test</span>', 'field5' => '<script>alert("test")</script>']);
+$arrayCleaned = $validator->clean();
+$tester->assertEqual($arrayCleaned['field'], '123', 'le validator a bien trim() le champ');
+$tester->assertEqual(array_key_exists('field2', $arrayCleaned), false, 'le validator a bien exclu ce champ');
+$tester->assertEqual($arrayCleaned['field3'], 123, 'le validator a bien trim() le champ');
+$tester->assertEqual(array_key_exists('field4', $arrayCleaned), false, 'le validator a bien exclu ce champ');
+$tester->assertEqual(array_key_exists('field5', $arrayCleaned), true, 'le validator a bien accepté ce champ');
+
+
 $tester->footer(exit: false);
