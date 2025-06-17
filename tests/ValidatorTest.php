@@ -367,4 +367,18 @@ $tester->assertEqual(count($result), 1, 'optional : chaîne vide doit pas passer
 $result = $validator->validate(['field' => ['type' => 'varchar', 'optional' => true, 'notEmpty' => true]], ['field' => null]);
 $tester->assertEqual(count($result), 0, 'optional : chaîne null doit passer');
 
+
+// Test de alpha
+$tester->header("Test de la méthode validateAlpha()");
+
+$result = $validator->validate(['field' => ['type' => 'varchar', 'alpha' => true, 'notEmpty' => true]], ['field' => 'not @ Aplha']);
+$tester->assertEqual($result[0]['valid'], false, 'alpha : valeur non alpha doit échouer');
+
+$result = $validator->validate(['field' => ['type' => 'varchar', 'alpha' => true, 'notEmpty' => true]], ['field' => 'not Aplha']);
+$tester->assertEqual($result[0]['valid'], false, 'alpha : valeur non alpha doit échouer');
+
+$result = $validator->validate(['field' => ['type' => 'varchar', 'alpha' => true, 'notEmpty' => true]], ['field' => 'IsOkAplha']);
+$tester->assertEqual(count($result), 0, 'alpha : valeur alpha doit passer');
+
+
 $tester->footer(exit: false);

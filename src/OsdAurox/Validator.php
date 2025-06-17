@@ -245,6 +245,14 @@ class Validator
                 }
             }
 
+            if($field->alpha !== null) {
+                $r = $this->validateAlpha($field);
+                if (!$r['valid']) {
+                    $field->errors[] = $r['msg'];
+                    $this->errors[$fieldName] = $field->errors;
+                }
+            }
+
             foreach ($field->errors as $msg) {
                 $this->formValidatorErrors[] = [
                     'field' => $fieldName,
@@ -319,6 +327,28 @@ class Validator
         return ['valid' => $valid,
             'msg' => $msg ?? ''];
     }
+
+    public function validateAlpha(Field $field): array
+    {
+        $msg = I18n::t('must contain only alphanumeric characters');;
+
+        // Vérifie si la valeur est une chaîne de caractères
+        if (!is_string($field->input)) {
+            return [
+                'valid' => false,
+                'msg' => I18n::t('must contain only alphanumeric characters')
+            ];
+        }
+
+        // Vérifie si la chaîne contient uniquement des caractères alphanumériques
+        $valid = preg_match('/^[a-zA-Z0-9]+$/', $field->input) === 1;
+
+        return [
+            'valid' => $valid,
+            'msg' => $valid ? '' : $msg
+        ];
+    }
+
 
     public function validateRequired(Field $field): array
     {

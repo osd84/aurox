@@ -30,6 +30,7 @@ class Field
     public bool $positive = false; // Si le champ doit être un entier positif
     public ?array $inArray = null; // Tableau des valeurs possibles
     public ?string $regex = null; // Expression régulière pour valider la valeur
+    public ?bool $alpha = null; // Si le champ ne doit contenir sur des caractères alpha numérique
 
     // ===== Attributs de type =====
     public string $dateFormat = 'Y-m-d';
@@ -135,6 +136,7 @@ class Field
         $this->positive = $field['positive'] ?? false;
         $this->inArray = $field['inArray'] ?? null;
         $this->regex = $field['regex'] ?? null;
+        $this->alpha = $field['alpha'] ?? null;
 
         // ===== Attributs de type =====
         $this->dateFormat = $field['dateFormat'] ?? 'Y-m-d';
