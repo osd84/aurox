@@ -316,7 +316,7 @@ abstract class BaseModel {
      * @return array
      * @throws Exception
      */
-    public function getRules(): array
+    public static function getRules(): array
     {
         /**
          * RULES --- Descriptions
