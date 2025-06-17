@@ -8,6 +8,4 @@ created_by = :created_by,
 updated_by = :updated_by,
 
 
-Définir $element dans les classes héritées de base model
-
-Définir les CRUD + Fetch dans les classes héritées de base model
+Migrer les getRules dans le nouveau format
