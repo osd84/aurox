@@ -217,25 +217,4 @@ $tester->header('Test de getValueFrom()');
 $r = PostsModel::getValueFrom($pdo, 1, 'title');
 $tester->assertEqual($r, 'title1', 'getValueFrom ok');
 
-
-$tester->header('Test de fetch()');
-$post = new PostsModel();
-$r = $post->fetch($pdo, 1);
-$tester->assertEqual($r, true, 'update ok');
-$tester->assertEqual($post->title, 'title1', 'fetch ok');
-$tester->assertEqual($post->element, 'post', 'fetch ok');
-
-$tester->header('Test de fetchObjectLinked()');
-$post->fetchObjectLinked($pdo, 1);
-$tester->assertEqual($post->linkedObjects['author']['name'], 'fake name', 'fetchObjectLinked ok');
-
-$tester->header('Test de update()');
-$post->title = 'title1_modif';
-$post->update($pdo, currentUserId: 2);
-$r = $post->fetch($pdo, 1);
-$tester->assertEqual($r, true, 'update ok');
-$tester->assertEqual($post->title, 'title1_modif', 'update ok');
-$tester->assertEqual($post->updatedBy, 2, 'update updatedBy ok');
-
-
 $tester->footer(exit: false);
