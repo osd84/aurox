@@ -28,26 +28,10 @@ abstract class BaseModel {
      * @var int   Identifiant unique de l'objet
      */
     public ?int $id;
-    public bool $validated = false;
-    public string $error; // String d'erreur
-    public string $errorHidden; // String d'erreur masquée car elle peut être utilisée pour stocker du contenu technique
-    public array $errors = []; //  	Tableaux des erreurs au format string
-    public array $validateFieldsErrors = []; //  array<string,string>	pour stocker les erreurs issues de Validator
-    public int $fkParentId; //   Champ contenant l'identifiant de la clé parente si ce champ en a une.
-    public string $fkParentClassName; //  $fkParentClassName
-    public mixed $oldCopy; // Pour stocker une copie clonée de l'objet avant édition (pour conserver une trace des anciennes propriétés).
-    public string $oldRef; // Pour stocker l'ancienne valeur d'une référence modifiée.
-    public string $createdAt;
 
-    public array $linkedObjectsIds = []; // contient les Ids des objets liés chargés
-    public array $linkedObjects = []; // contient les objets lies via clef $element exemple [ 'user' => User ]
 
-    public ?string $publishedAt;
-    public ?string $updatedAt;
-    public ?int $createdBy;
-    public ?int $updatedBy;
     /**
-     * FIELDS --- Descriptions
+     * RULES --- Descriptions
      *  'type' type de champ (
      * 'integer',
      * 'bool',
@@ -100,11 +84,9 @@ abstract class BaseModel {
      *  'autoFocusOnCreate' to have field having the focus on a create form. Only 1 field should have this property set to 1.
      *
      */
-    public array $fields = [];
     public const TABLE = "unknown";
 
 
-    public string $element; // ID pour identifier l'objet metier exemple : project, post, user
 
     public function getTable(): string
     {
@@ -387,14 +369,13 @@ abstract class BaseModel {
      * @return array
      * @throws Exception
      */
-    public static function getRules(): array
+    public function getRules(): array
     {
-//        return [
-//            'email' => Validator::create('email')->email(),
-//            'username' => Validator::create('username')->notEmpty()->required(),
-//        ];
+        $rules = [
+            'email' => ['type' => 'mail'],
+            'username' => ['type' => 'string', 'minLength' => 3, 'maxLength' => 255, 'required' => true],
+        ];
         throw new Exception('Not implemented');
-
     }
 
     public static function validate(): bool
@@ -549,31 +530,6 @@ abstract class BaseModel {
         throw new RuntimeException('Not implemented');
     }
 
-    // ----------------------------------- Cette Partie concerne le Chargement et le mappage des Row en Objets
-
-
-//    /**
-//     * Crée l'objet en base de données
-//     * @param mixed ...$args
-//     * @return int  Retourne l'ID ou -1 si echec
-//     */
-//    public function create(\PDO $pdo, ...$args): int
-//    {
-//        // Exemple d'implémentation.
-//
-//        $stmt = "INSERT INTO " . static::TABLE .
-//                    " SET created_at = :created_at,
-//                          updated_at = :updated_at,
-//                          created_by = :created_by,
-//                          updated_by = :updated_by
-//
-//        ";
-//        $stmt = $pdo->prepare($stmt);
-//        $stmt->execute([
-//            'created_at' => date('Y-m-d H:i:s')
-//        ]);
-//        return $pdo->lastInsertId();
-//    }
 
 
 }
