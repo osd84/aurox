@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e1d6f8c6353a520ec756ca397d645f91",
+    "content-hash": "392c23450d99f11ea117aa4bcaf8383a",
     "packages": [
         {
-            "name": "phpmailer/phpmailer",
-            "version": "v6.10.0",
+            "name": "osd84/phpmailer",
+            "version": "6.10",
             "source": {
                 "type": "git",
-                "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "bf74d75a1fde6beaa34a0ddae2ec5fce0f72a144"
+                "url": "https://github.com/osd84/PHPMailer.git",
+                "reference": "0ff2d3c8ead628df2493537d9f91db962aa47718"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/bf74d75a1fde6beaa34a0ddae2ec5fce0f72a144",
-                "reference": "bf74d75a1fde6beaa34a0ddae2ec5fce0f72a144",
+                "url": "https://api.github.com/repos/osd84/PHPMailer/zipball/0ff2d3c8ead628df2493537d9f91db962aa47718",
+                "reference": "0ff2d3c8ead628df2493537d9f91db962aa47718",
                 "shasum": ""
             },
             "require": {
@@ -76,8 +76,7 @@
             ],
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
             "support": {
-                "issues": "https://github.com/PHPMailer/PHPMailer/issues",
-                "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.10.0"
+                "source": "https://github.com/osd84/PHPMailer/tree/6.10"
             },
             "funding": [
                 {
@@ -85,7 +84,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-04-24T15:19:31+00:00"
+            "time": "2025-06-18T21:02:11+00:00"
         }
     ],
     "packages-dev": [

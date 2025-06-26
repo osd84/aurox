@@ -67,6 +67,10 @@ class Sec
         // tableau rejeté, à mettre à plat
         if (is_array($value)) return null;
 
+        if($value === null) {
+            return null;
+        }
+
         switch ($type) {
             case 'int':
                 return (int) $value;

@@ -342,134 +342,163 @@ $tester->assertEqual(
 
 $tester->header("Test de la méthode getParam()");
 
-// Sauvegarde des superglobales originales
-$originalGet = $_GET;
-$originalPost = $_POST;
-$originalRequest = $_REQUEST;
-
-// Test 1: Source GET (source=0)
-$_GET = ['username' => 'jean-pierre123'];
-$_POST = [];
-$_REQUEST = [];
-
-$result = Sec::getParam('username', 'alphaextra', 0);
+// Test avec source = 0 (GET)
+$_GET['test_param'] = 'test_value';
+$result = Sec::getParam('test_param', 'nohtml', 0);
 $tester->assertEqual(
     $result,
-    'jean-pierre',
-    "Devrait récupérer et nettoyer depuis GET avec type alphaextra"
+    'test_value',
+    "Devrait récupérer un paramètre depuis GET quand source = 0"
 );
 
-// Test 2: Source POST (source=1)
-$_GET = [];
-$_POST = ['userid' => '42abc'];
-$_REQUEST = [];
-
-$result = Sec::getParam('userid', 'int', 1);
+// Test avec source = 1 (POST)
+$_POST['test_post'] = 'post_value';
+$result = Sec::getParam('test_post', 'nohtml', 1);
 $tester->assertEqual(
     $result,
-    42,
-    "Devrait récupérer et convertir en entier depuis POST"
+    'post_value',
+    "Devrait récupérer un paramètre depuis POST quand source = 1"
 );
 
-// Test 3: Source POST puis GET (source=3, défaut)
-$_GET = ['email' => 'test@example.com'];
-$_POST = [];
-$_REQUEST = [];
-
-$result = Sec::getParam('email');
+// Test avec source = 2 (REQUEST)
+$_REQUEST['test_request'] = 'request_value';
+$result = Sec::getParam('test_request', 'nohtml', 2);
 $tester->assertEqual(
     $result,
-    'testexamplecom',
-    "Devrait récupérer depuis GET et nettoyer avec alphaextra (par défaut) quand POST est vide"
+    'request_value',
+    "Devrait récupérer un paramètre depuis REQUEST quand source = 2"
 );
 
-// Test 4: Source POST puis GET (source=3), avec POST prioritaire
-$_GET = ['name' => 'fallback'];
-$_POST = ['name' => 'primary'];
-$_REQUEST = [];
-
-$result = Sec::getParam('name');
+// Test avec source = 3 (POST puis GET) - POST prioritaire
+$_POST['test_both'] = 'post_value';
+$_GET['test_both'] = 'get_value';
+$result = Sec::getParam('test_both', 'nohtml', 3);
 $tester->assertEqual(
     $result,
-    'primary',
-    "Devrait prioriser POST sur GET avec source=3"
+    'post_value',
+    "Devrait prioriser POST quand source = 3 et que le paramètre existe dans POST et GET"
 );
 
-// Test 5: Source REQUEST (source=2)
-$_GET = [];
-$_POST = [];
-$_REQUEST = ['status' => '<b>Active</b>'];
-
-$result = Sec::getParam('status', 'nohtml', 2);
+// Test avec source = 3 (POST puis GET) - POST absent, GET présent
+unset($_POST['test_both']);
+$_GET['test_both'] = 'get_value';
+$result = Sec::getParam('test_both', 'nohtml', 3);
 $tester->assertEqual(
     $result,
-    'Active',
-    "Devrait récupérer depuis REQUEST et appliquer le nettoyage nohtml"
+    'get_value',
+    "Devrait utiliser GET quand source = 3 et que le paramètre n'existe pas dans POST"
 );
 
-// Test 6: Paramètre inexistant
-$_GET = [];
-$_POST = [];
-$_REQUEST = [];
-
-$result = Sec::getParam('nonexistent');
+// Test avec paramètre inexistant
+$result = Sec::getParam('inexistant', 'nohtml');
 $tester->assertEqual(
     $result,
     null,
     "Devrait retourner null pour un paramètre inexistant"
 );
 
-// Test 7: Type de nettoyage alpha
-$_GET = ['text' => 'Hello123!'];
-$_POST = [];
-$_REQUEST = [];
-
-$result = Sec::getParam('text', 'alpha', 0);
+// Test de nettoyage avec type 'int'
+$_GET['number'] = '42abc';
+$result = Sec::getParam('number', 'int', 0);
 $tester->assertEqual(
     $result,
-    'Hello',
-    "Devrait ne garder que les caractères alphabétiques avec type alpha"
+    42,
+    "Devrait convertir en entier avec type='int'"
 );
 
-// Test 8: Type de nettoyage aZ09
-$_GET = ['code' => 'Test-123!@'];
-$_POST = [];
-$_REQUEST = [];
-
-$result = Sec::getParam('code', 'aZ09', 0);
+// Test de nettoyage avec type 'float'
+$_GET['decimal'] = '3,14';
+$result = Sec::getParam('decimal', 'float', 0);
 $tester->assertEqual(
     $result,
-    'Test123',
-    "Devrait ne garder que les caractères alphanumériques avec type aZ09"
+    3.14,
+    "Devrait convertir en nombre à virgule flottante avec type='float'"
 );
 
-// Test 9: Type de nettoyage restricthtml
-$_GET = ['html' => '<p>Text with <b>bold</b> and <script>alert("xss")</script>'];
-$_POST = [];
-$_REQUEST = [];
-
-$result = Sec::getParam('html', 'restricthtml', 0);
+// Test de nettoyage avec type 'alpha'
+$_GET['alpha_test'] = 'ABC123 !@#';
+$result = Sec::getParam('alpha_test', 'alpha', 0);
 $tester->assertEqual(
     $result,
-    'Text with <b>bold</b> and alert("xss")',
-    "Devrait conserver uniquement les balises HTML autorisées"
+    'ABC',
+    "Devrait ne conserver que les caractères alphabétiques avec type='alpha'"
 );
 
-// Test 10: Traitement des tableaux
-$_GET = ['items' => ['item1', 'item2']];
-$_POST = [];
-$_REQUEST = [];
-
-$result = Sec::getParam('items', 'alpha', 0);
+// Test de nettoyage avec type 'alphaextra'
+$_GET['alphaextra_test'] = 'ABC 123-DEF!@#';
+$result = Sec::getParam('alphaextra_test', 'alphaextra', 0);
 $tester->assertEqual(
     $result,
-    ['item1', 'item2'],
-    "Devrait préserver les tableaux sans modification"
+    'ABC -DEF',
+    "Devrait ne conserver que les caractères alphabétiques, espaces et tirets avec type='alphaextra'"
 );
 
-// Restauration des superglobales originales
-$_GET = $originalGet;
-$_POST = $originalPost;
-$_REQUEST = $originalRequest;
+// Test de nettoyage avec type 'aZ09'
+$_GET['az09_test'] = 'ABC123!@#';
+$result = Sec::getParam('az09_test', 'aZ09', 0);
+$tester->assertEqual(
+    $result,
+    'ABC123',
+    "Devrait ne conserver que les caractères alphanumériques avec type='aZ09'"
+);
+
+// Test de nettoyage avec type 'nohtml'
+$_GET['html_test'] = '<p>Test</p><script>alert("XSS")</script>';
+$result = Sec::getParam('html_test', 'nohtml', 0);
+$tester->assertEqual(
+    $result,
+    'Testalert("XSS")',
+    "Devrait supprimer toutes les balises HTML avec type='nohtml'"
+);
+
+// Test de nettoyage avec type 'alphanohtml'
+$_GET['alphanohtml_test'] = '<p>Test123</p><script>alert("XSS")</script>';
+$result = Sec::getParam('alphanohtml_test', 'alphanohtml', 0);
+$tester->assertEqual(
+    $result,
+    'TestalertXSS',
+    "Devrait supprimer les balises HTML et ne conserver que les caractères alphabétiques avec type='alphanohtml'"
+);
+
+// Test de nettoyage avec type 'restricthtml'
+$_GET['restricthtml_test'] = '<p>Test</p><b>Bold</b><script>alert("XSS")</script><strong>Strong</strong>';
+$result = Sec::getParam('restricthtml_test', 'restricthtml', 0);
+$tester->assertEqual(
+    $result,
+    'Test<b>Bold</b>alert("XSS")<strong>Strong</strong>',
+    "Devrait ne conserver que certaines balises HTML avec type='restricthtml'"
+);
+
+// Test avec valeur de tableau (devrait retourner null)
+$_GET['array_param'] = ['value1', 'value2'];
+$result = Sec::getParam('array_param', 'nohtml', 0);
+$tester->assertEqual(
+    $result,
+    null,
+    "Devrait retourner null pour une valeur de type tableau"
+);
+
+// Test avec espaces superflus (devrait les supprimer)
+$_GET['trimmed'] = '  test avec espaces  ';
+$result = Sec::getParam('trimmed', 'nohtml', 0);
+$tester->assertEqual(
+    $result,
+    'test avec espaces',
+    "Devrait supprimer les espaces superflus en début et fin de chaîne"
+);
+
+// Test avec type invalide (devrait retourner null)
+$_GET['invalid_type'] = 'test';
+$result = Sec::getParam('invalid_type', 'type_inexistant', 0);
+$tester->assertEqual(
+    $result,
+    null,
+    "Devrait retourner null pour un type de nettoyage invalide"
+);
+
+// Nettoyage des variables globales après les tests
+$_GET = [];
+$_POST = [];
+$_REQUEST = [];
 
 $tester->footer(exit: false);
