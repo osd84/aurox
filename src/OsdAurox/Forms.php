@@ -9,7 +9,6 @@ class Forms
     public string $unique_id;
     public ?FormValidator $validator;
     public mixed $entity;
-    public array $errors = [];
     public bool $ajax = false;
     public string $action = '';
 
