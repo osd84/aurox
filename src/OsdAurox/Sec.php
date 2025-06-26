@@ -13,13 +13,16 @@ class Sec
     }
 
     /**
-     * Récupère et nettoie un paramètre depuis les variables superglobales.
+     * Récupère et nettoie un paramètre depuis GET, POST ou REQUEST.
      *
-     * @param string $key Le nom du paramètre à récupérer
-     * @param string $type Le type de nettoyage à appliquer (none, int, alpha, aZ09, nohtml, alphanohtml, restricthtml)
-     * @param int $source La source du paramètre: 0 = GET, 1 = POST, 2 = REQUEST, 3 = POST puis GET (par défaut)
+     * @param string $key    Clé du paramètre à récupérer
+     * @param string $type   Type de nettoyage à appliquer (défaut: 'alphaextra')
+     *                       Les types possibles sont: 'int', 'float', 'price', 'bool', 'email', 'ip',
+     *                       'ipv4', 'ipv6', 'url', 'alpha', 'alphaextra', 'aZ09', 'nohtml',
+     *                       'alphanohtml', 'restricthtml'
+     * @param int $source    Source du paramètre: 0 pour GET, 1 pour POST, 2 pour REQUEST, 3 pour POST puis GET (défaut: 3)
      *
-     * @return mixed La valeur nettoyée du paramètre ou null si non trouvé
+     * @return mixed         Valeur nettoyée selon le type spécifié, ou null si non trouvée ou invalide
      */
     public static function getParam(string $key, string $type = 'alphaextra', int $source = 3) {
         $raw = null;
@@ -39,28 +42,30 @@ class Sec
     }
 
     /**
-     * Nettoie et convertit une valeur en fonction du type spécifié.
+     * Sanitise une valeur selon le type spécifié.
      *
-     * Cette méthode sanitise une entrée selon le type demandé :
-     * - 'int' : conversion en entier
-     * - 'float' : conversion en nombre à virgule flottante
-     * - 'price' : conversion en prix (nombre à virgule flottante)
-     * - 'bool' : conversion en booléen
-     * - 'email' : validation d'adresse email
-     * - 'ip' : validation d'adresse IP
-     * - 'ipv4' : validation d'adresse IPv4
-     * - 'ipv6' : validation d'adresse IPv6
-     * - 'url' : validation d'URL
-     * - 'alpha' : ne conserve que les caractères alphabétiques
-     * - 'alphaextra' : ne conserve que les caractères alphabétiques, espaces et tirets
-     * - 'aZ09' : ne conserve que les caractères alphanumériques
-     * - 'nohtml' : supprime toutes les balises HTML
-     * - 'alphanohtml' : supprime les balises HTML et ne conserve que les caractères alphabétiques
-     * - 'restricthtml' : ne conserve que certaines balises HTML (b, i, u, strong, em)
+     * Cette méthode permet de nettoyer et convertir une valeur selon différents types :
+     * - int: conversion en entier
+     * - float: conversion en nombre flottant (remplace la virgule par un point)
+     * - price: extraction et conversion en nombre flottant pour un prix
+     * - bool: conversion en booléen
+     * - email: validation d'adresse email
+     * - ip: validation d'adresse IP
+     * - ipv4: validation d'adresse IPv4
+     * - ipv6: validation d'adresse IPv6
+     * - url: validation d'URL
+     * - alpha: ne conserve que les caractères alphabétiques
+     * - alphaextra: ne conserve que les caractères alphabétiques, espaces et tirets
+     * - aZ09: ne conserve que les caractères alphanumériques
+     * - nohtml: supprime toutes les balises HTML
+     * - alphanohtml: supprime les balises HTML et ne conserve que les caractères alphabétiques
+     * - restricthtml: ne conserve que certaines balises HTML basiques
+     *
+     * Les tableaux sont rejetés et retournent null.
      *
      * @param mixed $value La valeur à sanitiser
      * @param string $type Le type de sanitisation à appliquer
-     * @return mixed La valeur sanitisée selon le type spécifié, ou null si le type est invalide ou si la valeur est un tableau
+     * @return mixed La valeur sanitisée selon le type spécifié, ou null si la valeur est un tableau ou si le type est invalide
      */
     protected static function sanitize($value, string $type) {
 
