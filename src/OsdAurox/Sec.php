@@ -12,7 +12,118 @@ class Sec
         return $_SERVER['REQUEST_METHOD'] === 'POST';
     }
 
-    public static function getRealIpAddr()
+    /**
+     * Récupère et nettoie un paramètre depuis les variables superglobales.
+     *
+     * @param string $key Le nom du paramètre à récupérer
+     * @param string $type Le type de nettoyage à appliquer (none, int, alpha, aZ09, nohtml, alphanohtml, restricthtml)
+     * @param int $source La source du paramètre: 0 = GET, 1 = POST, 2 = REQUEST, 3 = POST puis GET (par défaut)
+     *
+     * @return mixed La valeur nettoyée du paramètre ou null si non trouvé
+     */
+    public static function getParam(string $key, string $type = 'alphaextra', int $source = 3) {
+        $raw = null;
+        if ($source === 1 || $source === 3) {
+            $raw = $_POST[$key] ?? null;
+        }
+        if ($raw === null && ($source === 0 || $source === 3)) {
+            $raw = $_GET[$key] ?? null;
+        }
+        if ($source === 2) {
+            $raw = $_REQUEST[$key] ?? null;
+        }
+        if (is_string($raw)) {
+            $raw = trim($raw);
+        }
+        return self::sanitize($raw, $type);
+    }
+
+    /**
+     * Nettoie et convertit une valeur en fonction du type spécifié.
+     *
+     * Cette méthode sanitise une entrée selon le type demandé :
+     * - 'int' : conversion en entier
+     * - 'float' : conversion en nombre à virgule flottante
+     * - 'price' : conversion en prix (nombre à virgule flottante)
+     * - 'bool' : conversion en booléen
+     * - 'email' : validation d'adresse email
+     * - 'ip' : validation d'adresse IP
+     * - 'ipv4' : validation d'adresse IPv4
+     * - 'ipv6' : validation d'adresse IPv6
+     * - 'url' : validation d'URL
+     * - 'alpha' : ne conserve que les caractères alphabétiques
+     * - 'alphaextra' : ne conserve que les caractères alphabétiques, espaces et tirets
+     * - 'aZ09' : ne conserve que les caractères alphanumériques
+     * - 'nohtml' : supprime toutes les balises HTML
+     * - 'alphanohtml' : supprime les balises HTML et ne conserve que les caractères alphabétiques
+     * - 'restricthtml' : ne conserve que certaines balises HTML (b, i, u, strong, em)
+     *
+     * @param mixed $value La valeur à sanitiser
+     * @param string $type Le type de sanitisation à appliquer
+     * @return mixed La valeur sanitisée selon le type spécifié, ou null si le type est invalide ou si la valeur est un tableau
+     */
+    protected static function sanitize($value, string $type) {
+
+        // tableau rejeté, à mettre à plat
+        if (is_array($value)) return null;
+
+        switch ($type) {
+            case 'int':
+                return (int) $value;
+
+            case 'float':
+                $val = str_replace(',', '.', $value);
+                return is_numeric($val) ? (float) $val : 0.0;
+
+            case 'price':
+                $clean = preg_replace('/[^\d,\.]/', '', $value);
+                $clean = str_replace(',', '.', $clean);
+                return (float) $clean;
+
+            case 'bool':
+                return (bool) $value;
+
+            case 'email':
+                return filter_var(trim($value), FILTER_VALIDATE_EMAIL) ?: '';
+
+            case 'ip':
+                return filter_var(trim($value), FILTER_VALIDATE_IP) ?: '';
+
+            case 'ipv4':
+                return filter_var($value, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) ?: '';
+
+            case 'ipv6':
+                return filter_var($value, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) ?: '';
+
+            case 'url':
+                return filter_var(trim($value), FILTER_VALIDATE_URL) ?: '';
+
+            case 'alpha':
+                return preg_replace('/[^a-zA-Z]/', '', strip_tags($value));
+
+            case 'alphaextra':
+                return preg_replace('/[^a-zA-Z \-]/', '', strip_tags($value));
+
+            case 'aZ09':
+                return preg_replace('/[^a-zA-Z0-9]/', '', strip_tags($value));
+
+            case 'nohtml':
+                return strip_tags($value);
+
+            case 'alphanohtml':
+                return preg_replace('/[^a-zA-Z]/', '', strip_tags($value));
+
+            case 'restricthtml':
+                return strip_tags($value, '<b><i><u><strong><em>');
+
+            default:
+                return null;
+        }
+
+    }
+
+
+public static function getRealIpAddr()
     {
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
             // Check IP from internet

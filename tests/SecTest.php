@@ -340,5 +340,136 @@ $tester->assertEqual(
     "Deux appels successifs doivent générer des UUIDs différents"
 );
 
+$tester->header("Test de la méthode getParam()");
+
+// Sauvegarde des superglobales originales
+$originalGet = $_GET;
+$originalPost = $_POST;
+$originalRequest = $_REQUEST;
+
+// Test 1: Source GET (source=0)
+$_GET = ['username' => 'jean-pierre123'];
+$_POST = [];
+$_REQUEST = [];
+
+$result = Sec::getParam('username', 'alphaextra', 0);
+$tester->assertEqual(
+    $result,
+    'jean-pierre',
+    "Devrait récupérer et nettoyer depuis GET avec type alphaextra"
+);
+
+// Test 2: Source POST (source=1)
+$_GET = [];
+$_POST = ['userid' => '42abc'];
+$_REQUEST = [];
+
+$result = Sec::getParam('userid', 'int', 1);
+$tester->assertEqual(
+    $result,
+    42,
+    "Devrait récupérer et convertir en entier depuis POST"
+);
+
+// Test 3: Source POST puis GET (source=3, défaut)
+$_GET = ['email' => 'test@example.com'];
+$_POST = [];
+$_REQUEST = [];
+
+$result = Sec::getParam('email');
+$tester->assertEqual(
+    $result,
+    'testexamplecom',
+    "Devrait récupérer depuis GET et nettoyer avec alphaextra (par défaut) quand POST est vide"
+);
+
+// Test 4: Source POST puis GET (source=3), avec POST prioritaire
+$_GET = ['name' => 'fallback'];
+$_POST = ['name' => 'primary'];
+$_REQUEST = [];
+
+$result = Sec::getParam('name');
+$tester->assertEqual(
+    $result,
+    'primary',
+    "Devrait prioriser POST sur GET avec source=3"
+);
+
+// Test 5: Source REQUEST (source=2)
+$_GET = [];
+$_POST = [];
+$_REQUEST = ['status' => '<b>Active</b>'];
+
+$result = Sec::getParam('status', 'nohtml', 2);
+$tester->assertEqual(
+    $result,
+    'Active',
+    "Devrait récupérer depuis REQUEST et appliquer le nettoyage nohtml"
+);
+
+// Test 6: Paramètre inexistant
+$_GET = [];
+$_POST = [];
+$_REQUEST = [];
+
+$result = Sec::getParam('nonexistent');
+$tester->assertEqual(
+    $result,
+    null,
+    "Devrait retourner null pour un paramètre inexistant"
+);
+
+// Test 7: Type de nettoyage alpha
+$_GET = ['text' => 'Hello123!'];
+$_POST = [];
+$_REQUEST = [];
+
+$result = Sec::getParam('text', 'alpha', 0);
+$tester->assertEqual(
+    $result,
+    'Hello',
+    "Devrait ne garder que les caractères alphabétiques avec type alpha"
+);
+
+// Test 8: Type de nettoyage aZ09
+$_GET = ['code' => 'Test-123!@'];
+$_POST = [];
+$_REQUEST = [];
+
+$result = Sec::getParam('code', 'aZ09', 0);
+$tester->assertEqual(
+    $result,
+    'Test123',
+    "Devrait ne garder que les caractères alphanumériques avec type aZ09"
+);
+
+// Test 9: Type de nettoyage restricthtml
+$_GET = ['html' => '<p>Text with <b>bold</b> and <script>alert("xss")</script>'];
+$_POST = [];
+$_REQUEST = [];
+
+$result = Sec::getParam('html', 'restricthtml', 0);
+$tester->assertEqual(
+    $result,
+    'Text with <b>bold</b> and alert("xss")',
+    "Devrait conserver uniquement les balises HTML autorisées"
+);
+
+// Test 10: Traitement des tableaux
+$_GET = ['items' => ['item1', 'item2']];
+$_POST = [];
+$_REQUEST = [];
+
+$result = Sec::getParam('items', 'alpha', 0);
+$tester->assertEqual(
+    $result,
+    ['item1', 'item2'],
+    "Devrait préserver les tableaux sans modification"
+);
+
+// Restauration des superglobales originales
+$_GET = $originalGet;
+$_POST = $originalPost;
+$_REQUEST = $originalRequest;
 
 $tester->footer(exit: false);
