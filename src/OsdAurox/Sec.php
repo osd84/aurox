@@ -14,6 +14,7 @@ class Sec
 
     /**
      * Récupère et nettoie un paramètre depuis GET, POST ou REQUEST.
+     * XSS possibles c'est un filtre d'entrée pas de sortie
      *
      * @param string $key    Clé du paramètre à récupérer
      * @param string $type   Type de nettoyage à appliquer (défaut: 'alphaextra')
@@ -44,6 +45,7 @@ class Sec
 
     /**
      * Sanitise une valeur selon le type spécifié.
+     * XSS possibles c'est un filtre d'entrée pas de sortie
      *
      * Cette méthode permet de nettoyer et convertir une valeur selon différents types :
      * - int: conversion en entier
@@ -163,20 +165,24 @@ public static function getRealIpAddr()
         return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
     }
 
-    public static function getAction(string $default = 'home')
+    /**
+     * Récupère la valeur du paramètre 'action' et la nettoie pour prévenir les attaques XSS.
+     *
+     * Cette méthode récupère la valeur du paramètre 'action' à partir de la source spécifiée,
+     * la nettoie pour supprimer le HTML et les caractères potentiellement dangereux,
+     * puis supprime les espaces au début et à la fin.
+     *
+     * @param string $default Valeur par défaut à retourner si le paramètre 'action' n'existe pas
+     * @param int $source Source des données (1=GET, 2=POST, 3=GET+POST, etc.)
+     * @return string Valeur nettoyée du paramètre 'action' ou la valeur par défaut
+     */
+    public static function getAction(string $default = 'noaction',  int $source = 3)
     {
-        $action = $_GET['action'] ?? $default;
-        $action = Sec::hNoHtml($action);
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $action .= 'Post'; // Si POST, appelle les méthodes correspondantes comme "loginPost"
+        $action = Sec::getParam('action', 'alphaextra', $source);
+        if (empty($action)) {
+            $action = $default;
         }
-
-        if(isset($_SERVER['CONTENT_TYPE'])  && $_SERVER['CONTENT_TYPE'] === 'application/json') {
-            $action .= 'Json'; // Si JSON, appelle les méthodes correspondantes comme "loginJson"
-        }
-
-        return $action;
+        return Sec::hNoHtml(trim($action));
     }
 
     public static function safeForLikeStrong($string)

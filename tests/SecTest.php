@@ -501,4 +501,96 @@ $_GET = [];
 $_POST = [];
 $_REQUEST = [];
 
+$tester->header("Test de la méthode getAction()");
+
+// Test avec action non définie (devrait retourner la valeur par noaction)
+$_GET = [];
+$_POST = [];
+$result = Sec::getAction();
+$tester->assertEqual(
+    $result,
+    'noaction',
+    "Devrait retourner la valeur par défaut 'noaction' quand aucune action n'est définie"
+);
+
+// Test avec action définie dans GET
+$_GET['action'] = 'list';
+$result = Sec::getAction();
+$tester->assertEqual(
+    $result,
+    'list',
+    "Devrait récupérer l'action depuis GET quand elle est définie"
+);
+
+// Test avec action définie dans POST (prioritaire par défaut)
+$_POST['action'] = 'create';
+$_GET['action'] = 'show';
+$result = Sec::getAction();
+$tester->assertEqual(
+    $result,
+    'create',
+    "Devrait prioriser l'action depuis POST quand source = 3"
+);
+
+// Test avec source = 0 (GET uniquement)
+$_GET['action'] = 'edit';
+$_POST['action'] = 'delete';
+$result = Sec::getAction('home', 0);
+$tester->assertEqual(
+    $result,
+    'edit',
+    "Devrait récupérer l'action depuis GET quand source = 0"
+);
+
+// Test avec source = 1 (POST uniquement)
+$_GET['action'] = 'show';
+$_POST['action'] = 'update';
+$result = Sec::getAction('home', 1);
+$tester->assertEqual(
+    $result,
+    'update',
+    "Devrait récupérer l'action depuis POST quand source = 1"
+);
+
+// Test avec valeur par défaut personnalisée
+$_GET = [];
+$_POST = [];
+$result = Sec::getAction('dashboard');
+$tester->assertEqual(
+    $result,
+    'dashboard',
+    "Devrait utiliser la valeur par défaut personnalisée"
+);
+
+// Test avec action contenant des caractères spéciaux (devrait être nettoyée)
+$_GET['action'] = 'edit-user!@#';
+$result = Sec::getAction();
+$tester->assertEqual(
+    $result,
+    'edit-user',
+    "Devrait nettoyer l'action selon le type 'alphaextra'"
+);
+
+// Test avec action vide (devrait retourner la valeur par défaut)
+$_GET['action'] = '';
+$result = Sec::getAction();
+$tester->assertEqual(
+    $result,
+    'noaction',
+    "Devrait retourner la valeur par défaut quand l'action est vide"
+);
+
+// Test avec action nulle (devrait retourner la valeur par défaut)
+$_GET['action'] = null;
+$result = Sec::getAction();
+$tester->assertEqual(
+    $result,
+    'noaction',
+    "Devrait retourner la valeur par défaut quand l'action est null"
+);
+
+// Nettoyage après les tests
+$_GET = [];
+$_POST = [];
+
 $tester->footer(exit: false);
