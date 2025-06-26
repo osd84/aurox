@@ -24,7 +24,8 @@ class Sec
      *
      * @return mixed         Valeur nettoyée selon le type spécifié, ou null si non trouvée ou invalide
      */
-    public static function getParam(string $key, string $type = 'alphaextra', int $source = 3) {
+    public static function getParam(string $key, string $type = 'alphaextra', int $source = 3): mixed
+    {
         $raw = null;
         if ($source === 1 || $source === 3) {
             $raw = $_POST[$key] ?? null;
@@ -67,7 +68,8 @@ class Sec
      * @param string $type Le type de sanitisation à appliquer
      * @return mixed La valeur sanitisée selon le type spécifié, ou null si la valeur est un tableau ou si le type est invalide
      */
-    protected static function sanitize($value, string $type) {
+    protected static function sanitize(mixed $value, string $type): mixed
+    {
 
         // tableau rejeté, à mettre à plat
         if (is_array($value)) return null;
