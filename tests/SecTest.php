@@ -424,6 +424,7 @@ $tester->assertEqual(
     "Devrait ne conserver que les caractères alphabétiques avec type='alpha'"
 );
 
+
 // Test de nettoyage avec type 'alphaextra'
 $_GET['alphaextra_test'] = 'ABC 123-DEF!@#';
 $result = Sec::getParam('alphaextra_test', 'alphaextra', 0);
@@ -440,6 +441,43 @@ $tester->assertEqual(
     $result,
     'ABC123',
     "Devrait ne conserver que les caractères alphanumériques avec type='aZ09'"
+);
+
+// Test de nettoyage avec type 'aZ09extra'
+$_GET['alphaextra_test'] = 'ABC 123-DEF!@#';
+$result = Sec::getParam('alphaextra_test', 'aZ09extra', 0);
+$tester->assertEqual(
+    $result,
+    'ABC 123-DEF',
+    "Devrait ne conserver que les caractères alphanumérique, espaces et tirets avec type='aZ09extra'"
+);
+
+// Test de nettoyage + lowerCase
+$_GET['az09_test'] = 'ABC123!@#';
+$result = Sec::getParam('az09_test', 'aZ09', 0, lowerCase: true);;
+$tester->assertEqual(
+    $result,
+    'abc123',
+    "Devrait ne conserver que les caractères alphanumériques avec type='aZ09' + lowercase"
+);
+
+// Test de nettoyage + uppercase
+$_GET['az09_test'] = 'abc123!@#';
+$result = Sec::getParam('az09_test', 'aZ09', 0, upperCase: true);;
+$tester->assertEqual(
+    $result,
+    'ABC123',
+    "Devrait ne conserver que les caractères alphanumériques avec type='aZ09' + uppercase"
+);
+
+
+// Test de nettoyage avec type '09'
+$_GET['alpha_test'] = 'ABC 0123 !@#';
+$result = Sec::getParam('alpha_test', '09', 0);
+$tester->assertEqual(
+    $result,
+    '0123',
+    "Devrait ne conserver que les caractères numérique sans passer par un int"
 );
 
 // Test de nettoyage avec type 'nohtml'
@@ -489,12 +527,13 @@ $tester->assertEqual(
 
 // Test avec type invalide (devrait retourner null)
 $_GET['invalid_type'] = 'test';
-$result = Sec::getParam('invalid_type', 'type_inexistant', 0);
-$tester->assertEqual(
-    $result,
-    null,
-    "Devrait retourner null pour un type de nettoyage invalide"
-);
+try {
+    $result = Sec::getParam('invalid_type', 'type_inexistant', 0);
+} catch (Exception $e) {
+    $result = $e->getMessage();
+    $tester->assertEqual($result, "Invalid type: type_inexistant", "Devrait lever une exception pour un type de nettoyage invalide");
+}
+
 
 // Nettoyage des variables globales après les tests
 $_GET = [];

@@ -25,7 +25,7 @@ class Sec
      *
      * @return mixed         Valeur nettoyée selon le type spécifié, ou null si non trouvée ou invalide
      */
-    public static function getParam(string $key, string $type = 'alphaextra', int $source = 3): mixed
+    public static function getParam(string $key, string $type = 'aZ09extra', int $source = 3, bool $lowerCase = False, bool $upperCase = false): mixed
     {
         $raw = null;
         if ($source === 1 || $source === 3) {
@@ -40,8 +40,32 @@ class Sec
         if (is_string($raw)) {
             $raw = trim($raw);
         }
+
+        if($lowerCase) {
+            $raw = mb_strtolower($raw);
+        }
+        if($upperCase) {
+            $raw = mb_strtoupper($raw);
+        }
+
         return self::sanitize($raw, $type);
     }
+
+    public static function getRealIpAddr()
+    {
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            // Check IP from internet
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            // Check IP is passed from proxy
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            // Check IP address from remote address
+            $ip = $_SERVER['REMOTE_ADDR'] ?? '';
+        }
+        return $ip;
+    }
+
 
     /**
      * Sanitise une valeur selon le type spécifié.
@@ -60,6 +84,8 @@ class Sec
      * - alpha: ne conserve que les caractères alphabétiques
      * - alphaextra: ne conserve que les caractères alphabétiques, espaces et tirets
      * - aZ09: ne conserve que les caractères alphanumériques
+     * - aZ09extra: ne conserve que les caractères alphanumériques, espaces et tirets
+     * - 09: ne conserve que les caractères numériques
      * - nohtml: supprime toutes les balises HTML
      * - alphanohtml: supprime les balises HTML et ne conserve que les caractères alphabétiques
      * - restricthtml: ne conserve que certaines balises HTML basiques
@@ -120,6 +146,12 @@ class Sec
             case 'aZ09':
                 return preg_replace('/[^a-zA-Z0-9]/', '', strip_tags($value));
 
+            case 'aZ09extra':
+                return preg_replace('/[^a-zA-Z0-9 \-]/', '', strip_tags($value));
+
+            case '09':
+                return preg_replace('/[^0-9]/', '', strip_tags($value));
+
             case 'nohtml':
                 return strip_tags($value);
 
@@ -130,25 +162,9 @@ class Sec
                 return strip_tags($value, '<b><i><u><strong><em>');
 
             default:
-                return null;
+                throw new \InvalidArgumentException('Invalid type: ' . $type);
         }
 
-    }
-
-
-public static function getRealIpAddr()
-    {
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-            // Check IP from internet
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
-        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            // Check IP is passed from proxy
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } else {
-            // Check IP address from remote address
-            $ip = $_SERVER['REMOTE_ADDR'] ?? '';
-        }
-        return $ip;
     }
 
     public static function h($string)
