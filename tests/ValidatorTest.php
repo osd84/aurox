@@ -424,5 +424,28 @@ $tester->assertEqual($arrayCleaned['field3'], 123, 'le validator a bien trim() l
 $tester->assertEqual(array_key_exists('field4', $arrayCleaned), false, 'le validator a bien exclu ce champ');
 $tester->assertEqual(array_key_exists('field5', $arrayCleaned), true, 'le validator a bien accepté ce champ');
 
+$tester->header("Test alias integer");
+$result = $validator->validate(
+    [
+        'field2' => ['type' => 'integer'],
+        'field3' => ['type' => 'int'],
+    ],
+    ['field2' => 123, 'field3' => 123]);
+$arrayCleaned = $validator->clean();
+$tester->assertEqual($arrayCleaned['field2'], 123, 'type integer ok');
+$tester->assertEqual($arrayCleaned['field3'], $arrayCleaned['field2'], 'type int est un alias de integer');
+
+$tester->header("Test alias bool");
+$result = $validator->validate(
+    [
+        'field2' => ['type' => 'bool'],
+        'field3' => ['type' => 'boolean'],
+    ],
+    ['field2' => true, 'field3' => true]);
+$arrayCleaned = $validator->clean();
+$tester->assertEqual($arrayCleaned['field2'], 123, 'type bool ok');
+$tester->assertEqual($arrayCleaned['field3'], $arrayCleaned['field2'], 'type boolean est un alias de bool');
+
+
 
 $tester->footer(exit: false);

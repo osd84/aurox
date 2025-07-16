@@ -56,9 +56,11 @@ class Field
 
     public const TYPES_LIST = [
         'integer',                        // Champ de type entier
+        'int',                            // alias pour integer
         'fk',     // Clé étrangère vers une classe et son chemin
         'varchar', // Champ varchar avec une longueur maximale précisée (à remplir dynamiquement)
         'bool',
+        'boolean', // alias de bool
         'text' ,                           // Texte long
         'html',                           // Texte HTML autorisé
         'float',                          // Champ de type flottant
@@ -72,8 +74,6 @@ class Field
 
 
     public const CONFUSE_LIST = [ // Champ souvent confondus ou mauvaise clef, lève une erreur si utilisés
-        'int',
-        'boolean',
         'length'
     ];
 
@@ -92,6 +92,14 @@ class Field
         }
         $this->errors = [];
         $this->valid = false;
+
+        // on gère les alias
+        if($field['type'] == 'int') {
+            $field['type'] = 'integer';
+        }
+        if($field['type'] == 'boolean') {
+            $field['type'] = 'bool';
+        }
 
         foreach (self::CONFUSE_LIST as $confuse) {
             if(array_key_exists($confuse, $field)) {
