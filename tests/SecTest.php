@@ -525,6 +525,25 @@ $tester->assertEqual(
     "Devrait supprimer les espaces superflus en début et fin de chaîne"
 );
 
+// Test avec raw
+$_GET['raw_param'] = ' <script>alert("XSS")</script> ';
+$result = Sec::getParam('raw_param', 'raw', 0);
+$tester->assertEqual(
+    $result,
+    '<script>alert("XSS")</script>',
+    "Devrait retourner la valeur brute sans nettoyage avec type='raw'"
+);
+
+// Test avec raw
+$_GET['raw_param'] = ' 0 ';
+$result = Sec::getParam('raw_param', 'raw', 0);
+$tester->assertEqual(
+    $result,
+    '0',
+    "Devrait retourner la valeur brute sans nettoyage avec type='raw'",
+    true
+);
+
 // Test avec type invalide (devrait retourner null)
 $_GET['invalid_type'] = 'test';
 try {

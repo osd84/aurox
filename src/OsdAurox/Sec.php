@@ -161,6 +161,10 @@ class Sec
             case 'restricthtml':
                 return strip_tags($value, '<b><i><u><strong><em>');
 
+            case 'raw':
+                // Ne fait aucune modification, retourne la valeur brute à part le trim par défaut, converti en string
+                return $value;
+
             default:
                 throw new \InvalidArgumentException('Invalid type: ' . $type);
         }
