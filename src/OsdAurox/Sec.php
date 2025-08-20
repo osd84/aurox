@@ -165,6 +165,26 @@ class Sec
                 // Ne fait aucune modification, retourne la valeur brute à part le trim par défaut, converti en string
                 return $value;
 
+            case 'date_us':
+                $value = trim(strip_tags($value));
+                if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $value)) {
+                    $dt = \DateTime::createFromFormat('Y-m-d', $value);
+                    if ($dt && $dt->format('Y-m-d') === $value) {
+                        return $value;
+                    }
+                }
+                return '';
+
+            case 'datetime_us':
+                $value = trim(strip_tags($value));
+                if (preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $value)) {
+                    $dt = \DateTime::createFromFormat('Y-m-d H:i:s', $value);
+                    if ($dt && $dt->format('Y-m-d H:i:s') === $value) {
+                        return $value;
+                    }
+                }
+                return '';
+
             default:
                 throw new \InvalidArgumentException('Invalid type: ' . $type);
         }

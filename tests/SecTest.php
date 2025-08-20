@@ -544,6 +544,78 @@ $tester->assertEqual(
     true
 );
 
+// Test avec date_us valide
+$_GET['date_param'] = '2024-06-18';
+$result = Sec::getParam('date_param', 'date_us', 0);
+$tester->assertEqual(
+    $result,
+    '2024-06-18',
+    "Devrait accepter une date US valide avec type='date_us'"
+);
+
+// Test avec date_us invalide (mauvais format)
+$_GET['date_param'] = '18/06/2024';
+$result = Sec::getParam('date_param', 'date_us', 0);
+$tester->assertEqual(
+    $result,
+    '',
+    "Devrait rejeter une date au mauvais format avec type='date_us'"
+);
+
+// Test avec date_us invalide (date impossible)
+$_GET['date_param'] = '2024-02-30';
+$result = Sec::getParam('date_param', 'date_us', 0);
+$tester->assertEqual(
+    $result,
+    '',
+    "Devrait rejeter une date impossible avec type='date_us'"
+);
+
+// Test avec date_us contenant du HTML
+$_GET['date_param'] = '<b>2024-06-18</b>';
+$result = Sec::getParam('date_param', 'date_us', 0);
+$tester->assertEqual(
+    $result,
+    '2024-06-18',
+    "Devrait nettoyer le HTML et accepter la date valide avec type='date_us'"
+);
+
+// Test avec datetime_us valide
+$_GET['datetime_param'] = '2024-06-18 14:30:00';
+$result = Sec::getParam('datetime_param', 'datetime_us', 0);
+$tester->assertEqual(
+    $result,
+    '2024-06-18 14:30:00',
+    "Devrait accepter un datetime US valide avec type='datetime_us'"
+);
+
+// Test avec datetime_us invalide (mauvais format)
+$_GET['datetime_param'] = '18/06/2024 14:30:00';
+$result = Sec::getParam('datetime_param', 'datetime_us', 0);
+$tester->assertEqual(
+    $result,
+    '',
+    "Devrait rejeter un datetime au mauvais format avec type='datetime_us'"
+);
+
+// Test avec datetime_us invalide (date impossible)
+$_GET['datetime_param'] = '2024-02-30 14:30:00';
+$result = Sec::getParam('datetime_param', 'datetime_us', 0);
+$tester->assertEqual(
+    $result,
+    '',
+    "Devrait rejeter un datetime avec date impossible avec type='datetime_us'"
+);
+
+// Test avec datetime_us contenant du HTML
+$_GET['datetime_param'] = '<i>2024-06-18 14:30:00</i>';
+$result = Sec::getParam('datetime_param', 'datetime_us', 0);
+$tester->assertEqual(
+    $result,
+    '2024-06-18 14:30:00',
+    "Devrait nettoyer le HTML et accepter le datetime valide avec type='datetime_us'"
+);
+
 // Test avec type invalide (devrait retourner null)
 $_GET['invalid_type'] = 'test';
 try {
