@@ -3,6 +3,7 @@
 namespace OsdAurox;
 
 use App\AppUrls;
+use OsdAurox\Cache;
 
 class Sec
 {
@@ -534,5 +535,38 @@ class Sec
         return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
     }
 
+    public static function setRateLimit(int $seconds, int $maxRequests = 10, string $endpoint = ''): bool
+    {
+        $ip = self::getRealIpAddr();
+        $hashedIp = md5($ip);
+        $cache = new Cache('rate_limit');
+        // safe string
+        $endpoint = preg_replace('/[^a-zA-Z0-9_\-]/', '_', $endpoint);
+        if (!$endpoint) {
+            $endpoint = 'global';
+        }
+        $key = 'rate_' . $endpoint . '_' . $hashedIp;
+        $data = $cache->get($key);
+
+        if ($data === null) {
+            $cache->set($key, 1, $seconds);
+            return true;
+        }
+
+        if ($data >= $maxRequests) {
+            return false;
+        }
+
+        $cache->set($key, $data + 1, $seconds);
+        return true;
+    }
+
+    public static function setRateLimitOrDie(int $seconds, int $maxRequests = 10, string $endpoint = ''): void
+    {
+        if (!self::setRateLimit($seconds, $maxRequests, $endpoint)) {
+            header('HTTP/1.1 429 Too Many Requests');
+            die('Trop de requêtes, veuillez patienter.');
+        }
+    }
 
 }

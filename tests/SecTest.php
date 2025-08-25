@@ -3,6 +3,7 @@
 require_once '../aurox.php';
 
 use OsdAurox\Sec;
+use OsdAurox\Cache;
 use osd84\BrutalTestRunner\BrutalTestRunner;
 
 $tester = new BrutalTestRunner();
@@ -722,5 +723,42 @@ $tester->assertEqual(
 // Nettoyage après les tests
 $_GET = [];
 $_POST = [];
+
+// TEST de la méthode setRateLimit()
+$tester->header("Test de la méthode setRateLimit()");
+
+// Mock IP et cache
+$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+
+// Nettoyage du cache avant test
+$cache = new Cache('rate_limit');
+$key = 'rate_testEndpoint_' . md5('127.0.0.1');
+$cache->set($key, null, 1); // reset
+
+// Test : premier appel sur endpoint "testEndpoint"
+$result = Sec::setRateLimit(2, 3, 'testEndpoint');
+$tester->assertEqual($result, true, "Premier appel, la limite ne doit pas être atteinte (endpoint spécifique)");
+
+// Test : deuxième appel sur le même endpoint
+$result = Sec::setRateLimit(2, 3, 'testEndpoint');
+$tester->assertEqual($result, true, "Deuxième appel, la limite ne doit pas être atteinte (endpoint spécifique)");
+
+// Test : troisième appel sur le même endpoint
+$result = Sec::setRateLimit(2, 3, 'testEndpoint');
+$tester->assertEqual($result, true, "Troisième appel, la limite ne doit pas être atteinte (endpoint spécifique)");
+
+// Test : quatrième appel sur le même endpoint (limite atteinte)
+$result = Sec::setRateLimit(2, 3, 'testEndpoint');
+$tester->assertEqual($result, false, "Quatrième appel, la limite doit être atteinte (endpoint spécifique)");
+
+// Test : appel sur un autre endpoint (compteur indépendant)
+$result = Sec::setRateLimit(2, 3, 'autreEndpoint');
+$tester->assertEqual($result, true, "Premier appel sur un autre endpoint, la limite ne doit pas être atteinte");
+
+// Test : après expiration (attente 2s), la limite doit être réinitialisée sur 'testEndpoint'
+sleep(3);
+$result = Sec::setRateLimit(2, 3, 'testEndpoint');
+$tester->assertEqual($result, true, "Après expiration, la limite doit être réinitialisée (endpoint spécifique)");
+
 
 $tester->footer(exit: false);
