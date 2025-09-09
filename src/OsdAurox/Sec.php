@@ -569,4 +569,27 @@ class Sec
         }
     }
 
+    public static function isRoleInArrayBool(array $roles): bool
+    {
+        if (!isset($_SESSION['user']) || !isset($_SESSION['user']['role'])) {
+            return false;
+        }
+        return in_array($_SESSION['user']['role'], $roles, true);
+    }
+
+    public static function isRoleInArrayOrDie(array $roles, $flash = true, $redirect = true): void
+    {
+        if (!self::isRoleInArrayBool($roles)) {
+            if ($flash) {
+                Flash::add('danger', 'Accès refusé');
+            }
+            if ($redirect) {
+                header('Location: ' . AppUrls::LOGIN);
+                exit;
+            }
+            die('Accès refusé');
+        }
+    }
+
+
 }
