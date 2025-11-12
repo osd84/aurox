@@ -97,7 +97,7 @@ class Sec
      * @param string $type Le type de sanitisation à appliquer
      * @return mixed La valeur sanitisée selon le type spécifié, ou null si la valeur est un tableau ou si le type est invalide
      */
-    protected static function sanitize(mixed $value, string $type): mixed
+    public static function sanitize(mixed $value, string $type = 'aZ09'): mixed
     {
 
         // tableau rejeté, à mettre à plat
